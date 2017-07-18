@@ -12,4 +12,11 @@ public class Deposit extends Product {
     private BigDecimal effectiveRate;
     private boolean refill;
     private boolean withdrawal;
+    private boolean earlyCancellation;
+    private Integer minPeriod;
+    private Integer maxPeriod;
+    private BigDecimal privilegeSum;
+    private BigDecimal privilegeRate;
+    private BigDecimal privateBankingRate;
+    private BigDecimal privateBankingSum;
 }
