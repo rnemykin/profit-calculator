@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="20.07.2017-1-1" author="rnemykin">
+        <createTable tableName="product">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="create_date" type="DATETIME">
+                <constraints nullable="false" />
+            </column>
+            <column name="update_date" type="DATETIME">
+                <constraints nullable="false" />
+            </column>
+            <column name="archive_date" type="DATETIME"/>
+            <column name="weight" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20.07.2017-2-1" author="rnemykin">
+        <createTable tableName="card">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="card_type" type="VARCHAR(255)"/>
+            <column name="card_category" type="VARCHAR(255)"/>
+            <column name="bonus_option" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20.07.2017-3-1" author="rnemykin">
+        <createTable tableName="deposit">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="deposit_type" type="VARCHAR(255)"/>
+            <column name="nominal_rate" type="NUMERIC"/>
+            <column name="effective_rate" type="NUMERIC"/>
+            <column name="refill" type="BOOLEAN"/>
+            <column name="withdrawal" type="BOOLEAN"/>
+            <column name="early_cancellation" type="BOOLEAN"/>
+            <column name="min_period" type="INTEGER"/>
+            <column name="max_period" type="INTEGER"/>
+            <column name="privilege_sum" type="NUMERIC"/>
+            <column name="privilege_rate" type="NUMERIC"/>
+            <column name="private_banking_rate" type="NUMERIC"/>
+            <column name="private_banking_sum" type="NUMERIC"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20.07.2017-4-1" author="rnemykin">
+        <createTable tableName="saving_account">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="rate1" type="NUMERIC"/>
+            <column name="rate2" type="NUMERIC"/>
+            <column name="rate3" type="NUMERIC"/>
+            <column name="rate4" type="NUMERIC"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

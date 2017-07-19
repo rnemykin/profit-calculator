@@ -4,14 +4,19 @@ import lombok.Data;
 import ru.tn.profitcalculator.model.enums.DepositTypeEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.math.BigDecimal;
 
 @Data
+@Entity
 public class Deposit extends Product {
     public Deposit() {
         setType(ProductTypeEnum.DEPOSIT);
     }
 
+    @Enumerated(EnumType.STRING)
     private DepositTypeEnum depositType;
     private BigDecimal nominalRate;
     private BigDecimal effectiveRate;

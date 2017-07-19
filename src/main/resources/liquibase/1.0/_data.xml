@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="20.07.2017-1-10" author="rnemykin">
+        <insert tableName="product">
+            <column name="name">Накопительный счет</column>
+            <column name="type">SAVING_ACCOUNT</column>
+            <column name="status">ACTIVE</column>
+            <column name="create_date">now()</column>
+            <column name="update_date">now()</column>
+            <column name="weight">2</column>
+        </insert>
+
+        <insert tableName="saving_account">
+            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="rate1">4</column>
+            <column name="rate2">5</column>
+            <column name="rate3">6</column>
+            <column name="rate4">8.5</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20.07.2017-1-11" author="rnemykin">
+        <insert tableName="product">
+            <column name="name">Выгодный</column>
+            <column name="type">DEPOSIT</column>
+            <column name="status">ACTIVE</column>
+            <column name="create_date">now()</column>
+            <column name="update_date">now()</column>
+            <column name="weight">1</column>
+        </insert>
+
+        <insert tableName="deposit">
+            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="deposit_type">PROFITABLE</column>
+            <column name="nominal_rate">7.4</column>
+            <column name="effective_rate">7.51</column>
+            <column name="refill">false</column>
+            <column name="withdrawal">false</column>
+            <column name="early_cancellation">true</column>
+            <column name="min_period">3</column>
+            <column name="max_period">60</column>
+            <column name="privilege_sum">2000001</column>
+            <column name="privilege_rate">7.6</column>
+            <column name="private_banking_sum">15000001</column>
+            <column name="private_banking_rate">7.9</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20.07.2017-1-12" author="rnemykin">
+        <insert tableName="product">
+            <column name="name">Накопительный</column>
+            <column name="type">DEPOSIT</column>
+            <column name="status">ACTIVE</column>
+            <column name="create_date">now()</column>
+            <column name="update_date">now()</column>
+            <column name="weight">1</column>
+        </insert>
+
+        <insert tableName="deposit">
+            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="deposit_type">ACCUMULATIVE</column>
+            <column name="nominal_rate">6.95</column>
+            <column name="effective_rate">7.05</column>
+            <column name="refill">true</column>
+            <column name="withdrawal">false</column>
+            <column name="early_cancellation">false</column>
+            <column name="min_period">3</column>
+            <column name="max_period">60</column>
+            <column name="privilege_sum">2000001</column>
+            <column name="privilege_rate">7.6</column>
+            <column name="private_banking_sum">15000001</column>
+            <column name="private_banking_rate">7.9</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20.07.2017-1-13" author="rnemykin">
+        <insert tableName="product">
+            <column name="name">Накопительный</column>
+            <column name="type">DEPOSIT</column>
+            <column name="status">ACTIVE</column>
+            <column name="create_date">now()</column>
+            <column name="update_date">now()</column>
+            <column name="weight">1</column>
+        </insert>
+
+        <insert tableName="deposit">
+            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="deposit_type">COMFORT</column>
+            <column name="nominal_rate">4.1</column>
+            <column name="effective_rate">4.13</column>
+            <column name="refill">true</column>
+            <column name="withdrawal">true</column>
+            <column name="early_cancellation">false</column>
+            <column name="min_period">6</column>
+            <column name="max_period">60</column>
+            <column name="privilege_sum">2000001</column>
+            <column name="privilege_rate">7.6</column>
+            <column name="private_banking_sum">15000001</column>
+            <column name="private_banking_rate">7.9</column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

@@ -48,7 +48,7 @@ public class ProductController {
         card.setWeight(2);
         card.setName("Карточный продукт");
         card.setCardType(CardTypeEnum.MIR);
-        card.setCategory(CardCategoryEnum.DEBIT);
+        card.setCardCategory(CardCategoryEnum.DEBIT);
         card.setBonusOption(BonusOptionEnum.TRAVEL);
 
         productResponse.setProducts(Arrays.asList(
