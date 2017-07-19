@@ -1,7 +1,7 @@
 package ru.tn.profitcalculator.model.enums;
 
 public enum ProductTypeEnum {
-    DEPOSTI,
+    DEPOSIT,
     CARD,
     SAVING_ACCOUNT
 }
