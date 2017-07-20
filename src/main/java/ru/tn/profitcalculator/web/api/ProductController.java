@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tn.profitcalculator.model.Card;
+import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.CardCategoryEnum;
@@ -29,11 +30,11 @@ public class ProductController {
 
     @GetMapping
     public Set<ProductResponse> findProducts(
-            @RequestParam BigDecimal totalSum,
+            @RequestParam BigDecimal sum,
             @RequestParam Integer monthsCount,
             @RequestParam(required = false) BigDecimal monthRefillSum,
             @RequestParam(required = false) BigDecimal monthWithdrawalSum,
-            @RequestParam(required = false) List<PosCategoryEnum> costCategories ) {
+            @RequestParam(required = false) List<PosCategoryEnum> costCategories) {
 
         ProductResponse productResponse = new ProductResponse();
         productResponse.setMaxRate(BigDecimal.TEN);
@@ -49,7 +50,19 @@ public class ProductController {
         card.setName("Карточный продукт");
         card.setCardType(CardTypeEnum.MIR);
         card.setCardCategory(CardCategoryEnum.DEBIT);
-        card.setBonusOption(BonusOptionEnum.TRAVEL);
+
+        CardOption cardOption = new CardOption();
+        cardOption.setOption(BonusOptionEnum.TRAVEL);
+        cardOption.setRate1(BigDecimal.valueOf(2));
+        cardOption.setRate2(BigDecimal.valueOf(4));
+        cardOption.setRate3(BigDecimal.valueOf(10));
+
+        CardOption cardOption2 = new CardOption();
+        cardOption.setOption(BonusOptionEnum.CASH_BACK);
+        cardOption.setRate1(BigDecimal.ONE);
+        cardOption.setRate2(BigDecimal.valueOf(2));
+        cardOption.setRate3(BigDecimal.valueOf(3));
+        card.setCardOptions(Arrays.asList(cardOption, cardOption2));
 
         productResponse.setProducts(Arrays.asList(
                 new ProductDto(savingAccProduct, singleton("Очень выгодный продукт")),
