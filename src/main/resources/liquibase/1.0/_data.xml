@@ -165,4 +165,29 @@
         </insert>
     </changeSet>
 
+    <changeSet id="20.07.2017-1-15" author="rnemykin">
+        <insert tableName="product">
+            <column name="name">Мультикарта</column>
+            <column name="type">CARD</column>
+            <column name="status">ACTIVE</column>
+            <column name="create_date">now()</column>
+            <column name="update_date">now()</column>
+            <column name="weight">2</column>
+        </insert>
+
+        <insert tableName="card">
+            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="card_type">MC</column>
+            <column name="card_category">DEBIT</column>
+        </insert>
+
+        <insert tableName="card_option">
+            <column name="card_id" valueComputed="(SELECT id FROM card ORDER BY id DESC LIMIT 1)"/>
+            <column name="option">AUTO</column>
+            <column name="rate1">2</column>
+            <column name="rate2">5</column>
+            <column name="rate3">10</column>
+        </insert>
+    </changeSet>
+
 </databaseChangeLog>
