@@ -13,7 +13,7 @@ import ru.tn.profitcalculator.model.enums.CardTypeEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductStatusEnum;
 import ru.tn.profitcalculator.web.comparator.ProductResponseComparator;
-import ru.tn.profitcalculator.web.model.ProductDto;
+import ru.tn.profitcalculator.web.model.ProductGroup;
 import ru.tn.profitcalculator.web.model.ProductResponse;
 
 import java.math.BigDecimal;
@@ -29,16 +29,16 @@ import static java.util.Collections.singleton;
 public class ProductController {
 
     @GetMapping
-    public Set<ProductResponse> findProducts(
+    public Set<ProductGroup> findProducts(
             @RequestParam BigDecimal sum,
             @RequestParam Integer monthsCount,
             @RequestParam(required = false) BigDecimal monthRefillSum,
             @RequestParam(required = false) BigDecimal monthWithdrawalSum,
             @RequestParam(required = false) List<PosCategoryEnum> costCategories) {
 
-        ProductResponse productResponse = new ProductResponse();
-        productResponse.setMaxRate(BigDecimal.TEN);
-        productResponse.setProfitSum(BigDecimal.valueOf(15900));
+        ProductGroup productGroup = new ProductGroup();
+        productGroup.setMaxRate(BigDecimal.TEN);
+        productGroup.setProfitSum(BigDecimal.valueOf(15900));
 
         SavingAccount savingAccProduct = new SavingAccount();
         savingAccProduct.setName("Накопительный счет");
@@ -64,13 +64,13 @@ public class ProductController {
         cardOption.setRate3(BigDecimal.valueOf(3));
         card.setCardOptions(Arrays.asList(cardOption, cardOption2));
 
-        productResponse.setProducts(Arrays.asList(
-                new ProductDto(savingAccProduct, singleton("Очень выгодный продукт")),
-                new ProductDto(card, singleton("Очень выгодная карта"))
+        productGroup.setProducts(Arrays.asList(
+                new ProductResponse(savingAccProduct, singleton("Очень выгодный продукт")),
+                new ProductResponse(card, singleton("Очень выгодная карта"))
         ));
 
-        Set<ProductResponse> result = new TreeSet<>(new ProductResponseComparator());
-        result.add(productResponse);
+        Set<ProductGroup> result = new TreeSet<>(new ProductResponseComparator());
+        result.add(productGroup);
         return result;
     }
 
