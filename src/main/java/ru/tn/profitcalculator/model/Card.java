@@ -1,7 +1,6 @@
 package ru.tn.profitcalculator.model;
 
 import lombok.Data;
-import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.CardCategoryEnum;
 import ru.tn.profitcalculator.model.enums.CardTypeEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
@@ -9,6 +8,10 @@ import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Data
 @Entity
@@ -23,6 +26,7 @@ public class Card extends Product {
     @Enumerated(EnumType.STRING)
     private CardCategoryEnum cardCategory;
 
-    @Enumerated(EnumType.STRING)
-    private BonusOptionEnum bonusOption;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cardId")
+    private List<CardOption> cardOptions;
 }
