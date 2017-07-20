@@ -75,4 +75,27 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20.07.2017-5-1" author="rnemykin">
+        <createTable tableName="card_option">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="card_id" type="BIGINT">
+                <constraints nullable="false" references="card(id)" foreignKeyName="card_option_card_id_fk"/>
+            </column>
+            <column name="option" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate1" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate2" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate3" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
