@@ -5,12 +5,12 @@
         "product": {
           "id": null,
           "name": "Накопительный счет",
-          "status": "ACTIVE",
           "createDate": null,
           "updateDate": null,
           "archiveDate": null,
-          "type": "SAVING_ACCOUNT",
           "weight": 2,
+          "status": "ACTIVE",
+          "type": "SAVING_ACCOUNT",
           "rate1": null,
           "rate2": null,
           "rate3": null,
@@ -24,15 +24,32 @@
         "product": {
           "id": null,
           "name": "Карточный продукт",
-          "status": null,
           "createDate": null,
           "updateDate": null,
           "archiveDate": null,
-          "type": "CARD",
           "weight": 2,
+          "status": null,
+          "type": "CARD",
           "cardType": "MIR",
-          "category": "DEBIT",
-          "bonusOption": "TRAVEL"
+          "cardCategory": "DEBIT",
+          "cardOptions": [
+            {
+              "id": null,
+              "cardId": null,
+              "option": "CASH_BACK",
+              "rate1": 1,
+              "rate2": 2,
+              "rate3": 3
+            },
+            {
+              "id": null,
+              "cardId": null,
+              "option": null,
+              "rate1": null,
+              "rate2": null,
+              "rate3": null
+            }
+          ]
         },
         "notes": [
           "Очень выгодная карта"
@@ -40,6 +57,7 @@
       }
     ],
     "optionalProducts": null,
+    "resultSum": 250000,
     "profitSum": 15900,
     "maxRate": 10
   }

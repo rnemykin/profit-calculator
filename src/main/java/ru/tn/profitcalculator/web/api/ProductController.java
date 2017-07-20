@@ -39,6 +39,7 @@ public class ProductController {
         ProductGroup productGroup = new ProductGroup();
         productGroup.setMaxRate(BigDecimal.TEN);
         productGroup.setProfitSum(BigDecimal.valueOf(15900));
+        productGroup.setResultSum(BigDecimal.valueOf(250000));
 
         SavingAccount savingAccProduct = new SavingAccount();
         savingAccProduct.setName("Накопительный счет");
