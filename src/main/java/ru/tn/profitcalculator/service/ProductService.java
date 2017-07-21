@@ -38,7 +38,7 @@ public class ProductService {
     public List<Product> searchProducts(int monthsCount, BigDecimal refillSum, BigDecimal withdrawalSum, List<PosCategoryEnum> categories) {
         List<Deposit> deposits = depositRepository.findAll(new DepositSpecification<>(
                 depositFilter()
-                        .monthsCount(monthsCount)
+                        .daysCount(monthsCount)
                         .refill(isGreatThenZero(refillSum))
                         .withdrawal(isGreatThenZero(withdrawalSum))
                         .build())
