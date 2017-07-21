@@ -56,6 +56,7 @@
             <column name="early_cancellation" type="BOOLEAN"/>
             <column name="min_period" type="INTEGER"/>
             <column name="max_period" type="INTEGER"/>
+            <column name="last_refill_day_remains" type="INTEGER"/>
             <column name="privilege_sum" type="NUMERIC"/>
             <column name="privilege_rate" type="NUMERIC"/>
             <column name="private_banking_rate" type="NUMERIC"/>
@@ -80,8 +81,8 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="card_id" type="BIGINT">
-                <constraints nullable="false" references="card(id)" foreignKeyName="card_option_card_id_fk"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
             </column>
             <column name="option" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -93,6 +94,23 @@
                 <constraints nullable="false"/>
             </column>
             <column name="rate3" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20.07.2017-6-1" author="rnemykin">
+        <createTable tableName="refill_option">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="refill_sum_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>

@@ -25,6 +25,7 @@ public class Deposit extends Product {
     private boolean earlyCancellation;
     private Integer minPeriod;
     private Integer maxPeriod;
+    private Integer lastRefillDayRemains;
     private BigDecimal privilegeSum;
     private BigDecimal privilegeRate;
     private BigDecimal privateBankingRate;

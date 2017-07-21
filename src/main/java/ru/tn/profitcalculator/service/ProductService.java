@@ -45,7 +45,7 @@ public class ProductService {
         );
 
         List<SavingAccount> savingAccounts = savingAccountRepository.findAll();
-        List<Card> cards = cardRepository.findAllByCategories(cardService.getBonusOptionsByPosCategories(categories));
+        List<Card> cards = cardRepository.findAll();
         return Stream.of(deposits, savingAccounts, cards).flatMap(Collection::stream).collect(toList());
     }
 

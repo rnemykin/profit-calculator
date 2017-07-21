@@ -67,13 +67,7 @@ public class ProductController {
         cardOption.setRate1(BigDecimal.valueOf(2));
         cardOption.setRate2(BigDecimal.valueOf(4));
         cardOption.setRate3(BigDecimal.valueOf(10));
-
-        CardOption cardOption2 = new CardOption();
-        cardOption.setOption(BonusOptionEnum.CASH_BACK);
-        cardOption.setRate1(BigDecimal.ONE);
-        cardOption.setRate2(BigDecimal.valueOf(2));
-        cardOption.setRate3(BigDecimal.valueOf(3));
-        card.setCardOptions(Arrays.asList(cardOption, cardOption2));
+        card.setCardOption(cardOption);
 
         productGroup.setProducts(Arrays.asList(
                 new ProductResponse(savingAccProduct, singleton("Очень выгодный продукт")),

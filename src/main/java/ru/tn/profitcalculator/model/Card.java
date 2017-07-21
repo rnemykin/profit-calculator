@@ -8,10 +8,7 @@ import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import java.util.List;
+import javax.persistence.Transient;
 
 @Data
 @Entity
@@ -26,7 +23,6 @@ public class Card extends Product {
     @Enumerated(EnumType.STRING)
     private CardCategoryEnum cardCategory;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "cardId")
-    private List<CardOption> cardOptions;
+    @Transient
+    private CardOption cardOption;
 }

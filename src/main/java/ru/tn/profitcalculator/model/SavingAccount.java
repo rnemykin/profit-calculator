@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 
 @Data
@@ -18,4 +19,7 @@ public class SavingAccount extends Product {
     private BigDecimal rate2;
     private BigDecimal rate3;
     private BigDecimal rate4;
+
+    @Transient
+    private RefillOption refillOption;
 }
