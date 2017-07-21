@@ -12,7 +12,7 @@ import java.util.List;
 public class ProductFilter {
     private boolean refill;
     private boolean withdrawal;
-    private Integer monthsCount;
+    private Integer daysCount;
     private ProductTypeEnum type;
     private List<BonusOptionEnum> bonusOptions;
 
