@@ -4,8 +4,5 @@ public enum PosCategoryEnum {
     AUTO,
     TRAVEL,
     FUN,
-    SHOPPING,
-    PHOTO,
-    FLOWERS,
-    CINEMA
+    OTHER
 }

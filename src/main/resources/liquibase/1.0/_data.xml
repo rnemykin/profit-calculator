@@ -42,8 +42,8 @@
             <column name="refill">false</column>
             <column name="withdrawal">false</column>
             <column name="early_cancellation">true</column>
-            <column name="min_period">3</column>
-            <column name="max_period">60</column>
+            <column name="min_period">92</column>
+            <column name="max_period">1830</column>
             <column name="privilege_sum">2000001</column>
             <column name="privilege_rate">7.6</column>
             <column name="private_banking_sum">15000001</column>
@@ -69,8 +69,8 @@
             <column name="refill">true</column>
             <column name="withdrawal">false</column>
             <column name="early_cancellation">false</column>
-            <column name="min_period">3</column>
-            <column name="max_period">60</column>
+            <column name="min_period">91</column>
+            <column name="max_period">1830</column>
             <column name="privilege_sum">2000001</column>
             <column name="privilege_rate">7.6</column>
             <column name="private_banking_sum">15000001</column>
@@ -80,7 +80,7 @@
 
     <changeSet id="20.07.2017-1-13" author="rnemykin">
         <insert tableName="product">
-            <column name="name">Накопительный</column>
+            <column name="name">Комфортный</column>
             <column name="type">DEPOSIT</column>
             <column name="status">ACTIVE</column>
             <column name="create_date">now()</column>
@@ -96,8 +96,8 @@
             <column name="refill">true</column>
             <column name="withdrawal">true</column>
             <column name="early_cancellation">false</column>
-            <column name="min_period">6</column>
-            <column name="max_period">60</column>
+            <column name="min_period">181</column>
+            <column name="max_period">1830</column>
             <column name="privilege_sum">2000001</column>
             <column name="privilege_rate">7.6</column>
             <column name="private_banking_sum">15000001</column>
