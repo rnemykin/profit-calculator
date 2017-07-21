@@ -36,12 +36,12 @@ public class ProductController {
     @GetMapping
     public Set<ProductGroup> findProducts(
             @RequestParam BigDecimal sum,
-            @RequestParam Integer monthsCount,
+            @RequestParam Integer daysCount,
             @RequestParam(required = false) BigDecimal monthRefillSum,
             @RequestParam(required = false) BigDecimal monthWithdrawalSum,
             @RequestParam(required = false) List<PosCategoryEnum> costCategories) {
 
-        List<Product> products = productService.searchProducts(monthsCount, monthRefillSum, monthWithdrawalSum, costCategories);
+        List<Product> products = productService.searchProducts(daysCount, monthRefillSum, monthWithdrawalSum, costCategories);
         return makeStubResponse();
     }
 

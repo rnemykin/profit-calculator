@@ -20,8 +20,8 @@ public class DepositSpecification<T extends Product> implements Specification<T>
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
-        predicates.add(criteriaBuilder.le(root.get("minPeriod"), filter.getMonthsCount()));
-        predicates.add(criteriaBuilder.ge(root.get("maxPeriod"), filter.getMonthsCount()));
+        predicates.add(criteriaBuilder.le(root.get("minPeriod"), filter.getDaysCount()));
+        predicates.add(criteriaBuilder.ge(root.get("maxPeriod"), filter.getDaysCount()));
         if ((filter.isRefill())) {
             predicates.add(criteriaBuilder.isTrue(root.get("refill")));
         }
