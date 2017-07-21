@@ -10,6 +10,7 @@ import ru.tn.profitcalculator.repository.CardRepository;
 import ru.tn.profitcalculator.repository.DepositRepository;
 import ru.tn.profitcalculator.repository.SavingAccountRepository;
 import ru.tn.profitcalculator.repository.specification.DepositSpecification;
+import ru.tn.profitcalculator.repository.specification.ProductFilter;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static ru.tn.profitcalculator.repository.specification.ProductFilter.depositFilter;
 
 @Service
 public class ProductService {
@@ -36,7 +36,7 @@ public class ProductService {
 
     public List<Product> searchProducts(int monthsCount, BigDecimal refillSum, BigDecimal withdrawalSum) {
         List<Deposit> deposits = depositRepository.findAll(new DepositSpecification<>(
-                depositFilter()
+                ProductFilter.builder()
                         .daysCount(monthsCount)
                         .refill(isGreatThenZero(refillSum))
                         .withdrawal(isGreatThenZero(withdrawalSum))
