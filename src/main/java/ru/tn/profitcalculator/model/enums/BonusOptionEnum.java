@@ -4,7 +4,6 @@ public enum BonusOptionEnum {
     AUTO,
     CAFE,
     TRAVEL,
-    FUN,
     COLLECTION,
     SAVING,
     CASH_BACK
