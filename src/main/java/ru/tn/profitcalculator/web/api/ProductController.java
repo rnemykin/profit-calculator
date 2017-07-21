@@ -41,7 +41,7 @@ public class ProductController {
             @RequestParam(required = false) BigDecimal monthWithdrawalSum,
             @RequestParam(required = false) List<PosCategoryEnum> costCategories) {
 
-        List<Product> products = productService.searchProducts(daysCount, monthRefillSum, monthWithdrawalSum, costCategories);
+        List<Product> products = productService.searchProducts(daysCount, monthRefillSum, monthWithdrawalSum);
         return makeStubResponse();
     }
 

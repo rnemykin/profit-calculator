@@ -6,7 +6,6 @@ import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.Deposit;
 import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.model.SavingAccount;
-import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.repository.CardRepository;
 import ru.tn.profitcalculator.repository.DepositRepository;
 import ru.tn.profitcalculator.repository.SavingAccountRepository;
@@ -35,7 +34,7 @@ public class ProductService {
         this.cardService = cardService;
     }
 
-    public List<Product> searchProducts(int monthsCount, BigDecimal refillSum, BigDecimal withdrawalSum, List<PosCategoryEnum> categories) {
+    public List<Product> searchProducts(int monthsCount, BigDecimal refillSum, BigDecimal withdrawalSum) {
         List<Deposit> deposits = depositRepository.findAll(new DepositSpecification<>(
                 depositFilter()
                         .daysCount(monthsCount)
