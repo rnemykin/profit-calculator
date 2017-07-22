@@ -38,7 +38,6 @@
             <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
             <column name="deposit_type">PROFITABLE</column>
             <column name="nominal_rate">7.4</column>
-            <column name="effective_rate">7.51</column>
             <column name="refill">false</column>
             <column name="withdrawal">false</column>
             <column name="early_cancellation">true</column>
@@ -65,7 +64,6 @@
             <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
             <column name="deposit_type">ACCUMULATIVE</column>
             <column name="nominal_rate">6.95</column>
-            <column name="effective_rate">7.05</column>
             <column name="refill">true</column>
             <column name="withdrawal">false</column>
             <column name="early_cancellation">false</column>
@@ -93,7 +91,6 @@
             <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
             <column name="deposit_type">COMFORT</column>
             <column name="nominal_rate">4.1</column>
-            <column name="effective_rate">4.13</column>
             <column name="refill">true</column>
             <column name="withdrawal">true</column>
             <column name="early_cancellation">false</column>

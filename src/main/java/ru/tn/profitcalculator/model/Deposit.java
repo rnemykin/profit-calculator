@@ -19,7 +19,6 @@ public class Deposit extends Product {
     @Enumerated(EnumType.STRING)
     private DepositTypeEnum depositType;
     private BigDecimal nominalRate;
-    private BigDecimal effectiveRate;
     private boolean refill;
     private boolean withdrawal;
     private boolean earlyCancellation;

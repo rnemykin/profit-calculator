@@ -50,7 +50,6 @@
             </column>
             <column name="deposit_type" type="VARCHAR(255)"/>
             <column name="nominal_rate" type="NUMERIC"/>
-            <column name="effective_rate" type="NUMERIC"/>
             <column name="refill" type="BOOLEAN"/>
             <column name="withdrawal" type="BOOLEAN"/>
             <column name="early_cancellation" type="BOOLEAN"/>
