@@ -13,6 +13,7 @@ import java.time.LocalDate;
 
 import static java.math.BigDecimal.valueOf;
 import static java.time.temporal.ChronoUnit.DAYS;
+import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Service
 public class DepositCalculatorService implements CalculatorService {
@@ -30,22 +31,18 @@ public class DepositCalculatorService implements CalculatorService {
         BigDecimal profitSum = BigDecimal.ZERO;
         LocalDate nextPeriodDate = startDate;
 
-        while (true) {
+        boolean isRefill = isGreatThenZero(request.getMonthRefillSum());
+        boolean isLastPeriod = false;
+        while (!isLastPeriod) {
             nextPeriodDate = nextPeriodDate.plusMonths(1);
-            if(nextPeriodDate.compareTo(endDate) <= 0) {
-                long periodDays = DAYS.between(startDate, nextPeriodDate);
-                BigDecimal monthProfit = calculatePeriodSum(totalSum, deposit.getNominalRate(), valueOf(periodDays));
-                profitSum = profitSum.add(monthProfit);
-                totalSum = totalSum.add(monthProfit);
-                if(request.getMonthRefillSum() != null) {
-                    totalSum = totalSum.add(request.getMonthRefillSum());
-                }
-            } else {
-                long periodDays = DAYS.between(startDate, endDate);
-                BigDecimal monthProfit = calculatePeriodSum(totalSum, deposit.getNominalRate(), valueOf(periodDays));
-                profitSum = profitSum.add(monthProfit);
-                totalSum = totalSum.add(monthProfit);
-                break;
+
+            isLastPeriod = nextPeriodDate.compareTo(endDate) >= 0;
+            long periodDays = isLastPeriod ? DAYS.between(startDate, endDate) : DAYS.between(startDate, nextPeriodDate);
+            BigDecimal monthProfit = calculatePeriodSum(totalSum, deposit.getNominalRate(), valueOf(periodDays));
+            profitSum = profitSum.add(monthProfit);
+            totalSum = totalSum.add(monthProfit);
+            if(isRefill && !isLastPeriod) {
+                totalSum = totalSum.add(request.getMonthRefillSum());
             }
 
             startDate = nextPeriodDate;
@@ -54,6 +51,7 @@ public class DepositCalculatorService implements CalculatorService {
         return CalculateResult.builder()
                 .totalSum(totalSum)
                 .profitSum(profitSum)
+//                .maxRate(maxRate)
                 .daysCount(request.getDaysCount())
                 .build();
     }
