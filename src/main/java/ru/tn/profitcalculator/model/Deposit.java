@@ -7,7 +7,11 @@ import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,4 +33,8 @@ public class Deposit extends Product {
     private BigDecimal privilegeRate;
     private BigDecimal privateBankingRate;
     private BigDecimal privateBankingSum;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "depositId")
+    private List<DepositRate> rates;
 }
