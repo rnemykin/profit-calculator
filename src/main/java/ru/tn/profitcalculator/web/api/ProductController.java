@@ -35,7 +35,7 @@ public class ProductController {
 
     @GetMapping
     public Set<ProductGroup> findProducts(
-            @RequestParam BigDecimal sum,
+            @RequestParam BigDecimal initSum,
             @RequestParam Integer daysCount,
             @RequestParam(required = false) BigDecimal monthRefillSum,
             @RequestParam(required = false) BigDecimal monthWithdrawalSum,
