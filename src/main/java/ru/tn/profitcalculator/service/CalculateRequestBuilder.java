@@ -44,6 +44,7 @@ public class CalculateRequestBuilder {
 
             result.add(
                     CalculateRequest.builder()
+                            .recommendation(true)
                             .product(savingAccount)
                             .daysCount(request.getDaysCount())
                             .monthRefillSum(BigDecimal.valueOf(10000))

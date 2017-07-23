@@ -17,4 +17,5 @@ public class CalculateRequest {
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
     private List<PosCategoryEnum> costCategories;
+    private boolean recommendation;
 }
