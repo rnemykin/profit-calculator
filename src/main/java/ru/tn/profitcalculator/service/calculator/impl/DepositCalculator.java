@@ -7,7 +7,7 @@ import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.repository.DepositRateRepository;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.service.calculator.CalculateResult;
-import ru.tn.profitcalculator.service.calculator.CalculatorService;
+import ru.tn.profitcalculator.service.calculator.Calculator;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,14 +18,14 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Service
-public class DepositCalculatorService implements CalculatorService {
+public class DepositCalculator implements Calculator {
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
 
     private final DepositRateRepository depositRateRepository;
 
     @Autowired
-    public DepositCalculatorService(DepositRateRepository depositRateRepository) {
+    public DepositCalculator(DepositRateRepository depositRateRepository) {
         this.depositRateRepository = depositRateRepository;
     }
 
