@@ -44,7 +44,7 @@ public class DepositCalculator implements Calculator {
         while (!isLastPeriod) {
             nextPeriodDate = nextPeriodDate.plusMonths(1);
 
-            isLastPeriod = nextPeriodDate.compareTo(endDate) >= 0;
+            isLastPeriod = !nextPeriodDate.isBefore(endDate);
             long periodDays = isLastPeriod ? DAYS.between(startDate, endDate) : DAYS.between(startDate, nextPeriodDate);
             BigDecimal monthProfit = calculatePeriodSum(totalSum, depositRate.getRate(), valueOf(periodDays));
             profitSum = profitSum.add(monthProfit);
