@@ -47,7 +47,7 @@ public class CalculateRequestBuilder {
                             .recommendation(true)
                             .product(savingAccount)
                             .daysCount(request.getDaysCount())
-                            .monthRefillSum(BigDecimal.valueOf(10000))
+                            .monthRefillSum(BigDecimal.valueOf(10000))  //  todo which sum need to recommend
                             .costCategories(request.getCostCategories())
                             .build()
             );
