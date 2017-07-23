@@ -11,6 +11,7 @@ import ru.tn.profitcalculator.repository.DepositRepository;
 import ru.tn.profitcalculator.repository.SavingAccountRepository;
 import ru.tn.profitcalculator.service.ProductService;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
+import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
 
@@ -41,17 +42,18 @@ public class ProfitCalculatorApplicationTests {
 
 	@Test
 	public void savingAccountCalculate() {
-		Calculator depositCalculator = calculatorFactory.get(ProductTypeEnum.SAVING_ACCOUNT);
-		savingAccountRepository.findAll().forEach(d -> System.out.println(
-				depositCalculator.calculate(
-						CalculateRequest.builder()
-								.product(d)
-								.daysCount(365)
-								.monthRefillSum(BigDecimal.valueOf(20000))
-								.initSum(BigDecimal.valueOf(200000))
-								.build()
-				)
-		));
+		Calculator calculator = calculatorFactory.get(ProductTypeEnum.SAVING_ACCOUNT);
+		savingAccountRepository.findAll().forEach(d -> {
+			CalculateRequest calculateRequest = CalculateRequest.builder()
+					.product(d)
+					.daysCount(365)
+					.monthRefillSum(BigDecimal.valueOf(20000))
+					.initSum(BigDecimal.valueOf(200000))
+					.build();
+
+			CalculateResult result = calculator.calculate(calculateRequest);
+			System.out.println(result);
+		});
 
 	}
 }
