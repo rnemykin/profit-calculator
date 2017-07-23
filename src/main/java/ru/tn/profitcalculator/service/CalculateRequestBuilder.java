@@ -1,5 +1,6 @@
 package ru.tn.profitcalculator.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Product;
@@ -34,13 +35,15 @@ public class CalculateRequestBuilder {
         ).collect(Collectors.toList());
 
         if(!isGreatThenZero(request.getMonthRefillSum()) && !isGreatThenZero(request.getMonthWithdrawalSum())) {
-            Product savingAccount = products.stream()
+            SavingAccount product = (SavingAccount) products.stream()
                     .filter(p -> p.getType() == ProductTypeEnum.SAVING_ACCOUNT)
                     .findFirst()
                     .get();
 
+            SavingAccount savingAccount = new SavingAccount();
+            BeanUtils.copyProperties(product, savingAccount);
             RefillOption autoRefillOption = refillOptionRepository.findByEventTypeAndRefillSumType(FIXED_DATE, FIXED_SUM);
-            ((SavingAccount) savingAccount).setRefillOption(autoRefillOption);
+            savingAccount.setRefillOption(autoRefillOption);
 
             result.add(
                     CalculateRequest.builder()
