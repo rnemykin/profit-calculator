@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,11 +100,10 @@ public class SavingAccountCalculator implements Calculator {
                 .build();
     }
 
-
-    private BigDecimal getRate4Month(int month) {
+    public BigDecimal getRate4Month(int month) {
         return PERIOD_RATES.entrySet().stream()
                 .filter(e -> e.getKey().compareTo(month) <= 0)
-                .max((x, y) -> x.getKey().compareTo(y.getKey()))
+                .max(Comparator.comparing(Map.Entry::getKey))
                 .orElseThrow(() -> new RuntimeException("rate not found fot month " + month))
                 .getValue();
     }
