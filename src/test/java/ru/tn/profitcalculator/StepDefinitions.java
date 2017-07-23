@@ -22,17 +22,17 @@ public class StepDefinitions {
     private BigDecimal initialSumm;
 
     @Пусть("^Ярик положил (\\d+) рублей на накопительный счет$")
-    public void ярославПоложилРублейНаНакопительныйСчет(BigDecimal initialSumm) {
+    public void ярикПоложилДеньгиНаНакопительныйСчет(BigDecimal initialSumm) {
         this.initialSumm = initialSumm;
     }
 
     @Когда("^прошло (\\d+) месяцев$")
-    public void прошлоМясяцМесяцев(int spentMonthes) {
+    public void прошлоМесяцев(int spentMonthes) {
         this.spentMonthes = spentMonthes;
     }
 
     @То("^итоговая % ставка \\(R\\) составила (.+)$")
-    public void итоговаяСтавкаРавнаСтавка(BigDecimal rate) {
+    public void итоговаяСтавкаСоставила(BigDecimal rate) {
         assertEquals(rate.doubleValue(), savingAccountCalculator.getRate4Month(spentMonthes).doubleValue(), 0);
     }
 }
