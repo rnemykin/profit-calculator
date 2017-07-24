@@ -32,6 +32,7 @@ public class CalculateRequestBuilder {
     List<CalculateRequest> makeRequests(List<Product> products, ProductSearchRequest request) {
         List<CalculateRequest> result = products.stream().map(p -> CalculateRequest.builder()
                 .product(p)
+                .initSum(request.getInitSum())
                 .daysCount(request.getDaysCount())
                 .monthRefillSum(request.getMonthRefillSum())
                 .monthWithdrawalSum(request.getMonthWithdrawalSum())
@@ -54,8 +55,9 @@ public class CalculateRequestBuilder {
                     CalculateRequest.builder()
                             .recommendation(true)
                             .product(savingAccount)
+                            .initSum(request.getInitSum())
                             .daysCount(request.getDaysCount())
-                            .monthRefillSum(request.getStartSum().divide(valueOf(10), 0, RoundingMode.UP))
+                            .monthRefillSum(request.getInitSum().divide(valueOf(10), 0, RoundingMode.UP))
                             .costCategories(request.getCategories2Costs().keySet())
                             .build()
             );
