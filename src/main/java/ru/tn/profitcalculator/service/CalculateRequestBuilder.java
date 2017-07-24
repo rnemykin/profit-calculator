@@ -11,18 +11,23 @@ import ru.tn.profitcalculator.repository.RefillOptionRepository;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.web.model.ProductSearchRequest;
 
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.math.BigDecimal.valueOf;
 import static ru.tn.profitcalculator.model.enums.RefillOptionEventTypeEnum.FIXED_DATE;
 import static ru.tn.profitcalculator.model.enums.RefillOptionSumTypeEnum.FIXED_SUM;
 import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Service
 public class CalculateRequestBuilder {
+    private final RefillOptionRepository refillOptionRepository;
+
     @Autowired
-    private RefillOptionRepository refillOptionRepository;
+    public CalculateRequestBuilder(RefillOptionRepository refillOptionRepository) {
+        this.refillOptionRepository = refillOptionRepository;
+    }
 
     List<CalculateRequest> makeRequests(List<Product> products, ProductSearchRequest request) {
         List<CalculateRequest> result = products.stream().map(p -> CalculateRequest.builder()
@@ -30,7 +35,7 @@ public class CalculateRequestBuilder {
                 .daysCount(request.getDaysCount())
                 .monthRefillSum(request.getMonthRefillSum())
                 .monthWithdrawalSum(request.getMonthWithdrawalSum())
-                .costCategories(request.getCostCategories())
+                .costCategories(request.getCategories2Costs().keySet())
                 .build()
         ).collect(Collectors.toList());
 
@@ -50,8 +55,8 @@ public class CalculateRequestBuilder {
                             .recommendation(true)
                             .product(savingAccount)
                             .daysCount(request.getDaysCount())
-                            .monthRefillSum(BigDecimal.valueOf(10000))  //  todo which sum need to recommend
-                            .costCategories(request.getCostCategories())
+                            .monthRefillSum(request.getStartSum().divide(valueOf(10), 0, RoundingMode.UP))
+                            .costCategories(request.getCategories2Costs().keySet())
                             .build()
             );
         }

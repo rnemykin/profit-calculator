@@ -1,9 +1,9 @@
 package ru.tn.profitcalculator.web.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.CardOption;
@@ -11,7 +11,6 @@ import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.CardCategoryEnum;
 import ru.tn.profitcalculator.model.enums.CardTypeEnum;
-import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductStatusEnum;
 import ru.tn.profitcalculator.service.CalculatorService;
 import ru.tn.profitcalculator.web.comparator.ProductResponseComparator;
@@ -21,7 +20,6 @@ import ru.tn.profitcalculator.web.model.ProductSearchRequest;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -34,24 +32,9 @@ public class ProductController {
     private CalculatorService calculatorService;
 
 
-    @GetMapping
-    public Set<ProductGroup> calculateProducts(
-            @RequestParam BigDecimal initSum,
-            @RequestParam Integer daysCount,
-            @RequestParam(required = false) BigDecimal monthRefillSum,
-            @RequestParam(required = false) BigDecimal monthWithdrawalSum,
-            @RequestParam(required = false) List<PosCategoryEnum> costCategories) {
-
-        calculatorService.calculateOffers(
-                ProductSearchRequest.builder()
-                        .startSum(initSum)
-                        .daysCount(daysCount)
-                        .monthRefillSum(monthRefillSum)
-                        .monthWithdrawalSum(monthWithdrawalSum)
-                        .costCategories(costCategories)
-                        .build()
-        );
-
+    @PostMapping
+    public Set<ProductGroup> calculateProducts(@RequestBody ProductSearchRequest request) {
+        calculatorService.calculateOffers(request);
         return makeStubResponse();
     }
 

@@ -6,7 +6,7 @@ import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Collection;
 
 @Data
 @Builder
@@ -16,6 +16,6 @@ public class CalculateRequest {
     private Integer daysCount;
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
-    private List<PosCategoryEnum> costCategories;
+    private Collection<PosCategoryEnum> costCategories;
     private boolean recommendation;
 }

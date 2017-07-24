@@ -5,15 +5,14 @@ import lombok.Data;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 public class ProductSearchRequest {
-    private BigDecimal totalSum;
     private BigDecimal startSum;
     private Integer daysCount;
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
-    private List<PosCategoryEnum> costCategories;
+    private Map<PosCategoryEnum, BigDecimal> categories2Costs;
 }

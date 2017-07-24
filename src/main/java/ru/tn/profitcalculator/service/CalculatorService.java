@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
+import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
 import ru.tn.profitcalculator.web.model.ProductGroup;
 import ru.tn.profitcalculator.web.model.ProductSearchRequest;
 
 import java.util.List;
 
-import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class CalculatorService {
@@ -30,6 +31,12 @@ public class CalculatorService {
         List<Product> products = productService.searchProducts(request.getDaysCount(), request.getMonthRefillSum(), request.getMonthWithdrawalSum());
         List<CalculateRequest> calculateRequests = calculateRequestBuilder.makeRequests(products, request);
 
-        return emptyList();
+        return calculateRequests.stream().map(r -> {
+            Calculator calculator = calculatorFactory.get(r.getProduct().getType());
+            return calculator.calculate(r);
+        }).map(r -> {
+
+            return new ProductGroup();
+        }).collect(toList());
     }
 }
