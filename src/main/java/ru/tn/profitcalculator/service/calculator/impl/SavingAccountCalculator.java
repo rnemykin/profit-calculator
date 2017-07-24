@@ -88,7 +88,7 @@ public class SavingAccountCalculator implements Calculator {
         return CalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
-                .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculateEffectiveRate())
+                .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculate())
                 .daysCount(daysCount)
                 .build();
     }
@@ -134,7 +134,7 @@ public class SavingAccountCalculator implements Calculator {
         private Map<Integer, BigDecimal> rates;
         private List<List<BigDecimal>> accountState;
 
-        private BigDecimal calculateEffectiveRate() {
+        private BigDecimal calculate() {
             BigDecimal b12 = getMinSumForPeriod(12);
             BigDecimal b6 = getMinSumForPeriod(6);
             BigDecimal b3 = getMinSumForPeriod(3);
