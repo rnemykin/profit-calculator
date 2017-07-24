@@ -84,7 +84,7 @@ public class SavingAccountCalculator implements Calculator {
             System.out.println("\n\n next layer \n\n");
         }
 
-        normalizeAccountStates(accountState);
+        normalizeAccountState(accountState);
         return CalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
@@ -114,7 +114,7 @@ public class SavingAccountCalculator implements Calculator {
         ).divide(V_100, 0, RoundingMode.HALF_UP);
     }
 
-    private void normalizeAccountStates(List<List<BigDecimal>> accountState) {
+    private void normalizeAccountState(List<List<BigDecimal>> accountState) {
         int maxSize = accountState.get(0).size();
         for (List<BigDecimal> state : accountState) {
             while (state.size() != maxSize) {
