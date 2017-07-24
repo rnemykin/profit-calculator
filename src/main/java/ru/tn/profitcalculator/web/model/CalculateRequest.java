@@ -1,4 +1,4 @@
-package ru.tn.profitcalculator.service.calculator;
+package ru.tn.profitcalculator.web.model;
 
 import lombok.Builder;
 import lombok.Data;

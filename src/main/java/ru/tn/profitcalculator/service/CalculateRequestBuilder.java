@@ -9,7 +9,7 @@ import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.repository.CardRepository;
 import ru.tn.profitcalculator.repository.RefillOptionRepository;
-import ru.tn.profitcalculator.service.calculator.CalculateRequest;
+import ru.tn.profitcalculator.web.model.CalculateRequest;
 import ru.tn.profitcalculator.web.model.ProductSearchRequest;
 
 import java.math.RoundingMode;

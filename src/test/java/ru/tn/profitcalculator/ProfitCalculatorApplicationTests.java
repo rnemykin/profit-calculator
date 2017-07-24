@@ -12,10 +12,10 @@ import ru.tn.profitcalculator.repository.SavingAccountRepository;
 import ru.tn.profitcalculator.repository.specification.DepositSpecification;
 import ru.tn.profitcalculator.repository.specification.ProductFilter;
 import ru.tn.profitcalculator.service.ProductService;
-import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
+import ru.tn.profitcalculator.web.model.CalculateRequest;
 
 import java.math.BigDecimal;
 import java.util.List;

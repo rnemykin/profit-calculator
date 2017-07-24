@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
-import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
+import ru.tn.profitcalculator.web.model.CalculateRequest;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
