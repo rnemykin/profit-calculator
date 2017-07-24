@@ -10,7 +10,7 @@ import java.util.List;
 @RepositoryRestResource
 public interface ProductRateRepository extends JpaRepository<ProductRate, Long> {
     @Query("from ProductRate dr where dr.productId = ?1 and dr.fromPeriod <= ?2 order by dr.fromPeriod desc")
-    List<ProductRate> findDepositRate(Long depositId, Integer period);
+    List<ProductRate> findProductRate(Long depositId, Integer period);
 
     List<ProductRate> findAllByProductId(Long productId);
 

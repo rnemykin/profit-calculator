@@ -33,7 +33,7 @@ public class DepositCalculator implements Calculator {
 
     @Override
     public CalculateResult calculate(CalculateRequest request) {
-        ProductRate productRate = productRateRepository.findDepositRate(request.getProduct().getId(), request.getDaysCount()).get(0);
+        ProductRate productRate = productRateRepository.findProductRate(request.getProduct().getId(), request.getDaysCount()).get(0);
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(request.getDaysCount());
 
