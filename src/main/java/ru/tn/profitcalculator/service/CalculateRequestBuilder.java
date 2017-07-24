@@ -10,7 +10,6 @@ import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.repository.CardRepository;
 import ru.tn.profitcalculator.repository.RefillOptionRepository;
 import ru.tn.profitcalculator.web.model.CalculateRequest;
-import ru.tn.profitcalculator.web.model.ProductSearchRequest;
 
 import java.math.RoundingMode;
 import java.util.List;
@@ -32,14 +31,14 @@ public class CalculateRequestBuilder {
         this.refillOptionRepository = refillOptionRepository;
     }
 
-    List<CalculateRequest> makeRequests(List<Product> products, ProductSearchRequest request) {
+    List<CalculateRequest> makeRequests(List<Product> products, CalculateRequest request) {
         List<CalculateRequest> result = products.stream().map(p -> CalculateRequest.builder()
                 .product(p)
                 .initSum(request.getInitSum())
                 .daysCount(request.getDaysCount())
                 .monthRefillSum(request.getMonthRefillSum())
                 .monthWithdrawalSum(request.getMonthWithdrawalSum())
-                .costCategories(request.getCategories2Costs().keySet())
+                .categories2Costs(request.getCategories2Costs())
                 .build()
         ).collect(Collectors.toList());
 
@@ -61,7 +60,7 @@ public class CalculateRequestBuilder {
                             .initSum(request.getInitSum())
                             .daysCount(request.getDaysCount())
                             .monthRefillSum(request.getInitSum().divide(valueOf(10), 0, RoundingMode.UP))
-                            .costCategories(request.getCategories2Costs().keySet())
+                            .categories2Costs(request.getCategories2Costs())
                             .build()
             );
         }

@@ -14,9 +14,9 @@ import ru.tn.profitcalculator.model.enums.CardTypeEnum;
 import ru.tn.profitcalculator.model.enums.ProductStatusEnum;
 import ru.tn.profitcalculator.service.CalculatorService;
 import ru.tn.profitcalculator.web.comparator.ProductResponseComparator;
+import ru.tn.profitcalculator.web.model.CalculateRequest;
 import ru.tn.profitcalculator.web.model.ProductGroup;
 import ru.tn.profitcalculator.web.model.ProductResponse;
-import ru.tn.profitcalculator.web.model.ProductSearchRequest;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class ProductController {
 
 
     @PostMapping
-    public Set<ProductGroup> calculateProducts(@RequestBody ProductSearchRequest request) {
+    public Set<ProductGroup> calculateProducts(@RequestBody CalculateRequest request) {
         calculatorService.calculateOffers(request);
         return makeStubResponse();
     }

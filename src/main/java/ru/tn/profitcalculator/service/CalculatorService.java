@@ -7,7 +7,6 @@ import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
 import ru.tn.profitcalculator.web.model.CalculateRequest;
 import ru.tn.profitcalculator.web.model.ProductGroup;
-import ru.tn.profitcalculator.web.model.ProductSearchRequest;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class CalculatorService {
     }
 
 
-    public List<ProductGroup> calculateOffers(ProductSearchRequest request) {
+    public List<ProductGroup> calculateOffers(CalculateRequest request) {
         List<Product> products = productService.searchProducts(request.getDaysCount(), request.getMonthRefillSum(), request.getMonthWithdrawalSum());
         List<CalculateRequest> calculateRequests = calculateRequestBuilder.makeRequests(products, request);
 
