@@ -60,6 +60,7 @@ public class ProductController {
         cardOption.setRate1(BigDecimal.valueOf(2));
         cardOption.setRate2(BigDecimal.valueOf(4));
         cardOption.setRate3(BigDecimal.valueOf(10));
+        cardOption.setRate(BigDecimal.valueOf(500));
         card.setCardOption(cardOption);
 
         productGroup.setProducts(Arrays.asList(
