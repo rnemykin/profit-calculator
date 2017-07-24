@@ -2,7 +2,6 @@ package ru.tn.profitcalculator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.Deposit;
 import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.model.SavingAccount;
@@ -44,8 +43,7 @@ public class ProductService {
         );
 
         List<SavingAccount> savingAccounts = savingAccountRepository.findAll();
-        List<Card> cards = cardRepository.findAll();
-        return Stream.of(deposits, savingAccounts, cards).flatMap(Collection::stream).collect(toList());
+        return Stream.of(deposits, savingAccounts).flatMap(Collection::stream).collect(toList());
     }
 
 }
