@@ -1,10 +1,8 @@
 package ru.tn.profitcalculator.service.calculator.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.tn.profitcalculator.model.ProductRate;
+import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
-import ru.tn.profitcalculator.repository.ProductRateRepository;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
@@ -30,17 +28,10 @@ public class SavingAccountCalculator implements Calculator {
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
 
-    private ProductRateRepository productRateRepository;
-
-    @Autowired
-    public SavingAccountCalculator(ProductRateRepository productRateRepository) {
-        this.productRateRepository = productRateRepository;
-    }
-
 
     @Override
     public CalculateResult calculate(CalculateRequest request) {
-        Map<Integer, BigDecimal> periodRates = initSavingAccountRates(request.getProduct().getId());
+        Map<Integer, BigDecimal> periodRates = initSavingAccountRates((SavingAccount) request.getProduct());
 
         Integer daysCount = request.getDaysCount();
         LocalDate startDate = LocalDate.now();
@@ -100,10 +91,9 @@ public class SavingAccountCalculator implements Calculator {
                 .build();
     }
 
-    private Map<Integer, BigDecimal> initSavingAccountRates(Long savingAccountId) {
+    private Map<Integer, BigDecimal> initSavingAccountRates(SavingAccount savingAccount) {
         Map<Integer, BigDecimal> rates = new HashMap<>();
-        List<ProductRate> productRates = productRateRepository.findAllByProductId(savingAccountId);
-        productRates.forEach(r -> rates.put(r.getFromPeriod(), r.getRate()));
+        savingAccount.getRates().forEach(r -> rates.put(r.getFromPeriod(), r.getRate()));
         return rates;
     }
 
