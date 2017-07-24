@@ -56,10 +56,22 @@ public class DepositCalculator implements Calculator {
             startDate = nextPeriodDate;
         }
 
+        BigDecimal maxRate = V_100.multiply(
+                valueOf(Math.pow(
+                        BigDecimal.ONE.add(depositRate.getRate()
+                                .multiply(valueOf(request.getDaysCount())
+                                        .divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP)
+                                        .divide(V_100, 10, RoundingMode.HALF_UP))
+                        ).doubleValue(),
+                        DAYS_IN_YEAR.divide(valueOf(request.getDaysCount()), 10, RoundingMode.HALF_UP).doubleValue()
+                        )
+                ).subtract(BigDecimal.ONE)
+        ).setScale(2, RoundingMode.HALF_UP);
+
         return CalculateResult.builder()
+                .maxRate(maxRate)
                 .totalSum(totalSum)
                 .profitSum(profitSum)
-                .maxRate(depositRate.getEffectiveRate())
                 .daysCount(request.getDaysCount())
                 .build();
     }
