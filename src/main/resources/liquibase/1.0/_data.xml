@@ -17,10 +17,27 @@
 
         <insert tableName="saving_account">
             <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
-            <column name="rate1">4</column>
-            <column name="rate2">5</column>
-            <column name="rate3">6</column>
-            <column name="rate4">8.5</column>
+        </insert>
+
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM saving_account ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">1</column>
+            <column name="rate">4</column>
+        </insert>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM saving_account ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">3</column>
+            <column name="rate">5</column>
+        </insert>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM saving_account ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">6</column>
+            <column name="rate">6</column>
+        </insert>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM saving_account ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">12</column>
+            <column name="rate">8.5</column>
         </insert>
     </changeSet>
 
@@ -49,41 +66,35 @@
             <column name="private_banking_rate">7.9</column>
         </insert>
 
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">91</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">91</column>
             <column name="rate">7.4</column>
-            <column name="effective_rate">7.45</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">181</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">181</column>
             <column name="rate">7.2</column>
-            <column name="effective_rate">7.31</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">395</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">395</column>
             <column name="rate">7.05</column>
-            <column name="effective_rate">7.3</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">546</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">546</column>
             <column name="rate">6.7</column>
-            <column name="effective_rate">7.03</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">732</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">732</column>
             <column name="rate">6.35</column>
-            <column name="effective_rate">6.75</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">1102</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">1102</column>
             <column name="rate">3.1</column>
-            <column name="effective_rate">3.25</column>
         </insert>
     </changeSet>
 
@@ -113,41 +124,35 @@
             <column name="private_banking_rate">7.9</column>
         </insert>
 
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">91</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">91</column>
             <column name="rate">6.95</column>
-            <column name="effective_rate">6.99</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">181</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">181</column>
             <column name="rate">6.75</column>
-            <column name="effective_rate">6.84</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">395</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">395</column>
             <column name="rate">6.3</column>
-            <column name="effective_rate">6.5</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">546</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">546</column>
             <column name="rate">5.9</column>
-            <column name="effective_rate">6.15</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">732</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">732</column>
             <column name="rate">5.65</column>
-            <column name="effective_rate">5.97</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">1102</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">1102</column>
             <column name="rate">2.75</column>
-            <column name="effective_rate">2.86</column>
         </insert>
     </changeSet>
 
@@ -177,35 +182,30 @@
             <column name="private_banking_rate">7.9</column>
         </insert>
 
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">181</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">181</column>
             <column name="rate">4.1</column>
-            <column name="effective_rate">4.13</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">395</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">395</column>
             <column name="rate">4</column>
-            <column name="effective_rate">4.08</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">546</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">546</column>
             <column name="rate">3.85</column>
-            <column name="effective_rate">3.96</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">732</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">732</column>
             <column name="rate">3.8</column>
-            <column name="effective_rate">3.94</column>
         </insert>
-        <insert tableName="deposit_rate">
-            <column name="deposit_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
-            <column name="from_day">1102</column>
+        <insert tableName="product_rate">
+            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="from_period">1102</column>
             <column name="rate">1.9</column>
-            <column name="effective_rate">1.95</column>
         </insert>
     </changeSet>
 

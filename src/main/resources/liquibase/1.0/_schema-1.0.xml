@@ -68,10 +68,6 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="rate1" type="NUMERIC"/>
-            <column name="rate2" type="NUMERIC"/>
-            <column name="rate3" type="NUMERIC"/>
-            <column name="rate4" type="NUMERIC"/>
         </createTable>
     </changeSet>
 
@@ -116,20 +112,17 @@
     </changeSet>
 
     <changeSet id="20.07.2017-7-1" author="rnemykin">
-        <createTable tableName="deposit_rate">
+        <createTable tableName="product_rate">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="deposit_id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false" references="deposit(id)" foreignKeyName="deposit_period_rate_deposit_id_fk"/>
+            <column name="product_id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" references="product(id)" foreignKeyName="deposit_period_rate_product_id_fk"/>
             </column>
             <column name="rate" type="NUMBER">
                 <constraints nullable="false"/>
             </column>
-            <column name="effective_rate" type="NUMBER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="from_day" type="INTEGER">
+            <column name="from_period" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
         </createTable>

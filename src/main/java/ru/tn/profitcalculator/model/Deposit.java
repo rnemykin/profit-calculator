@@ -35,6 +35,6 @@ public class Deposit extends Product {
     private BigDecimal privateBankingSum;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "depositId")
-    private List<DepositRate> rates;
+    @JoinColumn(name = "productId")
+    private List<ProductRate> rates;
 }
