@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 
 @Data
@@ -32,4 +33,7 @@ public abstract class Product {
 
     @Enumerated(EnumType.STRING)
     private ProductTypeEnum type;
+
+    @Transient
+    private Product linkedProduct;
 }
