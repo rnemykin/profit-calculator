@@ -2,9 +2,9 @@ package ru.tn.profitcalculator.service.calculator.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.tn.profitcalculator.model.DepositRate;
+import ru.tn.profitcalculator.model.ProductRate;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
-import ru.tn.profitcalculator.repository.DepositRateRepository;
+import ru.tn.profitcalculator.repository.ProductRateRepository;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
@@ -22,16 +22,16 @@ public class DepositCalculator implements Calculator {
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
 
-    private final DepositRateRepository depositRateRepository;
+    private final ProductRateRepository productRateRepository;
 
     @Autowired
-    public DepositCalculator(DepositRateRepository depositRateRepository) {
-        this.depositRateRepository = depositRateRepository;
+    public DepositCalculator(ProductRateRepository productRateRepository) {
+        this.productRateRepository = productRateRepository;
     }
 
     @Override
     public CalculateResult calculate(CalculateRequest request) {
-        DepositRate depositRate = depositRateRepository.findDepositRate(request.getProduct().getId(), request.getDaysCount()).get(0);
+        ProductRate productRate = productRateRepository.findDepositRate(request.getProduct().getId(), request.getDaysCount()).get(0);
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(request.getDaysCount());
 
@@ -46,7 +46,7 @@ public class DepositCalculator implements Calculator {
 
             isLastPeriod = !nextPeriodDate.isBefore(endDate);
             long periodDays = isLastPeriod ? DAYS.between(startDate, endDate) : DAYS.between(startDate, nextPeriodDate);
-            BigDecimal monthProfit = calculatePeriodSum(totalSum, depositRate.getRate(), valueOf(periodDays));
+            BigDecimal monthProfit = calculatePeriodSum(totalSum, productRate.getRate(), valueOf(periodDays));
             profitSum = profitSum.add(monthProfit);
             totalSum = totalSum.add(monthProfit);
             if(isRefill && !isLastPeriod) {
@@ -58,7 +58,7 @@ public class DepositCalculator implements Calculator {
 
         BigDecimal maxRate = V_100.multiply(
                 valueOf(Math.pow(
-                        BigDecimal.ONE.add(depositRate.getRate()
+                        BigDecimal.ONE.add(productRate.getRate()
                                 .multiply(valueOf(request.getDaysCount())
                                         .divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP)
                                         .divide(V_100, 10, RoundingMode.HALF_UP))

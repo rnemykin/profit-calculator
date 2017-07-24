@@ -2,9 +2,9 @@ package ru.tn.profitcalculator.service.calculator.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.tn.profitcalculator.model.SavingAccount;
+import ru.tn.profitcalculator.model.ProductRate;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
-import ru.tn.profitcalculator.repository.SavingAccountRepository;
+import ru.tn.profitcalculator.repository.ProductRateRepository;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
@@ -29,19 +29,19 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 public class SavingAccountCalculator implements Calculator {
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
-    private static final Map<Integer, BigDecimal> PERIOD_RATES = new HashMap<>();
+
+    private ProductRateRepository productRateRepository;
 
     @Autowired
-    public SavingAccountCalculator(SavingAccountRepository savingAccountRepository) {
-        SavingAccount savingAccount = savingAccountRepository.findAll().get(0);
-        PERIOD_RATES.put(1, savingAccount.getRate1());
-        PERIOD_RATES.put(3, savingAccount.getRate2());
-        PERIOD_RATES.put(6, savingAccount.getRate3());
-        PERIOD_RATES.put(12, savingAccount.getRate4());
+    public SavingAccountCalculator(ProductRateRepository productRateRepository) {
+        this.productRateRepository = productRateRepository;
     }
+
 
     @Override
     public CalculateResult calculate(CalculateRequest request) {
+        Map<Integer, BigDecimal> periodRates = initSavingAccountRates(request.getProduct().getId());
+
         Integer daysCount = request.getDaysCount();
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(daysCount);
@@ -76,7 +76,7 @@ public class SavingAccountCalculator implements Calculator {
 
                 boolean isLastPeriod = !layerNextPeriodDate.isBefore(endDate);
                 long periodDays = isLastPeriod ? DAYS.between(layerStartDate, endDate) : DAYS.between(layerStartDate, layerNextPeriodDate);
-                BigDecimal monthProfit = calculatePeriodSum(layerProfitSum, getRate4Month(i), valueOf(periodDays));
+                BigDecimal monthProfit = calculatePeriodSum(layerProfitSum, getRate4Month(periodRates, i), valueOf(periodDays));
 
                 layerProfitSum = layerProfitSum.add(monthProfit);
                 layerStartDate = layerNextPeriodDate;
@@ -100,8 +100,15 @@ public class SavingAccountCalculator implements Calculator {
                 .build();
     }
 
-    public BigDecimal getRate4Month(int month) {
-        return PERIOD_RATES.entrySet().stream()
+    private Map<Integer, BigDecimal> initSavingAccountRates(Long savingAccountId) {
+        Map<Integer, BigDecimal> rates = new HashMap<>();
+        List<ProductRate> productRates = productRateRepository.findAllByProductId(savingAccountId);
+        productRates.forEach(r -> rates.put(r.getFromPeriod(), r.getRate()));
+        return rates;
+    }
+
+    public BigDecimal getRate4Month(Map<Integer, BigDecimal> periodRates, int month) {
+        return periodRates.entrySet().stream()
                 .filter(e -> e.getKey().compareTo(month) <= 0)
                 .max(Comparator.comparing(Map.Entry::getKey))
                 .orElseThrow(() -> new RuntimeException("rate not found fot month " + month))
