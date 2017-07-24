@@ -16,7 +16,6 @@ import ru.tn.profitcalculator.service.CalculatorService;
 import ru.tn.profitcalculator.web.comparator.ProductResponseComparator;
 import ru.tn.profitcalculator.web.model.CalculateRequest;
 import ru.tn.profitcalculator.web.model.ProductGroup;
-import ru.tn.profitcalculator.web.model.ProductResponse;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -63,10 +62,8 @@ public class ProductController {
         cardOption.setRate(BigDecimal.valueOf(500));
         card.setCardOption(cardOption);
 
-        productGroup.setProducts(Arrays.asList(
-                new ProductResponse(savingAccProduct, singleton("Очень выгодный продукт")),
-                new ProductResponse(card, singleton("Очень выгодная карта"))
-        ));
+        productGroup.setProducts(Arrays.asList(savingAccProduct, card));
+        productGroup.setNotes(singleton("Очень выгодный продукт"));
 
         Set<ProductGroup> result = new TreeSet<>(new ProductResponseComparator());
         result.add(productGroup);
