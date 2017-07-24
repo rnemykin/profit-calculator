@@ -7,6 +7,7 @@ import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.model.RefillOption;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
+import ru.tn.profitcalculator.repository.CardRepository;
 import ru.tn.profitcalculator.repository.RefillOptionRepository;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.web.model.ProductSearchRequest;
@@ -22,10 +23,12 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Service
 public class CalculateRequestBuilder {
+    private final CardRepository cardRepository;
     private final RefillOptionRepository refillOptionRepository;
 
     @Autowired
-    public CalculateRequestBuilder(RefillOptionRepository refillOptionRepository) {
+    public CalculateRequestBuilder(CardRepository cardRepository, RefillOptionRepository refillOptionRepository) {
+        this.cardRepository = cardRepository;
         this.refillOptionRepository = refillOptionRepository;
     }
 
