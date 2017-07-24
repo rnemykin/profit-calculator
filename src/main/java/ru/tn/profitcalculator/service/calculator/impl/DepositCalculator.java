@@ -60,11 +60,12 @@ public class DepositCalculator implements Calculator {
 
         BigDecimal maxRate = V_100.multiply(
                 valueOf(Math.pow(
-                            BigDecimal.ONE.add(productRate.getRate()
-                                    .multiply(valueOf(request.getDaysCount())
+                            BigDecimal.ONE.
+                                    add(productRate.getRate()
+                                            .multiply(valueOf(request.getDaysCount())
                                             .divide(DAYS_IN_YEAR, SCALE, RoundingMode.HALF_UP)
                                             .divide(V_100, SCALE, RoundingMode.HALF_UP))
-                            ).doubleValue(),
+                                    ).doubleValue(),
                             DAYS_IN_YEAR.divide(valueOf(request.getDaysCount()), SCALE, RoundingMode.HALF_UP).doubleValue()
                         )
                 ).subtract(BigDecimal.ONE)
