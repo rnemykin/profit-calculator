@@ -1,5 +1,6 @@
 package ru.tn.profitcalculator.service.calculator.impl;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
@@ -83,10 +84,11 @@ public class SavingAccountCalculator implements Calculator {
             System.out.println("\n\n next layer \n\n");
         }
 
+        normalizeAccountStates(accountState);
         return CalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
-                .maxRate(null)  //todo
+                .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculateEffectiveRate())
                 .daysCount(daysCount)
                 .build();
     }
@@ -97,7 +99,7 @@ public class SavingAccountCalculator implements Calculator {
         return rates;
     }
 
-    public BigDecimal getRate4Month(Map<Integer, BigDecimal> periodRates, int month) {
+    private BigDecimal getRate4Month(Map<Integer, BigDecimal> periodRates, int month) {
         return periodRates.entrySet().stream()
                 .filter(e -> e.getKey().compareTo(month) <= 0)
                 .max(Comparator.comparing(Map.Entry::getKey))
@@ -112,8 +114,64 @@ public class SavingAccountCalculator implements Calculator {
         ).divide(V_100, 0, RoundingMode.HALF_UP);
     }
 
+    private void normalizeAccountStates(List<List<BigDecimal>> accountState) {
+        int maxSize = accountState.get(0).size();
+        for (List<BigDecimal> state : accountState) {
+            while (state.size() != maxSize) {
+                state.add(0, BigDecimal.ZERO);
+            }
+        }
+    }
+
     @Override
     public ProductTypeEnum type() {
         return ProductTypeEnum.SAVING_ACCOUNT;
+    }
+
+
+    @AllArgsConstructor
+     private class EffectiveRateCalculator {
+        private Map<Integer, BigDecimal> rates;
+        private List<List<BigDecimal>> accountState;
+
+        private BigDecimal calculateEffectiveRate() {
+            BigDecimal b12 = getMinSumForPeriod(12);
+            BigDecimal b6 = getMinSumForPeriod(6);
+            BigDecimal b3 = getMinSumForPeriod(3);
+            BigDecimal b1 = getMinSumForPeriod(1);
+
+            BigDecimal rate12 = getRate4Month(rates, 12);
+            BigDecimal rate6 = getRate4Month(rates, 6);
+            BigDecimal rate3 = getRate4Month(rates, 3);
+            BigDecimal rate1 = getRate4Month(rates, 1);
+
+            return (b12.multiply(rate12)
+                    .add(b6.subtract(b12).multiply(rate6))
+                    .add(b3.subtract(b6).multiply(rate3))
+                    .add(b1.subtract(b3).multiply(rate1))
+            ).divide(b1, 1, RoundingMode.HALF_UP);
+        }
+
+        private BigDecimal getMinSumForPeriod(int period) {
+            List<BigDecimal> initLayer = accountState.get(0);
+            if(initLayer.size() < period) {
+                return BigDecimal.ZERO;
+            }
+
+            int size = initLayer.size();
+            List<BigDecimal> monthsSum = new ArrayList<>();
+            for (int i = size - period; i < size; i++) {
+                BigDecimal monthSum = ZERO;
+                for (List<BigDecimal> state : accountState) {
+                    monthSum = monthSum.add(state.get(i));
+                }
+                monthsSum.add(monthSum);
+            }
+
+            return monthsSum.stream()
+                    .min(BigDecimal::compareTo)
+                    .orElse(BigDecimal.ZERO);
+        }
+
     }
 }
