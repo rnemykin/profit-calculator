@@ -9,6 +9,8 @@ import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.repository.DepositRepository;
 import ru.tn.profitcalculator.repository.SavingAccountRepository;
+import ru.tn.profitcalculator.repository.specification.DepositSpecification;
+import ru.tn.profitcalculator.repository.specification.ProductFilter;
 import ru.tn.profitcalculator.service.ProductService;
 import ru.tn.profitcalculator.service.calculator.CalculateRequest;
 import ru.tn.profitcalculator.service.calculator.CalculateResult;
@@ -46,8 +48,29 @@ public class ProfitCalculatorApplicationTests {
 		savingAccountRepository.findAll().forEach(d -> {
 			CalculateRequest calculateRequest = CalculateRequest.builder()
 					.product(d)
-					.daysCount(365)
-					.monthRefillSum(BigDecimal.valueOf(20000))
+					.daysCount(181)
+//					.monthRefillSum(BigDecimal.valueOf(15000))
+					.initSum(BigDecimal.valueOf(10000))
+					.build();
+
+			CalculateResult result = calculator.calculate(calculateRequest);
+			System.out.println(result);
+		});
+
+	}
+
+	@Test
+	public void depositCalculate() {
+        int daysCount = 280;
+        Calculator calculator = calculatorFactory.get(ProductTypeEnum.DEPOSIT);
+        depositRepository.findAll(new DepositSpecification<>(
+				ProductFilter.builder()
+						.daysCount(daysCount)
+						.build()
+		)).forEach(d -> {
+			CalculateRequest calculateRequest = CalculateRequest.builder()
+					.product(d)
+					.daysCount(daysCount)
 					.initSum(BigDecimal.valueOf(200000))
 					.build();
 

@@ -21,6 +21,8 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 public class DepositCalculator implements Calculator {
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
+    private static final int SCALE = 10;
+
 
     private final ProductRateRepository productRateRepository;
 
@@ -58,28 +60,28 @@ public class DepositCalculator implements Calculator {
 
         BigDecimal maxRate = V_100.multiply(
                 valueOf(Math.pow(
-                        BigDecimal.ONE.add(productRate.getRate()
-                                .multiply(valueOf(request.getDaysCount())
-                                        .divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP)
-                                        .divide(V_100, 10, RoundingMode.HALF_UP))
-                        ).doubleValue(),
-                        DAYS_IN_YEAR.divide(valueOf(request.getDaysCount()), 10, RoundingMode.HALF_UP).doubleValue()
+                            BigDecimal.ONE.add(productRate.getRate()
+                                    .multiply(valueOf(request.getDaysCount())
+                                            .divide(DAYS_IN_YEAR, SCALE, RoundingMode.HALF_UP)
+                                            .divide(V_100, SCALE, RoundingMode.HALF_UP))
+                            ).doubleValue(),
+                            DAYS_IN_YEAR.divide(valueOf(request.getDaysCount()), SCALE, RoundingMode.HALF_UP).doubleValue()
                         )
                 ).subtract(BigDecimal.ONE)
         ).setScale(2, RoundingMode.HALF_UP);
 
         return CalculateResult.builder()
                 .maxRate(maxRate)
-                .totalSum(totalSum)
-                .profitSum(profitSum)
+                .totalSum(totalSum.setScale(0, RoundingMode.UP))
+                .profitSum(profitSum.setScale(0, RoundingMode.UP))
                 .daysCount(request.getDaysCount())
                 .build();
     }
 
     private BigDecimal calculatePeriodSum(BigDecimal totalSum, BigDecimal rate, BigDecimal periodDays) {
         return totalSum.multiply(
-                rate.multiply(periodDays.divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP))
-        ).divide(V_100, 0, RoundingMode.HALF_UP);
+                rate.multiply(periodDays.divide(DAYS_IN_YEAR, SCALE, RoundingMode.HALF_UP))
+        ).divide(V_100, SCALE, RoundingMode.HALF_UP);
     }
 
     @Override
