@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Deposit;
 import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.model.SavingAccount;
-import ru.tn.profitcalculator.repository.CardRepository;
 import ru.tn.profitcalculator.repository.DepositRepository;
 import ru.tn.profitcalculator.repository.SavingAccountRepository;
 import ru.tn.profitcalculator.repository.specification.DepositSpecification;
@@ -21,13 +20,11 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Service
 public class ProductService {
-    private final CardRepository cardRepository;
     private final DepositRepository depositRepository;
     private final SavingAccountRepository savingAccountRepository;
 
     @Autowired
-    public ProductService(CardRepository cardRepository, DepositRepository depositRepository, SavingAccountRepository savingAccountRepository) {
-        this.cardRepository = cardRepository;
+    public ProductService(DepositRepository depositRepository, SavingAccountRepository savingAccountRepository) {
         this.depositRepository = depositRepository;
         this.savingAccountRepository = savingAccountRepository;
     }
