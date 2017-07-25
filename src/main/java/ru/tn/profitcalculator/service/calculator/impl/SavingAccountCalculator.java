@@ -97,8 +97,13 @@ public class SavingAccountCalculator implements Calculator {
         normalizeAccountState(accountState);
 
         BigDecimal maxRate = new EffectiveRateCalculator(periodRates, accountState).calculate();
-        BigDecimal savingOptionRate = new SavingOptionRateCalculator(savingAccount, params).calculate();
-        maxRate = maxRate.add(savingOptionRate);
+
+        if (savingAccount.getLinkedProduct() != null) {
+
+            Card card = (Card) savingAccount.getLinkedProduct();
+            BigDecimal savingOptionRate = new SavingOptionRateCalculator(card, params.getCategories2Costs()).calculate();
+            maxRate = maxRate.add(savingOptionRate);
+        }
 
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
@@ -189,36 +194,31 @@ public class SavingAccountCalculator implements Calculator {
     }
 
     @AllArgsConstructor
-    private class SavingOptionRateCalculator {
+    private static class SavingOptionRateCalculator {
 
-        private final Range<BigDecimal> RANGE_1 = Range.between(BigDecimal.valueOf(5000), BigDecimal.valueOf(14999.99));
-        private final Range<BigDecimal> RANGE_2 = Range.between(BigDecimal.valueOf(15000), BigDecimal.valueOf(74999.99));
-        private final Range<BigDecimal> RANGE_3 = Range.between(BigDecimal.valueOf(75000), BigDecimal.valueOf(Double.MAX_VALUE));
+        private static final Range<BigDecimal> RANGE_1 = Range.between(BigDecimal.valueOf(5000), BigDecimal.valueOf(14999.99));
+        private static final Range<BigDecimal> RANGE_2 = Range.between(BigDecimal.valueOf(15000), BigDecimal.valueOf(74999.99));
+        private static final Range<BigDecimal> RANGE_3 = Range.between(BigDecimal.valueOf(75000), BigDecimal.valueOf(Double.MAX_VALUE));
 
-        private SavingAccount savingAccount;
-        private CalculateParams params;
+        private Card card;
+        private Map<PosCategoryEnum, BigDecimal> categories2Costs;
 
         private BigDecimal calculate() {
             BigDecimal savingOptionRate = BigDecimal.ZERO;
-            if (savingAccount.getLinkedProduct() != null) {
+            CardOption cardOption = card.getCardOption();
 
-                Card card = (Card) savingAccount.getLinkedProduct();
-                CardOption cardOption = card.getCardOption();
+            if (cardOption != null && cardOption.getOption() == BonusOptionEnum.SAVING) {
+                BigDecimal totalTransactionSum = BigDecimal.ZERO;
 
-                if (cardOption != null && cardOption.getOption() == BonusOptionEnum.SAVING) {
-                    Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
-                    BigDecimal totalTransactionSum = BigDecimal.ZERO;
-
-                    for (BigDecimal categoryTransactionsSum : categories2Costs.values()) {
-                        totalTransactionSum = totalTransactionSum.add(categoryTransactionsSum);
-                    }
-                    if (RANGE_1.contains(totalTransactionSum)) {
-                        savingOptionRate = cardOption.getRate1();
-                    } else if (RANGE_2.contains(totalTransactionSum)) {
-                        savingOptionRate = cardOption.getRate2();
-                    } else if (RANGE_3.contains(totalTransactionSum)) {
-                        savingOptionRate = cardOption.getRate3();
-                    }
+                for (BigDecimal categoryTransactionsSum : categories2Costs.values()) {
+                    totalTransactionSum = totalTransactionSum.add(categoryTransactionsSum);
+                }
+                if (RANGE_1.contains(totalTransactionSum)) {
+                    savingOptionRate = cardOption.getRate1();
+                } else if (RANGE_2.contains(totalTransactionSum)) {
+                    savingOptionRate = cardOption.getRate2();
+                } else if (RANGE_3.contains(totalTransactionSum)) {
+                    savingOptionRate = cardOption.getRate3();
                 }
             }
             return savingOptionRate;
