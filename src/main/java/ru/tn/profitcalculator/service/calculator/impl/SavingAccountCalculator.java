@@ -64,14 +64,7 @@ public class SavingAccountCalculator implements Calculator {
         System.out.println("********************* start calculating");
         List<List<BigDecimal>> accountState = new ArrayList<>();
 
-        Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
-        BigDecimal savingOptionRate = BigDecimal.ZERO;
-
-        if (savingAccount.getLinkedProduct() != null && categories2Costs != null && !categories2Costs.isEmpty()) {
-            Card card = (Card) savingAccount.getLinkedProduct();
-            savingOptionRate = new SavingOptionRateCalculator(card, categories2Costs).calculate();
-        }
-
+        BigDecimal savingOptionRate = getSavingOptionRate(savingAccount, params);
         for (Map.Entry<LocalDate, BigDecimal> layer : layers.entrySet()) {
 
             List<BigDecimal> layerAccountState = new ArrayList<>();
@@ -112,6 +105,16 @@ public class SavingAccountCalculator implements Calculator {
                 .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculate())
                 .daysCount(daysCount)
                 .build();
+    }
+
+    private BigDecimal getSavingOptionRate(SavingAccount savingAccount, CalculateParams params) {
+        Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
+        BigDecimal savingOptionRate = BigDecimal.ZERO;
+        if (savingAccount.getLinkedProduct() != null && categories2Costs != null && !categories2Costs.isEmpty()) {
+            Card card = (Card) savingAccount.getLinkedProduct();
+            savingOptionRate = new SavingOptionRateCalculator(card, categories2Costs).calculate();
+        }
+        return savingOptionRate;
     }
 
     private Map<Integer, BigDecimal> initSavingAccountRates(SavingAccount savingAccount) {
