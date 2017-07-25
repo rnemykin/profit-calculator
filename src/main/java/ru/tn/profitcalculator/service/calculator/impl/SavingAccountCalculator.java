@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
-import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
-import ru.tn.profitcalculator.web.model.CalculateRequest;
+import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
+import ru.tn.profitcalculator.service.calculator.ProductCalculateResult;
+import ru.tn.profitcalculator.web.model.CalculateParams;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,25 +32,26 @@ public class SavingAccountCalculator implements Calculator {
 
 
     @Override
-    public CalculateResult calculate(CalculateRequest request) {
+    public ProductCalculateResult calculate(ProductCalculateRequest request) {
         Map<Integer, BigDecimal> periodRates = initSavingAccountRates((SavingAccount) request.getProduct());
 
-        Integer daysCount = request.getDaysCount();
+        CalculateParams params = request.getParams();
+        Integer daysCount = params.getDaysCount();
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(daysCount);
-        BigDecimal totalSum = request.getInitSum();
+        BigDecimal totalSum = params.getInitSum();
         BigDecimal totalProfit = ZERO;
 
         BigDecimal refillSum = ZERO;
         Map<LocalDate, BigDecimal> layers = new TreeMap<>();
         layers.put(startDate, totalSum);
-        if(isGreatThenZero(request.getMonthRefillSum())) {
+        if(isGreatThenZero(params.getMonthRefillSum())) {
             long monthsCount = MONTHS.between(startDate, endDate);
             for (int i = 1; i <= monthsCount ; i++) {
-                layers.put(startDate.plusMonths(i), request.getMonthRefillSum());
+                layers.put(startDate.plusMonths(i), params.getMonthRefillSum());
             }
 
-            refillSum = request.getMonthRefillSum().multiply(valueOf(monthsCount));
+            refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
         }
 
         System.out.println("********************* start calculating");
@@ -85,7 +87,7 @@ public class SavingAccountCalculator implements Calculator {
         }
 
         normalizeAccountState(accountState);
-        return CalculateResult.builder()
+        return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
                 .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculate())

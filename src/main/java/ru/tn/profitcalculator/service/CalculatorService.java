@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
-import ru.tn.profitcalculator.web.model.CalculateRequest;
+import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
+import ru.tn.profitcalculator.web.model.CalculateParams;
 import ru.tn.profitcalculator.web.model.ProductGroup;
 
 import java.util.List;
@@ -26,9 +27,9 @@ public class CalculatorService {
     }
 
 
-    public List<ProductGroup> calculateOffers(CalculateRequest request) {
-        List<Product> products = productService.searchProducts(request.getDaysCount(), request.getMonthRefillSum(), request.getMonthWithdrawalSum());
-        List<CalculateRequest> calculateRequests = calculateRequestBuilder.makeRequests(products, request);
+    public List<ProductGroup> calculateOffers(CalculateParams params) {
+        List<Product> products = productService.searchProducts(params.getDaysCount(), params.getMonthRefillSum(), params.getMonthWithdrawalSum());
+        List<ProductCalculateRequest> calculateRequests = calculateRequestBuilder.makeRequests(products, params);
 
         return calculateRequests.stream().map(r -> {
             Calculator calculator = calculatorFactory.get(r.getProduct().getType());

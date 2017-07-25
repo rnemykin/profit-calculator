@@ -9,13 +9,12 @@ import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.repository.CardRepository;
 import ru.tn.profitcalculator.repository.RefillOptionRepository;
-import ru.tn.profitcalculator.web.model.CalculateRequest;
+import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
+import ru.tn.profitcalculator.web.model.CalculateParams;
 
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static java.math.BigDecimal.valueOf;
 import static ru.tn.profitcalculator.model.enums.RefillOptionEventTypeEnum.FIXED_DATE;
 import static ru.tn.profitcalculator.model.enums.RefillOptionSumTypeEnum.FIXED_SUM;
 import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
@@ -31,18 +30,14 @@ public class CalculateRequestBuilder {
         this.refillOptionRepository = refillOptionRepository;
     }
 
-    List<CalculateRequest> makeRequests(List<Product> products, CalculateRequest request) {
-        List<CalculateRequest> result = products.stream().map(p -> CalculateRequest.builder()
+    List<ProductCalculateRequest> makeRequests(List<Product> products, CalculateParams params) {
+        List<ProductCalculateRequest> result = products.stream().map(p -> ProductCalculateRequest.builder()
                 .product(p)
-                .initSum(request.getInitSum())
-                .daysCount(request.getDaysCount())
-                .monthRefillSum(request.getMonthRefillSum())
-                .monthWithdrawalSum(request.getMonthWithdrawalSum())
-                .categories2Costs(request.getCategories2Costs())
+                .params(params)
                 .build()
         ).collect(Collectors.toList());
 
-        if(!isGreatThenZero(request.getMonthRefillSum()) && !isGreatThenZero(request.getMonthWithdrawalSum())) {
+        if(!isGreatThenZero(params.getMonthRefillSum()) && !isGreatThenZero(params.getMonthWithdrawalSum())) {
             SavingAccount product = (SavingAccount) products.stream()
                     .filter(p -> p.getType() == ProductTypeEnum.SAVING_ACCOUNT)
                     .findFirst()
@@ -54,13 +49,10 @@ public class CalculateRequestBuilder {
             savingAccount.setRefillOption(autoRefillOption);
 
             result.add(
-                    CalculateRequest.builder()
+                    ProductCalculateRequest.builder()
                             .recommendation(true)
                             .product(savingAccount)
-                            .initSum(request.getInitSum())
-                            .daysCount(request.getDaysCount())
-                            .monthRefillSum(request.getInitSum().divide(valueOf(10), 0, RoundingMode.UP))
-                            .categories2Costs(request.getCategories2Costs())
+                            .params(params)
                             .build()
             );
         }

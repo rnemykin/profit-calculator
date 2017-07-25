@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-public class CalculateResult {
+public class ProductCalculateResult {
     private BigDecimal profitSum;
     private BigDecimal totalSum;
     private BigDecimal maxRate;

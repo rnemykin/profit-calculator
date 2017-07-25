@@ -12,10 +12,11 @@ import ru.tn.profitcalculator.repository.SavingAccountRepository;
 import ru.tn.profitcalculator.repository.specification.DepositSpecification;
 import ru.tn.profitcalculator.repository.specification.ProductFilter;
 import ru.tn.profitcalculator.service.ProductService;
-import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
-import ru.tn.profitcalculator.web.model.CalculateRequest;
+import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
+import ru.tn.profitcalculator.service.calculator.ProductCalculateResult;
+import ru.tn.profitcalculator.web.model.CalculateParams;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -46,14 +47,17 @@ public class ProfitCalculatorApplicationTests {
 	public void savingAccountCalculate() {
 		Calculator calculator = calculatorFactory.get(ProductTypeEnum.SAVING_ACCOUNT);
 		savingAccountRepository.findAll().forEach(d -> {
-			CalculateRequest calculateRequest = CalculateRequest.builder()
+			ProductCalculateRequest calculateParams = ProductCalculateRequest.builder()
 					.product(d)
-					.daysCount(181)
-//					.monthRefillSum(BigDecimal.valueOf(15000))
-					.initSum(BigDecimal.valueOf(10000))
+					.params(
+							CalculateParams.builder()
+									.daysCount(181)
+									.initSum(BigDecimal.valueOf(10000))
+									.build()
+					)
 					.build();
 
-			CalculateResult result = calculator.calculate(calculateRequest);
+			ProductCalculateResult result = calculator.calculate(calculateParams);
 			System.out.println(result);
 		});
 
@@ -68,13 +72,16 @@ public class ProfitCalculatorApplicationTests {
 						.daysCount(daysCount)
 						.build()
 		)).forEach(d -> {
-			CalculateRequest calculateRequest = CalculateRequest.builder()
+			ProductCalculateRequest request = ProductCalculateRequest.builder()
 					.product(d)
-					.daysCount(daysCount)
-					.initSum(BigDecimal.valueOf(200000))
+					.params(CalculateParams.builder()
+									.daysCount(daysCount)
+									.initSum(BigDecimal.valueOf(200000))
+									.build()
+					)
 					.build();
 
-			CalculateResult result = calculator.calculate(calculateRequest);
+			ProductCalculateResult result = calculator.calculate(request);
 			System.out.println(result);
 		});
 

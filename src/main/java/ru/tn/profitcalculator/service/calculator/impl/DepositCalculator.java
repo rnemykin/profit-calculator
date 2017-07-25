@@ -5,9 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.ProductRate;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.repository.ProductRateRepository;
-import ru.tn.profitcalculator.service.calculator.CalculateResult;
 import ru.tn.profitcalculator.service.calculator.Calculator;
-import ru.tn.profitcalculator.web.model.CalculateRequest;
+import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
+import ru.tn.profitcalculator.service.calculator.ProductCalculateResult;
+import ru.tn.profitcalculator.web.model.CalculateParams;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -32,16 +33,17 @@ public class DepositCalculator implements Calculator {
     }
 
     @Override
-    public CalculateResult calculate(CalculateRequest request) {
-        ProductRate productRate = productRateRepository.findProductRate(request.getProduct().getId(), request.getDaysCount()).get(0);
+    public ProductCalculateResult calculate(ProductCalculateRequest request) {
+        CalculateParams params = request.getParams();
+        ProductRate productRate = productRateRepository.findProductRate(request.getProduct().getId(), params.getDaysCount()).get(0);
         LocalDate startDate = LocalDate.now();
-        LocalDate endDate = startDate.plusDays(request.getDaysCount());
+        LocalDate endDate = startDate.plusDays(params.getDaysCount());
 
-        BigDecimal totalSum = request.getInitSum();
+        BigDecimal totalSum = params.getInitSum();
         BigDecimal profitSum = BigDecimal.ZERO;
         LocalDate nextPeriodDate = startDate;
 
-        boolean isRefill = isGreatThenZero(request.getMonthRefillSum());
+        boolean isRefill = isGreatThenZero(params.getMonthRefillSum());
         boolean isLastPeriod = false;
         while (!isLastPeriod) {
             nextPeriodDate = nextPeriodDate.plusMonths(1);
@@ -52,7 +54,7 @@ public class DepositCalculator implements Calculator {
             profitSum = profitSum.add(monthProfit);
             totalSum = totalSum.add(monthProfit);
             if(isRefill && !isLastPeriod) {
-                totalSum = totalSum.add(request.getMonthRefillSum());
+                totalSum = totalSum.add(params.getMonthRefillSum());
             }
 
             startDate = nextPeriodDate;
@@ -62,20 +64,20 @@ public class DepositCalculator implements Calculator {
                 valueOf(Math.pow(
                             BigDecimal.ONE.
                                     add(productRate.getRate()
-                                            .multiply(valueOf(request.getDaysCount())
+                                            .multiply(valueOf(params.getDaysCount())
                                             .divide(DAYS_IN_YEAR, SCALE, RoundingMode.HALF_UP)
                                             .divide(V_100, SCALE, RoundingMode.HALF_UP))
                                     ).doubleValue(),
-                            DAYS_IN_YEAR.divide(valueOf(request.getDaysCount()), SCALE, RoundingMode.HALF_UP).doubleValue()
+                            DAYS_IN_YEAR.divide(valueOf(params.getDaysCount()), SCALE, RoundingMode.HALF_UP).doubleValue()
                         )
                 ).subtract(BigDecimal.ONE)
         ).setScale(2, RoundingMode.HALF_UP);
 
-        return CalculateResult.builder()
+        return ProductCalculateResult.builder()
                 .maxRate(maxRate)
                 .totalSum(totalSum.setScale(0, RoundingMode.UP))
                 .profitSum(profitSum.setScale(0, RoundingMode.UP))
-                .daysCount(request.getDaysCount())
+                .daysCount(params.getDaysCount())
                 .build();
     }
 
