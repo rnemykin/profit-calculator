@@ -9,6 +9,7 @@ import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 import ru.tn.profitcalculator.web.model.ProductGroup;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -26,17 +27,20 @@ public class CalculatorService {
         this.calculateRequestBuilder = calculateRequestBuilder;
     }
 
-
     public List<ProductGroup> calculateOffers(CalculateParams params) {
-        List<Product> products = productService.searchProducts(params.getDaysCount(), params.getMonthRefillSum(), params.getMonthWithdrawalSum());
+        Integer daysCount = params.getDaysCount();
+        BigDecimal monthRefillSum = params.getMonthRefillSum();
+        BigDecimal monthWithdrawalSum = params.getMonthWithdrawalSum();
+
+        List<Product> products = productService.searchProducts(daysCount, monthRefillSum, monthWithdrawalSum);
         List<ProductCalculateRequest> calculateRequests = calculateRequestBuilder.makeRequests(products, params);
 
-        return calculateRequests.stream().map(r -> {
-            Calculator calculator = calculatorFactory.get(r.getProduct().getType());
-            return calculator.calculate(r);
-        }).map(r -> {
-
-            return new ProductGroup();
-        }).collect(toList());
+        return calculateRequests.stream()
+                .map(r -> {
+                    Calculator calculator = calculatorFactory.get(r.getProduct().getType());
+                    return calculator.calculate(r);
+                })
+                .map(r -> new ProductGroup())
+                .collect(toList());
     }
 }
