@@ -61,7 +61,7 @@ public class ProfitCalculatorApplicationTests {
 
 	@Test
 	public void depositCalculate() {
-        int daysCount = 280;
+        int daysCount = 1830;
         Calculator calculator = calculatorFactory.get(ProductTypeEnum.DEPOSIT);
         depositRepository.findAll(new DepositSpecification<>(
 				ProductFilter.builder()
