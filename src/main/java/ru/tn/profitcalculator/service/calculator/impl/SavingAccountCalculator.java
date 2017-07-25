@@ -70,6 +70,7 @@ public class SavingAccountCalculator implements Calculator {
         log.info("start calculating");
         List<List<BigDecimal>> accountState = new ArrayList<>();
 
+        //TODO Максимальная сумма, на которую может быть начислена надбавка = 1,5 млн руб.
         BigDecimal optionRate = calculateOptionRate(savingAccount, params.getCategories2Costs());
         for (Map.Entry<LocalDate, BigDecimal> layer : layers.entrySet()) {
 

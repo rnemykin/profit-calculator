@@ -1,19 +1,19 @@
-package ru.tn.profitcalculator;
+package ru.tn.profitcalculator.steps;
 
 import cucumber.api.java.ru.Когда;
 import cucumber.api.java.ru.Пусть;
 import cucumber.api.java.ru.То;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.test.context.ContextConfiguration;
+import ru.tn.profitcalculator.ProfitCalculatorApplication;
 import ru.tn.profitcalculator.service.calculator.impl.SavingAccountCalculator;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 
-@ContextConfiguration(classes = ProfitCalculatorApplication.class, loader = SpringBootContextLoader.class)
-public class StepDefinitions {
+public class SavingAccountSteps {
 
-    @Autowired
+//    @Autowired
     private SavingAccountCalculator savingAccountCalculator;
 
     private int spentMonthes;

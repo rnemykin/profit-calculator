@@ -3,7 +3,6 @@ package ru.tn.profitcalculator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Product;
-import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
@@ -17,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 public class CalculatorService {
+
     private final ProductService productService;
     private final CalculatorFactory calculatorFactory;
     private final CalculateRequestBuilder calculateRequestBuilder;
@@ -41,7 +41,7 @@ public class CalculatorService {
                     Calculator calculator = calculatorFactory.get(r.getProduct().getType());
                     return calculator.calculate(r);
                 })
-                .map(r -> new ProductGroup())
+                .map(r -> new ProductGroup()) //TODO сделать мэппинг
                 .collect(toList());
     }
 }
