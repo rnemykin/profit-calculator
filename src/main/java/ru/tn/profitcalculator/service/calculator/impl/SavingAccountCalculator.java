@@ -63,6 +63,15 @@ public class SavingAccountCalculator implements Calculator {
 
         System.out.println("********************* start calculating");
         List<List<BigDecimal>> accountState = new ArrayList<>();
+
+        Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
+        BigDecimal savingOptionRate = BigDecimal.ZERO;
+
+        if (savingAccount.getLinkedProduct() != null && categories2Costs != null && !categories2Costs.isEmpty()) {
+            Card card = (Card) savingAccount.getLinkedProduct();
+            savingOptionRate = new SavingOptionRateCalculator(card, categories2Costs).calculate();
+        }
+
         for (Map.Entry<LocalDate, BigDecimal> layer : layers.entrySet()) {
 
             List<BigDecimal> layerAccountState = new ArrayList<>();
@@ -78,7 +87,8 @@ public class SavingAccountCalculator implements Calculator {
 
                 boolean isLastPeriod = !layerNextPeriodDate.isBefore(endDate);
                 long periodDays = isLastPeriod ? DAYS.between(layerStartDate, endDate) : DAYS.between(layerStartDate, layerNextPeriodDate);
-                BigDecimal monthProfit = calculatePeriodSum(layerProfitSum, getRate4Month(periodRates, i), valueOf(periodDays));
+                BigDecimal rate4Month = getRate4Month(periodRates, i).add(savingOptionRate);
+                BigDecimal monthProfit = calculatePeriodSum(layerProfitSum, rate4Month, valueOf(periodDays));
 
                 layerProfitSum = layerProfitSum.add(monthProfit);
                 layerStartDate = layerNextPeriodDate;
@@ -96,19 +106,10 @@ public class SavingAccountCalculator implements Calculator {
 
         normalizeAccountState(accountState);
 
-        BigDecimal maxRate = new EffectiveRateCalculator(periodRates, accountState).calculate();
-
-        if (savingAccount.getLinkedProduct() != null) {
-
-            Card card = (Card) savingAccount.getLinkedProduct();
-            BigDecimal savingOptionRate = new SavingOptionRateCalculator(card, params.getCategories2Costs()).calculate();
-            maxRate = maxRate.add(savingOptionRate);
-        }
-
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
-                .maxRate(maxRate)
+                .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculate())
                 .daysCount(daysCount)
                 .build();
     }
