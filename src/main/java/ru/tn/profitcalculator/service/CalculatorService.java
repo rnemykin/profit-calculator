@@ -3,6 +3,7 @@ package ru.tn.profitcalculator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Product;
+import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
