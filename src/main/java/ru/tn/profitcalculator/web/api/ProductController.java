@@ -17,6 +17,7 @@ import ru.tn.profitcalculator.web.comparator.ProductResponseComparator;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 import ru.tn.profitcalculator.web.model.ProductGroup;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class ProductController {
 
 
     @PostMapping
-    public Set<ProductGroup> calculateProducts(@RequestBody CalculateParams request) {
+    public Set<ProductGroup> calculateProducts(@Valid @RequestBody CalculateParams request) {
         calculatorService.calculateOffers(request);
         return makeStubResponse();
     }
