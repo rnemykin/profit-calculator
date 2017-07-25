@@ -1,15 +1,16 @@
 package ru.tn.profitcalculator.service.calculator.impl;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.Range;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.SavingAccount;
-import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.service.calculator.Calculator;
+import ru.tn.profitcalculator.service.calculator.OptionRateCalculator;
+import ru.tn.profitcalculator.service.calculator.OptionRateCalculatorFactory;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateResult;
 import ru.tn.profitcalculator.web.model.CalculateParams;
@@ -32,6 +33,9 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Service
 public class SavingAccountCalculator implements Calculator {
+
+    @Autowired
+    OptionRateCalculatorFactory optionRateCalculatorFactory;
 
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
@@ -64,7 +68,7 @@ public class SavingAccountCalculator implements Calculator {
         System.out.println("********************* start calculating");
         List<List<BigDecimal>> accountState = new ArrayList<>();
 
-        BigDecimal savingOptionRate = getSavingOptionRate(savingAccount, params);
+        BigDecimal optionRate = getOptionRate(savingAccount, params.getCategories2Costs());
         for (Map.Entry<LocalDate, BigDecimal> layer : layers.entrySet()) {
 
             List<BigDecimal> layerAccountState = new ArrayList<>();
@@ -80,7 +84,7 @@ public class SavingAccountCalculator implements Calculator {
 
                 boolean isLastPeriod = !layerNextPeriodDate.isBefore(endDate);
                 long periodDays = isLastPeriod ? DAYS.between(layerStartDate, endDate) : DAYS.between(layerStartDate, layerNextPeriodDate);
-                BigDecimal rate4Month = getRate4Month(periodRates, i).add(savingOptionRate);
+                BigDecimal rate4Month = getRate4Month(periodRates, i).add(optionRate);
                 BigDecimal monthProfit = calculatePeriodSum(layerProfitSum, rate4Month, valueOf(periodDays));
 
                 layerProfitSum = layerProfitSum.add(monthProfit);
@@ -107,14 +111,19 @@ public class SavingAccountCalculator implements Calculator {
                 .build();
     }
 
-    private BigDecimal getSavingOptionRate(SavingAccount savingAccount, CalculateParams params) {
-        Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
-        BigDecimal savingOptionRate = BigDecimal.ZERO;
-        if (savingAccount.getLinkedProduct() != null && categories2Costs != null && !categories2Costs.isEmpty()) {
+    private BigDecimal getOptionRate(SavingAccount savingAccount, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
+        boolean hasCardTransactions = categories2Costs != null && !categories2Costs.isEmpty();
+
+        if (savingAccount.getLinkedProduct() instanceof Card && hasCardTransactions) {
             Card card = (Card) savingAccount.getLinkedProduct();
-            savingOptionRate = new SavingOptionRateCalculator(card, categories2Costs).calculate();
+            CardOption cardOption = card.getCardOption();
+
+            if (cardOption != null) {
+                OptionRateCalculator optionRateCalculator = optionRateCalculatorFactory.get(cardOption.getOption());
+                return optionRateCalculator.calculate(cardOption, categories2Costs);
+            }
         }
-        return savingOptionRate;
+        return BigDecimal.ZERO;
     }
 
     private Map<Integer, BigDecimal> initSavingAccountRates(SavingAccount savingAccount) {
@@ -197,35 +206,4 @@ public class SavingAccountCalculator implements Calculator {
         }
     }
 
-    @AllArgsConstructor
-    private static class SavingOptionRateCalculator {
-
-        private static final Range<BigDecimal> RANGE_1 = Range.between(BigDecimal.valueOf(5000), BigDecimal.valueOf(14999.99));
-        private static final Range<BigDecimal> RANGE_2 = Range.between(BigDecimal.valueOf(15000), BigDecimal.valueOf(74999.99));
-        private static final Range<BigDecimal> RANGE_3 = Range.between(BigDecimal.valueOf(75000), BigDecimal.valueOf(Double.MAX_VALUE));
-
-        private Card card;
-        private Map<PosCategoryEnum, BigDecimal> categories2Costs;
-
-        private BigDecimal calculate() {
-            BigDecimal savingOptionRate = BigDecimal.ZERO;
-            CardOption cardOption = card.getCardOption();
-
-            if (cardOption != null && cardOption.getOption() == BonusOptionEnum.SAVING) {
-                BigDecimal totalTransactionSum = BigDecimal.ZERO;
-
-                for (BigDecimal categoryTransactionsSum : categories2Costs.values()) {
-                    totalTransactionSum = totalTransactionSum.add(categoryTransactionsSum);
-                }
-                if (RANGE_1.contains(totalTransactionSum)) {
-                    savingOptionRate = cardOption.getRate1();
-                } else if (RANGE_2.contains(totalTransactionSum)) {
-                    savingOptionRate = cardOption.getRate2();
-                } else if (RANGE_3.contains(totalTransactionSum)) {
-                    savingOptionRate = cardOption.getRate3();
-                }
-            }
-            return savingOptionRate;
-        }
-    }
 }
