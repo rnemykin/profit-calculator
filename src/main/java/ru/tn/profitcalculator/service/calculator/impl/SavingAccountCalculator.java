@@ -1,6 +1,7 @@
 package ru.tn.profitcalculator.service.calculator.impl;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
@@ -31,6 +32,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MONTHS;
 import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
+@Log4j
 @Service
 public class SavingAccountCalculator implements Calculator {
 
@@ -65,7 +67,7 @@ public class SavingAccountCalculator implements Calculator {
             refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
         }
 
-        System.out.println("********************* start calculating");
+        log.info("start calculating");
         List<List<BigDecimal>> accountState = new ArrayList<>();
 
         BigDecimal optionRate = calcOptionRate(savingAccount, params.getCategories2Costs());
@@ -94,12 +96,12 @@ public class SavingAccountCalculator implements Calculator {
                 totalSum = totalSum.add(monthProfit);
                 totalProfit = totalProfit.add(monthProfit);
 
-                System.out.println("monthProfit " + monthProfit);
-                System.out.println("layerProfitSum = " + layerProfitSum);
+                log.info("monthProfit " + monthProfit);
+                log.info("layerProfitSum = " + layerProfitSum);
             }
 
             accountState.add(layerAccountState);
-            System.out.println("\n\n next layer \n\n");
+            log.info("next layer");
         }
 
         normalizeAccountState(accountState);
@@ -142,7 +144,7 @@ public class SavingAccountCalculator implements Calculator {
     }
 
     private BigDecimal calculatePeriodSum(BigDecimal totalSum, BigDecimal rate, BigDecimal periodDays) {
-        System.out.println("totalSum = " + totalSum + " rate = " + rate + " period = " + periodDays);
+        log.info("totalSum = " + totalSum + " rate = " + rate + " period = " + periodDays);
         return totalSum.multiply(
                 rate.multiply(periodDays.divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP))
         ).divide(V_100, 0, RoundingMode.HALF_UP);
