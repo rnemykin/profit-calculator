@@ -68,7 +68,8 @@ public class SavingAccountCalculator implements Calculator {
         System.out.println("********************* start calculating");
         List<List<BigDecimal>> accountState = new ArrayList<>();
 
-        BigDecimal optionRate = getOptionRate(savingAccount, params.getCategories2Costs());
+        BigDecimal optionRate = calcOptionRate(savingAccount, params.getCategories2Costs());
+
         for (Map.Entry<LocalDate, BigDecimal> layer : layers.entrySet()) {
 
             List<BigDecimal> layerAccountState = new ArrayList<>();
@@ -111,7 +112,7 @@ public class SavingAccountCalculator implements Calculator {
                 .build();
     }
 
-    private BigDecimal getOptionRate(SavingAccount savingAccount, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
+    private BigDecimal calcOptionRate(SavingAccount savingAccount, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
         boolean hasCardTransactions = categories2Costs != null && !categories2Costs.isEmpty();
 
         if (savingAccount.getLinkedProduct() instanceof Card && hasCardTransactions) {
