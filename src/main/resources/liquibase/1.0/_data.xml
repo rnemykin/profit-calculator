@@ -16,26 +16,26 @@
         </insert>
 
         <insert tableName="saving_account">
-            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'SAVING_ACCOUNT')"/>
         </insert>
 
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM saving_account ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'SAVING_ACCOUNT')"/>
             <column name="from_period">1</column>
             <column name="rate">4</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM saving_account ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'SAVING_ACCOUNT')"/>
             <column name="from_period">3</column>
             <column name="rate">5</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM saving_account ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'SAVING_ACCOUNT')"/>
             <column name="from_period">6</column>
             <column name="rate">6</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM saving_account ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'SAVING_ACCOUNT')"/>
             <column name="from_period">12</column>
             <column name="rate">8.5</column>
         </insert>
@@ -52,7 +52,7 @@
         </insert>
 
         <insert tableName="deposit">
-            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="deposit_type">PROFITABLE</column>
             <column name="nominal_rate">7.4</column>
             <column name="refill">false</column>
@@ -67,32 +67,32 @@
         </insert>
 
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">91</column>
             <column name="rate">7.4</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">181</column>
             <column name="rate">7.2</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">395</column>
             <column name="rate">7.05</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">546</column>
             <column name="rate">6.7</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">732</column>
             <column name="rate">6.35</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">1102</column>
             <column name="rate">3.1</column>
         </insert>
@@ -109,7 +109,7 @@
         </insert>
 
         <insert tableName="deposit">
-            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="deposit_type">ACCUMULATIVE</column>
             <column name="nominal_rate">6.95</column>
             <column name="refill">true</column>
@@ -125,32 +125,32 @@
         </insert>
 
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">91</column>
             <column name="rate">6.95</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">181</column>
             <column name="rate">6.75</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">395</column>
             <column name="rate">6.3</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">546</column>
             <column name="rate">5.9</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">732</column>
             <column name="rate">5.65</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">1102</column>
             <column name="rate">2.75</column>
         </insert>
@@ -167,7 +167,7 @@
         </insert>
 
         <insert tableName="deposit">
-            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="deposit_type">COMFORT</column>
             <column name="nominal_rate">4.1</column>
             <column name="refill">true</column>
@@ -183,49 +183,34 @@
         </insert>
 
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">181</column>
             <column name="rate">4.1</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">395</column>
             <column name="rate">4</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">546</column>
             <column name="rate">3.85</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">732</column>
             <column name="rate">3.8</column>
         </insert>
         <insert tableName="product_rate">
-            <column name="product_id" valueComputed="(SELECT id FROM deposit ORDER BY id DESC LIMIT 1)"/>
+            <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">1102</column>
             <column name="rate">1.9</column>
         </insert>
     </changeSet>
 
     <changeSet id="20.07.2017-1-14" author="rnemykin">
-        <insert tableName="product">
-            <column name="name">Мультикарта</column>
-            <column name="type">CARD</column>
-            <column name="status">ACTIVE</column>
-            <column name="create_date">now()</column>
-            <column name="update_date">now()</column>
-            <column name="weight">2</column>
-        </insert>
-
-        <insert tableName="card">
-            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
-            <column name="card_type">MIR</column>
-            <column name="card_category">CREDIT</column>
-        </insert>
-
-        <insert tableName="product">
+          <insert tableName="product">
             <column name="name">Мультикарта</column>
             <column name="type">CARD</column>
             <column name="status">ACTIVE</column>
@@ -234,7 +219,7 @@
             <column name="weight">2</column>
         </insert>
         <insert tableName="card">
-            <column name="id" valueComputed="(SELECT id FROM product ORDER BY id DESC LIMIT 1)"/>
+            <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'CARD' AND name = 'Мультикарта')"/>
             <column name="card_type">MC</column>
             <column name="card_category">DEBIT</column>
         </insert>
