@@ -50,18 +50,17 @@ public class CalculateRequestBuilder {
                 .collect(Collectors.toList());
 
         if (!isGreatThenZero(params.getMonthRefillSum()) && !isGreatThenZero(params.getMonthWithdrawalSum())) {
-            result.add(makeAutoRefillRequest(products, params));
+            result.add(makeAutoRefillRequest(getCopyOfSavingAccount(products), params));
         }
 
-        if(isGreatThenZero(params.getMonthWithdrawalSum())) {
-            makeRequestWithCardOption(products, params);
+        if(params.getCategories2Costs() != null) {
+            result.add(makeRequestWithCardOption(getCopyOfSavingAccount(products), params));
         }
 
         return result;
     }
 
-    private ProductCalculateRequest makeAutoRefillRequest(List<Product> products, CalculateParams params) {
-        SavingAccount savingAccount = getCopyOfSavingAccount(products);
+    private ProductCalculateRequest makeAutoRefillRequest(SavingAccount savingAccount, CalculateParams params) {
         RefillOption autoRefillOption = refillOptionRepository.findByEventTypeAndRefillSumType(FIXED_DATE, FIXED_SUM);
         savingAccount.setRefillOption(autoRefillOption);
 
@@ -83,36 +82,37 @@ public class CalculateRequestBuilder {
         return savingAccount;
     }
 
-    private void makeRequestWithCardOption(List<Product> products, CalculateParams params) {
+    private ProductCalculateRequest makeRequestWithCardOption(SavingAccount savingAccount, CalculateParams params) {
         Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
-        if(categories2Costs != null) {
-            PosCategoryEnum maxCostCategory = categories2Costs.entrySet().stream()
-                    .max(Comparator.comparing(Map.Entry::getValue))
-                    .get()
-                    .getKey();
+        PosCategoryEnum maxCostCategory = categories2Costs.entrySet().stream()
+                .max(Comparator.comparing(Map.Entry::getValue))
+                .get()
+                .getKey();
 
-            BonusOptionEnum bonusOption;
-            switch (maxCostCategory) {
-                case AUTO:
-                    bonusOption = BonusOptionEnum.AUTO;
-                    break;
+        BonusOptionEnum bonusOption;
+        switch (maxCostCategory) {
+            case AUTO:
+                bonusOption = BonusOptionEnum.AUTO;
+                break;
 
-                case TRAVEL:
-                    bonusOption = BonusOptionEnum.TRAVEL;
-                    break;
+            case TRAVEL:
+                bonusOption = BonusOptionEnum.TRAVEL;
+                break;
 
-                case FUN:
-                    bonusOption = BonusOptionEnum.FUN;
-                    break;
+            case FUN:
+                bonusOption = BonusOptionEnum.FUN;
+                break;
 
-                default:
-                    bonusOption = BonusOptionEnum.SAVING;
-            }
-
-            SavingAccount savingAccount = getCopyOfSavingAccount(products);
-            Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
-            card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
-            savingAccount.setLinkedProduct(card);
+            default:
+                bonusOption = BonusOptionEnum.SAVING;
         }
+
+        Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
+        card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
+        savingAccount.setLinkedProduct(card);
+        return ProductCalculateRequest.builder()
+                .product(savingAccount)
+                .params(params)
+                .build();
     }
 }
