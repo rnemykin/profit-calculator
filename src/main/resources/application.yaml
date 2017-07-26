@@ -2,17 +2,6 @@ spring:
   data:
     rest:
       basePath: /api/v1
-  datasource:
-    username: sa
-    password:
-    url: jdbc:h2:file:./db/product
-    driver-class-name: org.h2.Driver
-
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: validate
-      show-sql: true
 
   profiles:
     active: @project.profile@
