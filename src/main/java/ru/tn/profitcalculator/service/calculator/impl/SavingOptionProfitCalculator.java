@@ -10,6 +10,7 @@ import ru.tn.profitcalculator.service.calculator.OptionProfitCalculator;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Map;
 
@@ -62,14 +63,14 @@ public class SavingOptionProfitCalculator implements OptionProfitCalculator {
         return cardOption;
     }
 
-    protected BigDecimal calculateProfitSum(BigDecimal sum, BigDecimal rate, BigDecimal days) {
+    public BigDecimal calculateProfitSum(BigDecimal sum, BigDecimal rate, BigDecimal days) {
         if(sum.compareTo(maxSum4Rate) > 0) {
             sum = maxSum4Rate;
         }
-        return sum.multiply(
-                        rate.multiply(
-                                days.divide(BigDecimal.valueOf(365), 10, RoundingMode.HALF_UP)))
-                .divide(BigDecimal.valueOf(100), 0, RoundingMode.HALF_UP);
+        BigDecimal daysInYear = BigDecimal.valueOf(365);
+        BigDecimal period = days.divide(daysInYear, 10, RoundingMode.HALF_UP);
+        long profitSum = sum.multiply(rate.multiply(period)).longValue();
+        return BigDecimal.valueOf(profitSum);
     }
 
     @Override

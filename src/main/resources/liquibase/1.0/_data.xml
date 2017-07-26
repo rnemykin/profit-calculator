@@ -299,9 +299,9 @@
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
             <column name="name">Сбережения</column>
             <column name="bonus_option">SAVING</column>
-            <column name="rate1" valueNumeric="0.5"/>
-            <column name="rate2">1</column>
-            <column name="rate3" valueNumeric="1.5"/>
+            <column name="rate1" valueNumeric="0.005"/>
+            <column name="rate2" valueNumeric="0.01"/>
+            <column name="rate3" valueNumeric="0.015"/>
         </insert>
     </changeSet>
 
