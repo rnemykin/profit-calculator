@@ -1,7 +1,7 @@
 spring:
   data:
     rest:
-      baseUri: /api/v1
+      basePath: /api/v1
   datasource:
     username: sa
     password:
