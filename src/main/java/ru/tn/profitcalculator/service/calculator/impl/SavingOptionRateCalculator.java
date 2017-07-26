@@ -10,6 +10,9 @@ import ru.tn.profitcalculator.service.calculator.OptionRateCalculator;
 import java.math.BigDecimal;
 import java.util.Map;
 
+/**
+ * Калькулятор ставки для опции Сбережения
+ */
 @Service
 public class SavingOptionRateCalculator implements OptionRateCalculator {
 

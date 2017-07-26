@@ -259,9 +259,9 @@
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
             <column name="name">Авто</column>
             <column name="bonus_option">AUTO</column>
-            <column name="rate1">2</column>
-            <column name="rate2">5</column>
-            <column name="rate3">10</column>
+            <column name="rate1">0</column>
+            <column name="rate2">3</column>
+            <column name="rate3">5</column>
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
@@ -276,16 +276,16 @@
             <column name="name">Cashback</column>
             <column name="bonus_option">CASH_BACK</column>
             <column name="rate1">1</column>
-            <column name="rate2" valueNumeric="1.5"/>
-            <column name="rate3">2</column>
+            <column name="rate2">1</column>
+            <column name="rate3">1</column>
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
             <column name="name">Путешествия</column>
             <column name="bonus_option">TRAVEL</column>
-            <column name="rate1">1</column>
-            <column name="rate2">2</column>
-            <column name="rate3">4</column>
+            <column name="rate1">0</column>
+            <column name="rate2" valueNumeric="1.9" />
+            <column name="rate3" valueNumeric="3.8" />
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
