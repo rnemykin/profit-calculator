@@ -2,16 +2,16 @@ package ru.tn.profitcalculator.service.calculator.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.SavingAccount;
+import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.service.calculator.Calculator;
-import ru.tn.profitcalculator.service.calculator.OptionRateCalculator;
-import ru.tn.profitcalculator.service.calculator.OptionRateCalculatorFactory;
+import ru.tn.profitcalculator.service.calculator.OptionProfitCalculator;
+import ru.tn.profitcalculator.service.calculator.OptionProfitCalculatorFactory;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateResult;
 import ru.tn.profitcalculator.web.model.CalculateParams;
@@ -36,11 +36,14 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 @Service
 public class SavingAccountCalculator implements Calculator {
 
-    @Autowired
-    OptionRateCalculatorFactory optionRateCalculatorFactory;
-
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
+
+    private final OptionProfitCalculatorFactory optionProfitCalculatorFactory;
+
+    public SavingAccountCalculator(OptionProfitCalculatorFactory optionProfitCalculatorFactory) {
+        this.optionProfitCalculatorFactory = optionProfitCalculatorFactory;
+    }
 
     @Override
     public ProductCalculateResult calculate(ProductCalculateRequest request) {
@@ -70,8 +73,8 @@ public class SavingAccountCalculator implements Calculator {
         log.info("start calculating");
         List<List<BigDecimal>> accountState = new ArrayList<>();
 
-        //TODO Максимальная сумма, на которую может быть начислена надбавка = 1,5 млн руб.
-        BigDecimal optionRate = calculateOptionRate(savingAccount, params.getCategories2Costs());
+        CardOption cardOption = getCardOption(savingAccount, params.getCategories2Costs());
+
         for (Map.Entry<LocalDate, BigDecimal> layer : layers.entrySet()) {
 
             List<BigDecimal> layerAccountState = new ArrayList<>();
@@ -87,8 +90,23 @@ public class SavingAccountCalculator implements Calculator {
 
                 boolean isLastPeriod = !layerNextPeriodDate.isBefore(endDate);
                 long periodDays = isLastPeriod ? DAYS.between(layerStartDate, endDate) : DAYS.between(layerStartDate, layerNextPeriodDate);
-                BigDecimal rate4Month = getRate4Month(periodRates, i).add(optionRate);
+                BigDecimal rate4Month = getRate4Month(periodRates, i);
                 BigDecimal monthProfit = calculatePeriodSum(layerProfitSum, rate4Month, valueOf(periodDays));
+
+                if (cardOption != null) {
+                    if(cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
+
+                        BigDecimal sum = layer.getValue();
+                        BigDecimal rate = cardOption.getRate();
+                        BigDecimal days = valueOf(periodDays);
+
+                        SavingOptionProfitCalculator calculator = (SavingOptionProfitCalculator) optionProfitCalculatorFactory.get(BonusOptionEnum.SAVING);
+                        BigDecimal optionProfitSum = calculator.calculateProfitSum(sum, rate, days);
+                        monthProfit = monthProfit.add(optionProfitSum);
+                    } else {
+                        monthProfit = monthProfit.add(cardOption.getCashback());
+                    }
+                }
 
                 layerProfitSum = layerProfitSum.add(monthProfit);
                 layerStartDate = layerNextPeriodDate;
@@ -106,15 +124,24 @@ public class SavingAccountCalculator implements Calculator {
 
         normalizeAccountState(accountState);
 
+        BonusOptionEnum option = null;
+        BigDecimal optionMaxRate = null;
+
+        if (cardOption != null) {
+            option = cardOption.getBonusOption();
+            optionMaxRate = cardOption.getRate();
+        }
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
                 .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculate())
                 .daysCount(daysCount)
+                .option(option)
+                .optionMaxRate(optionMaxRate)
                 .build();
     }
 
-    private BigDecimal calculateOptionRate(SavingAccount savingAccount, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
+    private CardOption getCardOption(SavingAccount savingAccount, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
         boolean hasCardTransactions = categories2Costs != null && !categories2Costs.isEmpty();
 
         if (savingAccount.getLinkedProduct() instanceof Card && hasCardTransactions) {
@@ -122,11 +149,12 @@ public class SavingAccountCalculator implements Calculator {
             CardOption cardOption = card.getCardOption();
 
             if (cardOption != null) {
-                OptionRateCalculator optionRateCalculator = optionRateCalculatorFactory.get(cardOption.getBonusOption());
-                return optionRateCalculator.calculate(cardOption, categories2Costs);
+                OptionProfitCalculator optionProfitCalculator = optionProfitCalculatorFactory.get(cardOption.getBonusOption());
+                cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
+                return cardOption;
             }
         }
-        return BigDecimal.ZERO;
+        return null;
     }
 
     private Map<Integer, BigDecimal> initSavingAccountRates(SavingAccount savingAccount) {

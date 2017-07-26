@@ -11,8 +11,8 @@ import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.repository.CardOptionRepository;
-import ru.tn.profitcalculator.service.calculator.OptionRateCalculator;
-import ru.tn.profitcalculator.service.calculator.OptionRateCalculatorFactory;
+import ru.tn.profitcalculator.service.calculator.OptionProfitCalculator;
+import ru.tn.profitcalculator.service.calculator.OptionProfitCalculatorFactory;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -25,18 +25,18 @@ import static org.junit.Assert.assertNotNull;
 public class OptionRateCalculatorSteps {
 
     @Autowired
-    private OptionRateCalculatorFactory optionRateCalculatorFactory;
+    private OptionProfitCalculatorFactory optionProfitCalculatorFactory;
 
     @Autowired
     private CardOptionRepository cardOptionRepository;
 
-    private OptionRateCalculator optionRateCalculator;
+    private OptionProfitCalculator optionProfitCalculator;
     private Map<PosCategoryEnum, BigDecimal> categories2Costs = new HashMap<>();
     private CardOption cardOption;
 
     @Пусть("^Ярик подключил для мультикарты опцию (\\w+)$")
     public void ярикПодключилДляМультикартыОпцию(BonusOptionEnum option) {
-        optionRateCalculator = optionRateCalculatorFactory.get(option);
+        optionProfitCalculator = optionProfitCalculatorFactory.get(option);
         cardOption = cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(option);
         assertNotNull(cardOption);
     }
@@ -49,7 +49,7 @@ public class OptionRateCalculatorSteps {
 
     @Тогда("^надбавка к процентной ставке по накопительному счету равна (.+)%$")
     public void надбавкаКПроцентнойСтавкеПоНакопительномуСчетуРавна(BigDecimal rate) {
-        BigDecimal calculatedRate = optionRateCalculator.calculate(cardOption, categories2Costs);
-        assertEquals(rate.doubleValue(), calculatedRate.doubleValue(), 0);
+        cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
+        assertEquals(rate.doubleValue(), cardOption.getRate().doubleValue(), 0);
     }
 }

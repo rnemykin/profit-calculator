@@ -10,16 +10,16 @@ import java.util.Map;
 import java.util.Optional;
 
 @Component
-public class OptionRateCalculatorFactory {
+public class OptionProfitCalculatorFactory {
 
-    private static final Map<BonusOptionEnum, OptionRateCalculator> CALCULATORS = new HashMap<>();
+    private static final Map<BonusOptionEnum, OptionProfitCalculator> CALCULATORS = new HashMap<>();
 
     @Autowired
-    public OptionRateCalculatorFactory(List<OptionRateCalculator> calculators) {
+    public OptionProfitCalculatorFactory(List<OptionProfitCalculator> calculators) {
         calculators.forEach(c -> CALCULATORS.put(c.getOption(), c));
     }
 
-    public OptionRateCalculator get(BonusOptionEnum option) {
+    public OptionProfitCalculator get(BonusOptionEnum option) {
         return Optional.ofNullable(CALCULATORS.get(option))
                 .orElseThrow(() -> new IllegalArgumentException("No bonusOption rate calculator for bonusOption " + option));
     }

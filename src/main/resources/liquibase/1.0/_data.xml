@@ -260,8 +260,8 @@
             <column name="name">Авто</column>
             <column name="bonus_option">AUTO</column>
             <column name="rate1">0</column>
-            <column name="rate2">3</column>
-            <column name="rate3">5</column>
+            <column name="rate2" valueNumeric="0.01" />
+            <column name="rate3" valueNumeric="0.05" />
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
@@ -275,9 +275,9 @@
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
             <column name="name">Cashback</column>
             <column name="bonus_option">CASH_BACK</column>
-            <column name="rate1">1</column>
-            <column name="rate2">1</column>
-            <column name="rate3">1</column>
+            <column name="rate1" valueNumeric="0.01" />
+            <column name="rate2" valueNumeric="0.01" />
+            <column name="rate3" valueNumeric="0.01" />
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
