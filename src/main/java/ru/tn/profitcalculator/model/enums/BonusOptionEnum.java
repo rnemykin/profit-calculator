@@ -11,9 +11,9 @@ public enum BonusOptionEnum {
     AUTO,
 
     /**
-     * Кафе
+     * Развлечения
      */
-    CAFE,
+    FUN,
 
     /**
      * Путешествия

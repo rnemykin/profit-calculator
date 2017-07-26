@@ -23,9 +23,8 @@ public class CardService {
         CATEGORY_2_OPTION.put(PosCategoryEnum.AUTO, singleton(BonusOptionEnum.AUTO));
         CATEGORY_2_OPTION.put(PosCategoryEnum.TRAVEL, singleton(BonusOptionEnum.TRAVEL));
 
-        EnumSet<BonusOptionEnum> commonOptions = EnumSet.of(BonusOptionEnum.SAVING, BonusOptionEnum.CASH_BACK, BonusOptionEnum.CAFE, BonusOptionEnum.COLLECTION);
-        CATEGORY_2_OPTION.put(PosCategoryEnum.FUN, commonOptions);
-        CATEGORY_2_OPTION.put(PosCategoryEnum.OTHER, commonOptions);
+        CATEGORY_2_OPTION.put(PosCategoryEnum.FUN, EnumSet.of(BonusOptionEnum.SAVING, BonusOptionEnum.CASH_BACK, BonusOptionEnum.COLLECTION, BonusOptionEnum.FUN));
+        CATEGORY_2_OPTION.put(PosCategoryEnum.OTHER, EnumSet.of(BonusOptionEnum.SAVING, BonusOptionEnum.CASH_BACK, BonusOptionEnum.COLLECTION));
     }
 
     public List<BonusOptionEnum> getBonusOptionsByPosCategories(List<PosCategoryEnum> categories) {

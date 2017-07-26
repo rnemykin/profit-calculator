@@ -235,7 +235,7 @@
         </insert>
         <insert tableName="card_option">
             <column name="name">Развлечения</column>
-            <column name="option">CAFE</column>
+            <column name="option">FUN</column>
             <column name="rate1">2</column>
             <column name="rate2">5</column>
             <column name="rate3">10</column>
