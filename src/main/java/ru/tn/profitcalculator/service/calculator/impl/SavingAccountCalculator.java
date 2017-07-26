@@ -124,19 +124,16 @@ public class SavingAccountCalculator implements Calculator {
 
         normalizeAccountState(accountState);
 
-        BonusOptionEnum option = null;
         BigDecimal optionMaxRate = null;
-
         if (cardOption != null) {
-            option = cardOption.getBonusOption();
             optionMaxRate = cardOption.getRate();
         }
+
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
                 .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculate())
                 .daysCount(daysCount)
-                .option(option)
                 .optionMaxRate(optionMaxRate)
                 .product(request.getProduct())
                 .recommendation(request.isRecommendation())
