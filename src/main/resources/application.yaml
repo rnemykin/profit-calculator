@@ -14,5 +14,8 @@ spring:
       ddl-auto: validate
       show-sql: true
 
+  profiles:
+    active: @project.profile@
+
 liquibase:
   changeLog: classpath:liquibase/changelog-master.xml

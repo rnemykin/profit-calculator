@@ -33,6 +33,7 @@
 
             <properties>
                 <project.packaging.type>jar</project.packaging.type>
+                <project.profile>dev</project.profile>
             </properties>
 
             <dependencies>
@@ -49,6 +50,7 @@
             <properties>
                 <project.packaging.type>war</project.packaging.type>
                 <oracle.version>12.2.0.1</oracle.version>
+                <project.profile>prod</project.profile>
             </properties>
 
             <repositories>
@@ -159,8 +161,32 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <outputDirectory>target</outputDirectory>
+                    <warName>ROOT</warName>
+                </configuration>
             </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
 
