@@ -75,8 +75,8 @@ public class DepositCalculator implements Calculator {
 
         return ProductCalculateResult.builder()
                 .maxRate(maxRate)
-                .totalSum(totalSum.setScale(0, RoundingMode.UP))
-                .profitSum(profitSum.setScale(0, RoundingMode.UP))
+                .totalSum(totalSum.setScale(0, RoundingMode.HALF_UP))
+                .profitSum(profitSum.setScale(0, RoundingMode.HALF_UP))
                 .daysCount(params.getDaysCount())
                 .product(request.getProduct())
                 .recommendation(request.isRecommendation())
