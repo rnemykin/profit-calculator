@@ -56,7 +56,7 @@ public class CalculateRequestBuilder {
             savingAccount.setRefillOption(autoRefillOption);
 
             Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
-            card.setCardOption(cardOptionRepository.findFirstByOptionOrderByIdDesc(BonusOptionEnum.SAVING));
+            card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(BonusOptionEnum.SAVING));
             savingAccount.setLinkedProduct(card);
 
             result.add(

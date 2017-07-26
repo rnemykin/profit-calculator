@@ -8,5 +8,5 @@ import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 @RepositoryRestResource
 public interface CardOptionRepository extends JpaRepository<CardOption, Long>{
 
-    CardOption findFirstByOptionOrderByIdDesc(BonusOptionEnum option);
+    CardOption findFirstByBonusOptionOrderByIdDesc(BonusOptionEnum option);
 }

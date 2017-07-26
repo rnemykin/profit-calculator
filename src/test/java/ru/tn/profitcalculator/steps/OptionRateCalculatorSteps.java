@@ -37,7 +37,7 @@ public class OptionRateCalculatorSteps {
     @Пусть("^Ярик подключил для мультикарты опцию (\\w+)$")
     public void ярикПодключилДляМультикартыОпцию(BonusOptionEnum option) {
         optionRateCalculator = optionRateCalculatorFactory.get(option);
-        cardOption = cardOptionRepository.findFirstByOptionOrderByIdDesc(option);
+        cardOption = cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(option);
         assertNotNull(cardOption);
     }
 
