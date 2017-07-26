@@ -20,7 +20,7 @@ public class CardOption {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private BonusOptionEnum option;
+    private BonusOptionEnum bonusOption;
     private String name;
     private BigDecimal rate1;
     private BigDecimal rate2;

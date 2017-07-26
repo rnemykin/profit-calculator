@@ -60,7 +60,7 @@ public class ProductController {
         card.setCardCategory(CardCategoryEnum.DEBIT);
 
         CardOption cardOption = new CardOption();
-        cardOption.setOption(BonusOptionEnum.TRAVEL);
+        cardOption.setBonusOption(BonusOptionEnum.TRAVEL);
         cardOption.setRate1(BigDecimal.valueOf(2));
         cardOption.setRate2(BigDecimal.valueOf(4));
         cardOption.setRate3(BigDecimal.valueOf(10));

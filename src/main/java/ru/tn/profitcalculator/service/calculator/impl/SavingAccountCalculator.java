@@ -122,7 +122,7 @@ public class SavingAccountCalculator implements Calculator {
             CardOption cardOption = card.getCardOption();
 
             if (cardOption != null) {
-                OptionRateCalculator optionRateCalculator = optionRateCalculatorFactory.get(cardOption.getOption());
+                OptionRateCalculator optionRateCalculator = optionRateCalculatorFactory.get(cardOption.getBonusOption());
                 return optionRateCalculator.calculate(cardOption, categories2Costs);
             }
         }

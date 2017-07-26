@@ -79,7 +79,7 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="option" type="VARCHAR(255)">
+            <column name="bonus_option" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="rate1" type="NUMERIC">
@@ -117,7 +117,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="product_id" type="BIGINT" autoIncrement="true">
-                <constraints nullable="false" references="product(id)" foreignKeyName="deposit_period_rate_product_id_fk"/>
+                <constraints nullable="false" references="product(id)" foreignKeyName="product_rate_product_id_fk"/>
             </column>
             <column name="rate" type="NUMBER">
                 <constraints nullable="false"/>

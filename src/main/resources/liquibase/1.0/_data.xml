@@ -228,42 +228,42 @@
     <changeSet id="22.07.2017-1-15" author="rnemykin">
         <insert tableName="card_option">
             <column name="name">Авто</column>
-            <column name="option">AUTO</column>
+            <column name="bonus_option">AUTO</column>
             <column name="rate1">2</column>
             <column name="rate2">5</column>
             <column name="rate3">10</column>
         </insert>
         <insert tableName="card_option">
             <column name="name">Развлечения</column>
-            <column name="option">FUN</column>
+            <column name="bonus_option">FUN</column>
             <column name="rate1">2</column>
             <column name="rate2">5</column>
             <column name="rate3">10</column>
         </insert>
         <insert tableName="card_option">
             <column name="name">Cashback</column>
-            <column name="option">CASH_BACK</column>
+            <column name="bonus_option">CASH_BACK</column>
             <column name="rate1">1</column>
             <column name="rate2">1.5</column>
             <column name="rate3">2</column>
         </insert>
         <insert tableName="card_option">
             <column name="name">Путешествия</column>
-            <column name="option">TRAVEL</column>
+            <column name="bonus_option">TRAVEL</column>
             <column name="rate1">1</column>
             <column name="rate2">2</column>
             <column name="rate3">4</column>
         </insert>
         <insert tableName="card_option">
             <column name="name">Коллекция</column>
-            <column name="option">COLLECTION</column>
+            <column name="bonus_option">COLLECTION</column>
             <column name="rate1">1</column>
             <column name="rate2">2</column>
             <column name="rate3">4</column>
         </insert>
         <insert tableName="card_option">
             <column name="name">Сбережения</column>
-            <column name="option">SAVING</column>
+            <column name="bonus_option">SAVING</column>
             <column name="rate1">0.5</column>
             <column name="rate2">1</column>
             <column name="rate3">1.5</column>
