@@ -1,5 +1,6 @@
 package ru.tn.profitcalculator.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.ru.И;
 import cucumber.api.java.ru.Пусть;
 import cucumber.api.java.ru.Тогда;
@@ -51,5 +52,23 @@ public class OptionRateCalculatorSteps {
     public void надбавкаКПроцентнойСтавкеПоНакопительномуСчетуРавна(BigDecimal rate) {
         cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
         assertEquals(rate.doubleValue(), cardOption.getRate().doubleValue(), 0);
+    }
+
+    @И("^за месяц совершил покупки в категории Авто на сумму (.+) рублей, а также по другим категориям на сумму (.+) рублей$")
+    public void заМесяцСовершилПокупкиВКатегорииАвтоАТакжеПоДругимКатегориям(BigDecimal autoSum, BigDecimal otherSum) {
+        categories2Costs.clear();
+        categories2Costs.put(PosCategoryEnum.AUTO, autoSum);
+        categories2Costs.put(PosCategoryEnum.OTHER, otherSum);
+    }
+
+    @Тогда("^максимальная ставка по кешбеку составит (.+)%$")
+    public void максимальнаяСтавкаПоКешбекуСоставитСтавка(BigDecimal maxRate) {
+        cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
+        assertEquals(maxRate.doubleValue(), cardOption.getRate().doubleValue() * 100, 0);
+    }
+
+    @И("^общая сумма кешбека составит (.+) рублей$")
+    public void общаяСуммаКешбекаСоставитCashbackРублей(BigDecimal cashback) {
+        assertEquals(cashback.doubleValue(), cardOption.getCashback().doubleValue(), 0);
     }
 }

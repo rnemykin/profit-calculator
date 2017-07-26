@@ -22,7 +22,7 @@ public class CashbackOptionProfitCalculator implements OptionProfitCalculator {
 
     @Override
     public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
-        BigDecimal rate = cardOption.getRate1().divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP); // 1% for all purchases
+        BigDecimal rate = cardOption.getRate1(); // 1% for all purchases
         BigDecimal cashback = BigDecimal.ZERO;
 
         for (BigDecimal sum : categories2Costs.values()) {
