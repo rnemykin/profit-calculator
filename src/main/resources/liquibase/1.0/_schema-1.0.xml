@@ -8,7 +8,7 @@
     <changeSet id="20.07.2017-1-1" author="rnemykin">
         <createSequence sequenceName="product_id_seq" startValue="1" incrementBy="1"/>
         <createTable tableName="product">
-            <column name="id" type="BIGINT" defaultValueSequenceNext="product_id_seq">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">

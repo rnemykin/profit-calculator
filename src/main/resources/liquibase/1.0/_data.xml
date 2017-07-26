@@ -5,14 +5,17 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
+    <property name="now" dbms="oracle" value="SYSDATE"/>
+    <property name="now" dbms="h2" value="now()"/>
+
     <changeSet id="20.07.2017-1-10" author="rnemykin">
         <insert tableName="product">
             <column name="id" valueComputed="(product_id_seq.nextval)"/>
             <column name="name">Накопительный счет</column>
             <column name="type">SAVING_ACCOUNT</column>
             <column name="status">ACTIVE</column>
-            <column name="create_date">now()</column>
-            <column name="update_date">now()</column>
+            <column name="create_date" valueComputed="${now}"/>
+            <column name="update_date" valueComputed="${now}"/>
             <column name="weight">2</column>
         </insert>
 
@@ -42,7 +45,7 @@
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'SAVING_ACCOUNT')"/>
             <column name="from_period">12</column>
-            <column name="rate">8.5</column>
+            <column name="rate" valueNumeric="8.5" />
         </insert>
     </changeSet>
 
@@ -52,61 +55,61 @@
             <column name="name">Выгодный</column>
             <column name="type">DEPOSIT</column>
             <column name="status">ACTIVE</column>
-            <column name="create_date">now()</column>
-            <column name="update_date">now()</column>
+            <column name="create_date" valueComputed="${now}"/>
+            <column name="update_date" valueComputed="${now}"/>
             <column name="weight">1</column>
         </insert>
 
         <insert tableName="deposit">
             <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="deposit_type">PROFITABLE</column>
-            <column name="nominal_rate">7.4</column>
-            <column name="refill">false</column>
-            <column name="withdrawal">false</column>
-            <column name="early_cancellation">true</column>
+            <column name="nominal_rate" valueNumeric="7.4"/>
+            <column name="refill">0</column>
+            <column name="withdrawal">0</column>
+            <column name="early_cancellation">1</column>
             <column name="min_period">92</column>
             <column name="max_period">1830</column>
             <column name="privilege_sum">2000001</column>
-            <column name="privilege_rate">7.6</column>
+            <column name="privilege_rate" valueNumeric="7.6"/>
             <column name="private_banking_sum">15000001</column>
-            <column name="private_banking_rate">7.9</column>
+            <column name="private_banking_rate" valueNumeric="7.9"/>
         </insert>
 
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">91</column>
-            <column name="rate">7.4</column>
+            <column name="rate" valueNumeric="7.4" />
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">181</column>
-            <column name="rate">7.2</column>
+            <column name="rate" valueNumeric="7.2"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">395</column>
-            <column name="rate">7.05</column>
+            <column name="rate" valueNumeric="7.05" />
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">546</column>
-            <column name="rate">6.7</column>
+            <column name="rate" valueNumeric="6.7" />
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">732</column>
-            <column name="rate">6.35</column>
+            <column name="rate" valueNumeric="6.35" />
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Выгодный')"/>
             <column name="from_period">1102</column>
-            <column name="rate">3.1</column>
+            <column name="rate" valueNumeric="3.1" />
         </insert>
     </changeSet>
 
@@ -116,62 +119,62 @@
             <column name="name">Накопительный</column>
             <column name="type">DEPOSIT</column>
             <column name="status">ACTIVE</column>
-            <column name="create_date">now()</column>
-            <column name="update_date">now()</column>
+            <column name="create_date" valueComputed="${now}"/>
+            <column name="update_date" valueComputed="${now}"/>
             <column name="weight">1</column>
         </insert>
 
         <insert tableName="deposit">
             <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="deposit_type">ACCUMULATIVE</column>
-            <column name="nominal_rate">6.95</column>
-            <column name="refill">true</column>
-            <column name="withdrawal">false</column>
-            <column name="early_cancellation">false</column>
+            <column name="nominal_rate" valueNumeric="6.95"/>
+            <column name="refill">1</column>
+            <column name="withdrawal">0</column>
+            <column name="early_cancellation">0</column>
             <column name="min_period">91</column>
             <column name="max_period">1830</column>
             <column name="last_refill_day_remains">30</column>
             <column name="privilege_sum">2000001</column>
-            <column name="privilege_rate">7.6</column>
+            <column name="privilege_rate" valueNumeric="7.6"/>
             <column name="private_banking_sum">15000001</column>
-            <column name="private_banking_rate">7.9</column>
+            <column name="private_banking_rate" valueNumeric="7.9"/>
         </insert>
 
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">91</column>
-            <column name="rate">6.95</column>
+            <column name="rate" valueNumeric="6.95"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">181</column>
-            <column name="rate">6.75</column>
+            <column name="rate" valueNumeric="6.75"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">395</column>
-            <column name="rate">6.3</column>
+            <column name="rate" valueNumeric="6.3"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">546</column>
-            <column name="rate">5.9</column>
+            <column name="rate" valueNumeric="5.9"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">732</column>
-            <column name="rate">5.65</column>
+            <column name="rate" valueNumeric="5.65"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Накопительный')"/>
             <column name="from_period">1102</column>
-            <column name="rate">2.75</column>
+            <column name="rate" valueNumeric="2.75"/>
         </insert>
     </changeSet>
 
@@ -181,32 +184,32 @@
             <column name="name">Комфортный</column>
             <column name="type">DEPOSIT</column>
             <column name="status">ACTIVE</column>
-            <column name="create_date">now()</column>
-            <column name="update_date">now()</column>
+            <column name="create_date" valueComputed="${now}"/>
+            <column name="update_date" valueComputed="${now}"/>
             <column name="weight">1</column>
         </insert>
 
         <insert tableName="deposit">
             <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="deposit_type">COMFORT</column>
-            <column name="nominal_rate">4.1</column>
-            <column name="refill">true</column>
-            <column name="withdrawal">true</column>
-            <column name="early_cancellation">false</column>
+            <column name="nominal_rate" valueNumeric="4.1"/>
+            <column name="refill">1</column>
+            <column name="withdrawal">1</column>
+            <column name="early_cancellation">0</column>
             <column name="min_period">181</column>
             <column name="max_period">1830</column>
             <column name="last_refill_day_remains">30</column>
             <column name="privilege_sum">2000001</column>
-            <column name="privilege_rate">7.6</column>
+            <column name="privilege_rate" valueNumeric="7.6"/>
             <column name="private_banking_sum">15000001</column>
-            <column name="private_banking_rate">7.9</column>
+            <column name="private_banking_rate" valueNumeric="7.9"/>
         </insert>
 
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">181</column>
-            <column name="rate">4.1</column>
+            <column name="rate" valueNumeric="4.1"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
@@ -218,19 +221,19 @@
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">546</column>
-            <column name="rate">3.85</column>
+            <column name="rate" valueNumeric="3.85"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">732</column>
-            <column name="rate">3.8</column>
+            <column name="rate" valueNumeric="3.8"/>
         </insert>
         <insert tableName="product_rate">
             <column name="id" valueComputed="(product_rate_id_seq.nextval)"/>
             <column name="product_id" valueComputed="(SELECT id FROM product WHERE type = 'DEPOSIT' AND name = 'Комфортный')"/>
             <column name="from_period">1102</column>
-            <column name="rate">1.9</column>
+            <column name="rate" valueNumeric="1.9"/>
         </insert>
     </changeSet>
 
@@ -240,8 +243,8 @@
             <column name="name">Мультикарта</column>
             <column name="type">CARD</column>
             <column name="status">ACTIVE</column>
-            <column name="create_date">now()</column>
-            <column name="update_date">now()</column>
+            <column name="create_date" valueComputed="${now}"/>
+            <column name="update_date" valueComputed="${now}"/>
             <column name="weight">2</column>
         </insert>
         <insert tableName="card">
@@ -273,7 +276,7 @@
             <column name="name">Cashback</column>
             <column name="bonus_option">CASH_BACK</column>
             <column name="rate1">1</column>
-            <column name="rate2">1.5</column>
+            <column name="rate2" valueNumeric="1.5"/>
             <column name="rate3">2</column>
         </insert>
         <insert tableName="card_option">
@@ -296,9 +299,9 @@
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
             <column name="name">Сбережения</column>
             <column name="bonus_option">SAVING</column>
-            <column name="rate1">0.5</column>
+            <column name="rate1" valueNumeric="0.5"/>
             <column name="rate2">1</column>
-            <column name="rate3">1.5</column>
+            <column name="rate3" valueNumeric="1.5"/>
         </insert>
     </changeSet>
 
