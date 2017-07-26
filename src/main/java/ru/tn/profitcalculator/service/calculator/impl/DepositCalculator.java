@@ -78,6 +78,8 @@ public class DepositCalculator implements Calculator {
                 .totalSum(totalSum.setScale(0, RoundingMode.UP))
                 .profitSum(profitSum.setScale(0, RoundingMode.UP))
                 .daysCount(params.getDaysCount())
+                .product(request.getProduct())
+                .recommendation(request.isRecommendation())
                 .build();
     }
 

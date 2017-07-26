@@ -138,6 +138,8 @@ public class SavingAccountCalculator implements Calculator {
                 .daysCount(daysCount)
                 .option(option)
                 .optionMaxRate(optionMaxRate)
+                .product(request.getProduct())
+                .recommendation(request.isRecommendation())
                 .build();
     }
 
