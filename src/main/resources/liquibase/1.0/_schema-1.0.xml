@@ -6,8 +6,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="20.07.2017-1-1" author="rnemykin">
+        <createSequence sequenceName="product_id_seq" startValue="1" incrementBy="1"/>
         <createTable tableName="product">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGINT" defaultValueSequenceNext="product_id_seq">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
@@ -34,8 +35,8 @@
 
     <changeSet id="20.07.2017-2-1" author="rnemykin">
         <createTable tableName="card">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
             </column>
             <column name="card_type" type="VARCHAR(255)"/>
             <column name="card_category" type="VARCHAR(255)"/>
@@ -45,8 +46,8 @@
 
     <changeSet id="20.07.2017-3-1" author="rnemykin">
         <createTable tableName="deposit">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
             </column>
             <column name="deposit_type" type="VARCHAR(255)"/>
             <column name="nominal_rate" type="NUMERIC"/>
@@ -65,15 +66,16 @@
 
     <changeSet id="20.07.2017-4-1" author="rnemykin">
         <createTable tableName="saving_account">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+            <column name="id" type="BIGINT">
+                <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
     <changeSet id="20.07.2017-5-1" author="rnemykin">
+        <createSequence sequenceName="card_option_id_seq" startValue="1" incrementBy="1"/>
         <createTable tableName="card_option">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
@@ -95,8 +97,9 @@
     </changeSet>
 
     <changeSet id="20.07.2017-6-1" author="rnemykin">
+        <createSequence sequenceName="refill_option_id_seq" startValue="1" incrementBy="1"/>
         <createTable tableName="refill_option">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="VARCHAR(255)">
@@ -112,11 +115,12 @@
     </changeSet>
 
     <changeSet id="20.07.2017-7-1" author="rnemykin">
+        <createSequence sequenceName="product_rate_id_seq" startValue="1" incrementBy="1"/>
         <createTable tableName="product_rate">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="id" type="BIGINT">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="product_id" type="BIGINT" autoIncrement="true">
+            <column name="product_id" type="BIGINT">
                 <constraints nullable="false" references="product(id)" foreignKeyName="product_rate_product_id_fk"/>
             </column>
             <column name="rate" type="NUMBER">

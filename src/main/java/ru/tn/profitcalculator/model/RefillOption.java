@@ -10,12 +10,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Data
 @Entity
 public class RefillOption {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refill_option_id_seq")
+    @SequenceGenerator(sequenceName = "refill_option_id_seq", allocationSize = 1, name = "refill_option_id_seq")
     private Long id;
     private String name;
 
