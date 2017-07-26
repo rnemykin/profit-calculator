@@ -9,6 +9,7 @@ import ru.tn.profitcalculator.model.RefillOption;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.CardTypeEnum;
+import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.repository.CardOptionRepository;
 import ru.tn.profitcalculator.repository.CardRepository;
@@ -16,7 +17,10 @@ import ru.tn.profitcalculator.repository.RefillOptionRepository;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 
+import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ru.tn.profitcalculator.model.enums.RefillOptionEventTypeEnum.FIXED_DATE;
@@ -41,31 +45,74 @@ public class CalculateRequestBuilder {
                 .map(p -> ProductCalculateRequest.builder()
                         .product(p)
                         .params(params)
-                        .build())
+                        .build()
+                )
                 .collect(Collectors.toList());
 
         if (!isGreatThenZero(params.getMonthRefillSum()) && !isGreatThenZero(params.getMonthWithdrawalSum())) {
-            SavingAccount product = (SavingAccount) products.stream()
-                    .filter(p -> p.getType() == ProductTypeEnum.SAVING_ACCOUNT)
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Saving account product expected, but not found"));
-
-            SavingAccount savingAccount = new SavingAccount();
-            BeanUtils.copyProperties(product, savingAccount);
-            RefillOption autoRefillOption = refillOptionRepository.findByEventTypeAndRefillSumType(FIXED_DATE, FIXED_SUM);
-            savingAccount.setRefillOption(autoRefillOption);
-
-            Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
-            card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(BonusOptionEnum.SAVING));
-            savingAccount.setLinkedProduct(card);
-
-            result.add(
-                    ProductCalculateRequest.builder()
-                            .recommendation(true)
-                            .product(savingAccount)
-                            .params(params)
-                            .build());
+            result.add(makeAutoRefillRequest(products, params));
         }
+
+        if(isGreatThenZero(params.getMonthWithdrawalSum())) {
+            makeRequestWithCardOption(products, params);
+        }
+
         return result;
+    }
+
+    private ProductCalculateRequest makeAutoRefillRequest(List<Product> products, CalculateParams params) {
+        SavingAccount savingAccount = getCopyOfSavingAccount(products);
+        RefillOption autoRefillOption = refillOptionRepository.findByEventTypeAndRefillSumType(FIXED_DATE, FIXED_SUM);
+        savingAccount.setRefillOption(autoRefillOption);
+
+        return ProductCalculateRequest.builder()
+                        .recommendation(true)
+                        .product(savingAccount)
+                        .params(params)
+                        .build();
+    }
+
+    private SavingAccount getCopyOfSavingAccount(List<Product> products) {
+        SavingAccount source = (SavingAccount) products.stream()
+                .filter(p -> p.getType() == ProductTypeEnum.SAVING_ACCOUNT)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Saving account product expected, but not found"));
+
+        SavingAccount savingAccount = new SavingAccount();
+        BeanUtils.copyProperties(source, savingAccount);
+        return savingAccount;
+    }
+
+    private void makeRequestWithCardOption(List<Product> products, CalculateParams params) {
+        Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
+        if(categories2Costs != null) {
+            PosCategoryEnum maxCostCategory = categories2Costs.entrySet().stream()
+                    .max(Comparator.comparing(Map.Entry::getValue))
+                    .get()
+                    .getKey();
+
+            BonusOptionEnum bonusOption;
+            switch (maxCostCategory) {
+                case AUTO:
+                    bonusOption = BonusOptionEnum.AUTO;
+                    break;
+
+                case TRAVEL:
+                    bonusOption = BonusOptionEnum.TRAVEL;
+                    break;
+
+                case FUN:
+                    bonusOption = BonusOptionEnum.FUN;
+                    break;
+
+                default:
+                    bonusOption = BonusOptionEnum.SAVING;
+            }
+
+            SavingAccount savingAccount = getCopyOfSavingAccount(products);
+            Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
+            card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
+            savingAccount.setLinkedProduct(card);
+        }
     }
 }
