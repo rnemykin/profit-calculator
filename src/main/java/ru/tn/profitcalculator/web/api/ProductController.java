@@ -26,10 +26,14 @@ import java.util.TreeSet;
 import static java.util.Collections.singleton;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/v1/products")
 public class ProductController {
+    private final CalculatorService calculatorService;
+
     @Autowired
-    private CalculatorService calculatorService;
+    public ProductController(CalculatorService calculatorService) {
+        this.calculatorService = calculatorService;
+    }
 
 
     @PostMapping
