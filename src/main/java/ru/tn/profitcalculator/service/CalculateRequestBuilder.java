@@ -30,7 +30,7 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 @Service
 public class CalculateRequestBuilder {
 
-    private static final BigDecimal CASH_BACK_AND_SAVING_OPTION_THRESHOLD = BigDecimal.valueOf(5000);
+    private static final BigDecimal SAVING_ACCOUNT_MIN_SUM = BigDecimal.valueOf(5000);
 
     private final CardRepository cardRepository;
     private final CardOptionRepository cardOptionRepository;
@@ -57,7 +57,7 @@ public class CalculateRequestBuilder {
         }
 
         if(params.getCategories2Costs() != null) {
-            result.add(makeRequestWithCardOption(getCopyOfSavingAccount(products), params));
+            result.addAll(makeRequestsWithCardOption(products, params));
         }
 
         return result;
@@ -85,32 +85,43 @@ public class CalculateRequestBuilder {
         return savingAccount;
     }
 
-    private ProductCalculateRequest makeRequestWithCardOption(SavingAccount savingAccount, CalculateParams params) {
+    private List<ProductCalculateRequest> makeRequestsWithCardOption(List<Product> products, CalculateParams params) {
         Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
-        PosCategoryEnum maxCostCategory = categories2Costs.entrySet().stream()
+        BigDecimal maxCostSum = categories2Costs.entrySet().stream()
                 .max(Comparator.comparing(Map.Entry::getValue))
                 .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
-                .getKey();
+                .getValue();
 
         BigDecimal totalSum = categories2Costs.values().stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        BonusOptionEnum bonusOption;
-        switch (maxCostCategory) {
-            case AUTO:
-                bonusOption = BonusOptionEnum.AUTO; break;
-            case FUN:
-                bonusOption = BonusOptionEnum.FUN; break;
-            default:
-                bonusOption = totalSum.compareTo(CASH_BACK_AND_SAVING_OPTION_THRESHOLD) < 0 ? BonusOptionEnum.CASH_BACK : BonusOptionEnum.SAVING;
-        }
+        List<PosCategoryEnum> costCategories = categories2Costs.entrySet().stream()
+                .filter(e -> maxCostSum.compareTo(e.getValue()) == 0)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
 
-        Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
-        card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
-        savingAccount.setLinkedProduct(card);
-        return ProductCalculateRequest.builder()
-                .product(savingAccount)
-                .params(params)
-                .build();
+        return costCategories.stream().map(category -> {
+            BonusOptionEnum bonusOption;
+            switch (category) {
+                case AUTO:
+                    bonusOption = BonusOptionEnum.AUTO;
+                    break;
+                case FUN:
+                    bonusOption = BonusOptionEnum.FUN;
+                    break;
+                default:
+                    bonusOption = totalSum.compareTo(SAVING_ACCOUNT_MIN_SUM) < 0 ? BonusOptionEnum.CASH_BACK : BonusOptionEnum.SAVING;
+            }
+
+            Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
+            card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
+
+            SavingAccount savingAccount = getCopyOfSavingAccount(products);
+            savingAccount.setLinkedProduct(card);
+            return ProductCalculateRequest.builder()
+                    .product(savingAccount)
+                    .params(params)
+                    .build();
+        }).collect(Collectors.toList());
     }
 }
