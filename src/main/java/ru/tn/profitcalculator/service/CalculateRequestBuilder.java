@@ -115,6 +115,10 @@ public class CalculateRequestBuilder {
                             bonusOption = BonusOptionEnum.FUN;
                             break;
 
+                        case TRAVEL:
+                            bonusOption = BonusOptionEnum.TRAVEL;
+                            break;
+
                         case OTHER:
                             bonusOption = totalSum.compareTo(SAVING_ACCOUNT_MIN_SUM) < 0 ? BonusOptionEnum.CASH_BACK : BonusOptionEnum.SAVING;
                             break;
