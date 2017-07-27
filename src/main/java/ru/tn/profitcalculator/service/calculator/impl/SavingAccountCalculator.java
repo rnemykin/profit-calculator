@@ -123,6 +123,9 @@ public class SavingAccountCalculator implements Calculator {
             log.info("next layer");
         }
 
+        if (cardOption != null) {
+            cardOption.setRate(cardOption.getRate().multiply(V_100));
+        }
         normalizeAccountState(accountState);
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
