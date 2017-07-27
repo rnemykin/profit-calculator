@@ -126,8 +126,8 @@ public class SavingAccountCalculator implements Calculator {
         BigDecimal maxRate = new EffectiveRateCalculator(periodRates, accountState).calculate();
         if (cardOption != null) {
             if(cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
-                maxRate = maxRate.add(cardOption.getRate());
-                cardOption.setRate(null);
+                BigDecimal rate = cardOption.getRate().multiply(V_100);
+                maxRate = maxRate.add(rate);
             } else {
                 cardOption.setRate(cardOption.getRate().multiply(V_100));
             }
