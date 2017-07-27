@@ -16,6 +16,6 @@ public class ProductGroup {
     private Set<String> notes;
     private BigDecimal resultSum;
     private BigDecimal profitSum;
-    private BigDecimal optionProfitSum;
+    private Long optionProfitSum;
     private BigDecimal maxRate;
 }

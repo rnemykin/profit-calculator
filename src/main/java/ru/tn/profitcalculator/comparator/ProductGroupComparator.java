@@ -24,8 +24,8 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
                 .average()
                 .orElse(1.0);
 
-        Optional<BigDecimal> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
-        BigDecimal profitSum = productGroup.getProfitSum().add(optionProfitSum.orElse(BigDecimal.ZERO));
+        Optional<Long> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
+        BigDecimal profitSum = productGroup.getProfitSum().add(valueOf(optionProfitSum.orElse(0L)));
         BigDecimal weight = valueOf(weightSum * Math.pow(10, profitSum.precision()));
         return profitSum.multiply(SUM_RATIO).add(weight.multiply(WEIGHT_RATIO));
     }
