@@ -3,19 +3,28 @@ package ru.tn.profitcalculator.comparator;
 import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.web.model.ProductGroup;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 
+import static java.math.BigDecimal.valueOf;
+
 public class ProductGroupComparator implements Comparator<ProductGroup> {
+    private static final BigDecimal SUM_RATIO = valueOf(0.7);
+    private static final BigDecimal WEIGHT_RATIO = valueOf(0.3);
+
     @Override
     public int compare(ProductGroup one, ProductGroup two) {
-        Integer weight1 = one.getProducts().stream()
-                .mapToInt(Product::getWeight)
-                .sum();
+        return calculateRating(two).compareTo(calculateRating(one));
+    }
 
-        Integer weight2 = two.getProducts().stream()
+    private BigDecimal calculateRating(ProductGroup productGroup) {
+        Double weightSum = productGroup.getProducts().stream()
                 .mapToInt(Product::getWeight)
-                .sum();
+                .average()
+                .orElse(1.0);
 
-        return weight1.compareTo(weight2);
+        BigDecimal profitSum = productGroup.getProfitSum();
+        BigDecimal weight = valueOf(weightSum * Math.pow(10, profitSum.precision()));
+        return profitSum.multiply(SUM_RATIO).add(weight.multiply(WEIGHT_RATIO));
     }
 }
