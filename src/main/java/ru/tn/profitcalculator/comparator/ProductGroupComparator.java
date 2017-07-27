@@ -5,6 +5,7 @@ import ru.tn.profitcalculator.web.model.ProductGroup;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
+import java.util.Optional;
 
 import static java.math.BigDecimal.valueOf;
 
@@ -23,7 +24,8 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
                 .average()
                 .orElse(1.0);
 
-        BigDecimal profitSum = productGroup.getProfitSum();
+        Optional<BigDecimal> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
+        BigDecimal profitSum = productGroup.getProfitSum().add(optionProfitSum.orElse(BigDecimal.ZERO));
         BigDecimal weight = valueOf(weightSum * Math.pow(10, profitSum.precision()));
         return profitSum.multiply(SUM_RATIO).add(weight.multiply(WEIGHT_RATIO));
     }
