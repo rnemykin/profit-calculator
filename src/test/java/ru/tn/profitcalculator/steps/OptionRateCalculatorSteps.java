@@ -69,6 +69,6 @@ public class OptionRateCalculatorSteps {
 
     @И("^общая сумма кешбека составит (.+) рублей$")
     public void общаяСуммаКешбекаСоставитCashbackРублей(BigDecimal cashback) {
-        assertEquals(cashback.doubleValue(), cardOption.getCashback().doubleValue(), 0);
+        assertEquals(cashback.doubleValue(), cardOption.getCashback4Month().doubleValue(), 0);
     }
 }

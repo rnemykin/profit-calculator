@@ -56,6 +56,7 @@ public class SavingAccountCalculator implements Calculator {
         LocalDate endDate = startDate.plusDays(daysCount);
         BigDecimal totalSum = params.getInitSum();
         BigDecimal totalProfit = ZERO;
+        BigDecimal optionTotalProfit = ZERO;
 
         BigDecimal refillSum = ZERO;
         Map<LocalDate, BigDecimal> layers = new TreeMap<>();
@@ -104,7 +105,7 @@ public class SavingAccountCalculator implements Calculator {
                         BigDecimal optionProfitSum = calculator.calculateProfitSum(sum, rate, days);
                         monthProfit = monthProfit.add(optionProfitSum);
                     } else {
-                        totalProfit = totalProfit.add(cardOption.getCashback());
+                        optionTotalProfit = optionTotalProfit.add(cardOption.getCashback4Month());
                     }
                 }
 
@@ -126,6 +127,7 @@ public class SavingAccountCalculator implements Calculator {
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
+                .optionProfitSum(optionTotalProfit)
                 .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculate())
                 .daysCount(daysCount)
                 .product(request.getProduct())
