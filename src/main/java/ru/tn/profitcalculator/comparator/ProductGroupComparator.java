@@ -5,17 +5,17 @@ import ru.tn.profitcalculator.web.model.ProductGroup;
 
 import java.util.Comparator;
 
-public class ProductResponseComparator implements Comparator<ProductGroup> {
+public class ProductGroupComparator implements Comparator<ProductGroup> {
     @Override
-    public int compare(ProductGroup o1, ProductGroup o2) {
-        Integer sum1 = o1.getProducts().stream()
+    public int compare(ProductGroup one, ProductGroup two) {
+        Integer weight1 = one.getProducts().stream()
                 .mapToInt(Product::getWeight)
                 .sum();
 
-        Integer sum2 = o2.getProducts().stream()
+        Integer weight2 = two.getProducts().stream()
                 .mapToInt(Product::getWeight)
                 .sum();
 
-        return sum1.compareTo(sum2);
+        return weight1.compareTo(weight2);
     }
 }

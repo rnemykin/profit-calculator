@@ -2,7 +2,7 @@ package ru.tn.profitcalculator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.tn.profitcalculator.comparator.ProductResponseComparator;
+import ru.tn.profitcalculator.comparator.ProductGroupComparator;
 import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
@@ -58,7 +58,7 @@ public class CalculatorService {
                             .optionalProducts(r.isRecommendation() ? products : emptyList())
                             .build();
                 })
-                .sorted(new ProductResponseComparator())
+                .sorted(new ProductGroupComparator())
                 .collect(toList());
     }
 }
