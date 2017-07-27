@@ -38,6 +38,7 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 @Service
 public class SavingAccountCalculator implements Calculator {
 
+    private static final BigDecimal DAYS_IN_MONTH = valueOf(30);
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
 
@@ -60,7 +61,6 @@ public class SavingAccountCalculator implements Calculator {
         LocalDate endDate = startDate.plusDays(daysCount);
         BigDecimal totalSum = params.getInitSum();
         BigDecimal totalProfit = ZERO;
-        BigDecimal optionTotalProfit = ZERO;
 
         BigDecimal refillSum = ZERO;
         Map<LocalDate, BigDecimal> layers = new TreeMap<>();
@@ -74,10 +74,9 @@ public class SavingAccountCalculator implements Calculator {
 
             refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
         }
-
         List<List<BigDecimal>> accountState = new ArrayList<>();
-        CardOption cardOption = getCardOption(savingAccount, params.getCategories2Costs());
 
+        CardOption cardOption = getCardOption(savingAccount, params.getCategories2Costs());
         for (Map.Entry<LocalDate, BigDecimal> layer : layers.entrySet()) {
             List<BigDecimal> layerAccountState = new ArrayList<>();
 
@@ -95,19 +94,14 @@ public class SavingAccountCalculator implements Calculator {
                 BigDecimal rate4Month = getRate4Month(periodRates, i);
                 BigDecimal monthProfit = calculatePeriodSum(layerProfitSum, rate4Month, valueOf(periodDays));
 
-                if (cardOption != null) {
-                    if(cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
+                if (cardOption != null && cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
+                    BigDecimal sum = layer.getValue();
+                    BigDecimal rate = cardOption.getRate();
+                    BigDecimal days = valueOf(periodDays);
 
-                        BigDecimal sum = layer.getValue();
-                        BigDecimal rate = cardOption.getRate();
-                        BigDecimal days = valueOf(periodDays);
-
-                        SavingOptionProfitCalculator calculator = (SavingOptionProfitCalculator) optionProfitCalculatorFactory.get(BonusOptionEnum.SAVING);
-                        BigDecimal optionProfitSum = calculator.calculateProfitSum(sum, rate, days);
-                        monthProfit = monthProfit.add(optionProfitSum);
-                    } else if(i == 1) {
-                        optionTotalProfit = optionTotalProfit.add(cardOption.getCashback4Month());
-                    }
+                    SavingOptionProfitCalculator calculator = (SavingOptionProfitCalculator) optionProfitCalculatorFactory.get(BonusOptionEnum.SAVING);
+                    BigDecimal optionProfitSum = calculator.calculateProfitSum(sum, rate, days);
+                    monthProfit = monthProfit.add(optionProfitSum);
                 }
 
                 layerProfitSum = layerProfitSum.add(monthProfit);
@@ -130,6 +124,8 @@ public class SavingAccountCalculator implements Calculator {
                 maxRate = maxRate.add(cardOption.getRate());
             }
         }
+        BigDecimal optionTotalProfit = calculateTotalProfitFromOption(startDate, endDate, cardOption);
+
 
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
@@ -140,6 +136,14 @@ public class SavingAccountCalculator implements Calculator {
                 .product(request.getProduct())
                 .recommendation(request.isRecommendation())
                 .build();
+    }
+
+    protected BigDecimal calculateTotalProfitFromOption(LocalDate startDate, LocalDate endDate, CardOption cardOption) {
+        if (cardOption != null && cardOption.getBonusOption() != BonusOptionEnum.SAVING) {
+            BigDecimal monthes = valueOf(DAYS.between(startDate, endDate)).divide(DAYS_IN_MONTH, 4, RoundingMode.HALF_UP);
+            return cardOption.getCashback4Month().multiply(monthes);
+        }
+        return null;
     }
 
     private CardOption getCardOption(SavingAccount savingAccount, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
