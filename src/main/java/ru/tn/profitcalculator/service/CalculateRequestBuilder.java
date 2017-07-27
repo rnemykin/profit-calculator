@@ -18,6 +18,8 @@ import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +34,10 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 @Service
 public class CalculateRequestBuilder {
 
-    private static final BigDecimal SAVING_ACCOUNT_MIN_SUM = BigDecimal.valueOf(5000);
-
     private final CardRepository cardRepository;
     private final CardOptionRepository cardOptionRepository;
     private final RefillOptionRepository refillOptionRepository;
     private final ObjectService objectService;
-
 
     @Autowired
     public CalculateRequestBuilder(CardRepository cardRepository, CardOptionRepository cardOptionRepository, RefillOptionRepository refillOptionRepository, ObjectService objectService) {
@@ -61,7 +60,7 @@ public class CalculateRequestBuilder {
             result.add(makeAutoRefillRequest(getCopyOfSavingAccount(products), params));
         }
 
-        if(params.getCategories2Costs() != null) {
+        if (params.getCategories2Costs() != null) {
             result.addAll(makeRequestsWithCardOption(products, params));
         }
 
@@ -73,10 +72,10 @@ public class CalculateRequestBuilder {
         savingAccount.setRefillOption(autoRefillOption);
 
         return ProductCalculateRequest.builder()
-                        .recommendation(true)
-                        .product(savingAccount)
-                        .params(params)
-                        .build();
+                .recommendation(true)
+                .product(savingAccount)
+                .params(params)
+                .build();
     }
 
     private SavingAccount getCopyOfSavingAccount(List<Product> products) {
@@ -95,46 +94,49 @@ public class CalculateRequestBuilder {
                 .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
                 .getValue();
 
-        BigDecimal totalSum = categories2Costs.values().stream()
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
         List<PosCategoryEnum> costCategories = categories2Costs.entrySet().stream()
                 .filter(e -> maxCostSum.compareTo(e.getValue()) == 0)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
         return costCategories.stream()
-                .map(category -> {
-                    BonusOptionEnum bonusOption = null;
+                .flatMap(category -> {
+                    List<BonusOptionEnum> bonusOptions = new ArrayList<>();
+
                     switch (category) {
                         case AUTO:
-                            bonusOption = BonusOptionEnum.AUTO;
+                            bonusOptions.add(BonusOptionEnum.AUTO);
                             break;
 
                         case FUN:
-                            bonusOption = BonusOptionEnum.FUN;
+                            bonusOptions.add(BonusOptionEnum.FUN);
                             break;
 
                         case TRAVEL:
-                            bonusOption = BonusOptionEnum.TRAVEL;
+                            bonusOptions.add(BonusOptionEnum.TRAVEL);
                             break;
 
                         case OTHER:
-                            bonusOption = totalSum.compareTo(SAVING_ACCOUNT_MIN_SUM) < 0 ? BonusOptionEnum.CASH_BACK : BonusOptionEnum.SAVING;
-                            break;
+                            bonusOptions.addAll(Arrays.asList(BonusOptionEnum.SAVING, BonusOptionEnum.CASH_BACK, BonusOptionEnum.COLLECTION));
                     }
 
-                    if(bonusOption == null) {
-                        log.warn("bonusOption not found for costCategory " + category);
+                    if (bonusOptions.isEmpty()) {
+                        log.warn("bonus options not set for category " + category);
                         return null;
                     }
 
-                    SavingAccount savingAccount = getCopyOfSavingAccount(products);
-                    savingAccount.setLinkedProduct(getCard(bonusOption));
-                    return ProductCalculateRequest.builder()
-                            .product(savingAccount)
-                            .params(params)
-                            .build();
+                    return bonusOptions.parallelStream()
+                            .map(option -> {
+                                SavingAccount savingAccount = getCopyOfSavingAccount(products);
+                                savingAccount.setLinkedProduct(getCard(option));
+
+                                return ProductCalculateRequest.builder()
+                                        .product(savingAccount)
+                                        .params(params)
+                                        .build();
+                            })
+                            .collect(Collectors.toList())
+                            .stream();
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
