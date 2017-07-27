@@ -1,6 +1,5 @@
 package ru.tn.profitcalculator.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.ru.И;
 import cucumber.api.java.ru.Пусть;
 import cucumber.api.java.ru.Тогда;
@@ -59,6 +58,13 @@ public class OptionProfitCalculatorSteps {
     public void заМесяцСовершилПокупкиВКатегорииАвтоАТакжеПоДругимКатегориям(BigDecimal autoSum, BigDecimal otherSum) {
         categories2Costs.clear();
         categories2Costs.put(PosCategoryEnum.AUTO, autoSum);
+        categories2Costs.put(PosCategoryEnum.OTHER, otherSum);
+    }
+
+    @И("^за месяц совершил покупки в категории Развлечения на сумму (.+) рублей, а также по другим категориям на сумму (.+) рублей$")
+    public void заМесяцСовершилПокупкиВКатегорииРазвлеченияАТакжеПоДругимКатегориям(BigDecimal autoSum, BigDecimal otherSum) {
+        categories2Costs.clear();
+        categories2Costs.put(PosCategoryEnum.FUN, autoSum);
         categories2Costs.put(PosCategoryEnum.OTHER, otherSum);
     }
 

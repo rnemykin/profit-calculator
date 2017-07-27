@@ -21,7 +21,7 @@ public class AutoOptionProfitCalculator implements OptionProfitCalculator {
 
     @Override
     public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
-        BigDecimal rateAuto = cardOption.getRate3();
+        BigDecimal maxRate = cardOption.getRate3();
         BigDecimal rateOther = cardOption.getRate2();
         BigDecimal cashback = BigDecimal.ZERO;
 
@@ -29,8 +29,8 @@ public class AutoOptionProfitCalculator implements OptionProfitCalculator {
             PosCategoryEnum category = entry.getKey();
             BigDecimal sumByCategory = entry.getValue();
 
-            if(category == PosCategoryEnum.AUTO) {
-                cashback = cashback.add(sumByCategory.multiply(rateAuto)); // 5% for auto purchases
+            if(category == getMainCategory()) {
+                cashback = cashback.add(sumByCategory.multiply(maxRate)); // 5% for auto purchases
             } else {
                 cashback = cashback.add(sumByCategory.multiply(rateOther)); // 1% for other purchases
             }
@@ -38,10 +38,14 @@ public class AutoOptionProfitCalculator implements OptionProfitCalculator {
         if (cashback.compareTo(maxCashbackSum) > 0) {
             cashback = maxCashbackSum;
         }
-        cardOption.setRate(rateAuto); // max rate = 5%, platinum card
+        cardOption.setRate(maxRate); // max rate = 5%, platinum card
         cardOption.setCashback4Month(cashback);
 
         return cardOption;
+    }
+
+    protected PosCategoryEnum getMainCategory() {
+        return PosCategoryEnum.AUTO;
     }
 
     @Override
