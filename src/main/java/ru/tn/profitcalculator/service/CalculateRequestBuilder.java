@@ -1,7 +1,6 @@
 package ru.tn.profitcalculator.service;
 
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
@@ -38,12 +37,15 @@ public class CalculateRequestBuilder {
     private final CardRepository cardRepository;
     private final CardOptionRepository cardOptionRepository;
     private final RefillOptionRepository refillOptionRepository;
+    private final ObjectService objectService;
+
 
     @Autowired
-    public CalculateRequestBuilder(CardRepository cardRepository, CardOptionRepository cardOptionRepository, RefillOptionRepository refillOptionRepository) {
+    public CalculateRequestBuilder(CardRepository cardRepository, CardOptionRepository cardOptionRepository, RefillOptionRepository refillOptionRepository, ObjectService objectService) {
         this.cardRepository = cardRepository;
         this.cardOptionRepository = cardOptionRepository;
         this.refillOptionRepository = refillOptionRepository;
+        this.objectService = objectService;
     }
 
     List<ProductCalculateRequest> makeRequests(List<Product> products, CalculateParams params) {
@@ -83,9 +85,7 @@ public class CalculateRequestBuilder {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Saving account product expected, but not found"));
 
-        SavingAccount savingAccount = new SavingAccount();
-        BeanUtils.copyProperties(source, savingAccount);
-        return savingAccount;
+        return objectService.clone(source);
     }
 
     private List<ProductCalculateRequest> makeRequestsWithCardOption(List<Product> products, CalculateParams params) {
@@ -139,9 +139,6 @@ public class CalculateRequestBuilder {
     private Card getCard(BonusOptionEnum bonusOption) {
         Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
         card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
-
-        Card copyCard = new Card();
-        BeanUtils.copyProperties(card, copyCard);
-        return copyCard;
+        return objectService.clone(card);
     }
 }
