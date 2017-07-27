@@ -31,6 +31,7 @@ import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MONTHS;
+import static org.springframework.util.CollectionUtils.isEmpty;
 import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Log4j
@@ -148,14 +149,11 @@ public class SavingAccountCalculator implements Calculator {
     }
 
     private CardOption getCardOption(SavingAccount savingAccount, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
-        boolean hasCardTransactions = categories2Costs != null && !categories2Costs.isEmpty();
-
-        if (savingAccount.getLinkedProduct() instanceof Card && hasCardTransactions) {
+        if (savingAccount.getLinkedProduct() instanceof Card && !isEmpty(categories2Costs)) {
             Card card = (Card) savingAccount.getLinkedProduct();
 
             if (card.getCardOption() != null) {
                 CardOption cardOption = objectService.clone(card.getCardOption());
-
                 OptionProfitCalculator optionProfitCalculator = optionProfitCalculatorFactory.get(cardOption.getBonusOption());
                 return optionProfitCalculator.calculate(cardOption, categories2Costs);
             }
