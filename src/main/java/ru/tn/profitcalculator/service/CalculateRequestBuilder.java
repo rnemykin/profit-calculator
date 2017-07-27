@@ -29,6 +29,9 @@ import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Service
 public class CalculateRequestBuilder {
+
+    private static final BigDecimal CASH_BACK_AND_SAVING_OPTION_THRESHOLD = BigDecimal.valueOf(5000);
+
     private final CardRepository cardRepository;
     private final CardOptionRepository cardOptionRepository;
     private final RefillOptionRepository refillOptionRepository;
@@ -86,25 +89,20 @@ public class CalculateRequestBuilder {
         Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
         PosCategoryEnum maxCostCategory = categories2Costs.entrySet().stream()
                 .max(Comparator.comparing(Map.Entry::getValue))
-                .get()
+                .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
                 .getKey();
+
+        BigDecimal totalSum = categories2Costs.values().stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         BonusOptionEnum bonusOption;
         switch (maxCostCategory) {
             case AUTO:
-                bonusOption = BonusOptionEnum.AUTO;
-                break;
-
-            case TRAVEL:
-                bonusOption = BonusOptionEnum.TRAVEL;
-                break;
-
+                bonusOption = BonusOptionEnum.AUTO; break;
             case FUN:
-                bonusOption = BonusOptionEnum.FUN;
-                break;
-
+                bonusOption = BonusOptionEnum.FUN; break;
             default:
-                bonusOption = BonusOptionEnum.SAVING;
+                bonusOption = totalSum.compareTo(CASH_BACK_AND_SAVING_OPTION_THRESHOLD) < 0 ? BonusOptionEnum.CASH_BACK : BonusOptionEnum.SAVING;
         }
 
         Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
