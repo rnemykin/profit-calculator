@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 @Builder
 public class ProductCalculateResult {
     private BigDecimal profitSum;
+    private BigDecimal optionProfitSum;
     private BigDecimal totalSum;
     private BigDecimal maxRate;
     private Integer daysCount;

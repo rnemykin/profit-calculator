@@ -39,7 +39,7 @@ public class AutoOptionProfitCalculator implements OptionProfitCalculator {
             cashback = maxCashbackSum;
         }
         cardOption.setRate(rateAuto); // max rate = 5%, platinum card
-        cardOption.setCashback(cashback);
+        cardOption.setCashback4Month(cashback);
 
         return cardOption;
     }

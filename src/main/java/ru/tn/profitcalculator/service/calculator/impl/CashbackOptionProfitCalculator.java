@@ -32,7 +32,7 @@ public class CashbackOptionProfitCalculator implements OptionProfitCalculator {
             cashback = maxCashbackSum;
         }
         cardOption.setRate(rate);
-        cardOption.setCashback(cashback);
+        cardOption.setCashback4Month(cashback);
 
         return cardOption;
     }
