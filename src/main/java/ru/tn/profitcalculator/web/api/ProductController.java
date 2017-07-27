@@ -11,8 +11,6 @@ import ru.tn.profitcalculator.web.model.ProductGroup;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -26,9 +24,8 @@ public class ProductController {
 
 
     @PostMapping
-    public Set<ProductGroup> calculateProducts(@Valid @RequestBody CalculateParams request) {
-        List<ProductGroup> productGroups = calculatorService.calculateOffers(request);
-        return new TreeSet<>(productGroups);
+    public List<ProductGroup> calculateProducts(@Valid @RequestBody CalculateParams request) {
+        return calculatorService.calculateOffers(request);
     }
 
 }
