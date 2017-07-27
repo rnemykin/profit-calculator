@@ -12,7 +12,6 @@ public class ProductCalculateResult {
     private BigDecimal profitSum;
     private BigDecimal totalSum;
     private BigDecimal maxRate;
-    private BigDecimal optionMaxRate;
     private Integer daysCount;
     private Product product;
     private boolean recommendation;
