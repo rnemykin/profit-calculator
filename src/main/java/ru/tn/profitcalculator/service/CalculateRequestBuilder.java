@@ -1,5 +1,6 @@
 package ru.tn.profitcalculator.service;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,14 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ru.tn.profitcalculator.model.enums.RefillOptionEventTypeEnum.FIXED_DATE;
 import static ru.tn.profitcalculator.model.enums.RefillOptionSumTypeEnum.FIXED_SUM;
 import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
+@Log4j
 @Service
 public class CalculateRequestBuilder {
 
@@ -100,28 +103,45 @@ public class CalculateRequestBuilder {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        return costCategories.stream().map(category -> {
-            BonusOptionEnum bonusOption;
-            switch (category) {
-                case AUTO:
-                    bonusOption = BonusOptionEnum.AUTO;
-                    break;
-                case FUN:
-                    bonusOption = BonusOptionEnum.FUN;
-                    break;
-                default:
-                    bonusOption = totalSum.compareTo(SAVING_ACCOUNT_MIN_SUM) < 0 ? BonusOptionEnum.CASH_BACK : BonusOptionEnum.SAVING;
-            }
+        return costCategories.stream()
+                .map(category -> {
+                    BonusOptionEnum bonusOption = null;
+                    switch (category) {
+                        case AUTO:
+                            bonusOption = BonusOptionEnum.AUTO;
+                            break;
 
-            Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
-            card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
+                        case FUN:
+                            bonusOption = BonusOptionEnum.FUN;
+                            break;
 
-            SavingAccount savingAccount = getCopyOfSavingAccount(products);
-            savingAccount.setLinkedProduct(card);
-            return ProductCalculateRequest.builder()
-                    .product(savingAccount)
-                    .params(params)
-                    .build();
-        }).collect(Collectors.toList());
+                        case OTHER:
+                            bonusOption = totalSum.compareTo(SAVING_ACCOUNT_MIN_SUM) < 0 ? BonusOptionEnum.CASH_BACK : BonusOptionEnum.SAVING;
+                            break;
+                    }
+
+                    if(bonusOption == null) {
+                        log.warn("bonusOption not found for costCategory " + category);
+                        return null;
+                    }
+
+                    SavingAccount savingAccount = getCopyOfSavingAccount(products);
+                    savingAccount.setLinkedProduct(getCard(bonusOption));
+                    return ProductCalculateRequest.builder()
+                            .product(savingAccount)
+                            .params(params)
+                            .build();
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    private Card getCard(BonusOptionEnum bonusOption) {
+        Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
+        card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
+
+        Card copyCard = new Card();
+        BeanUtils.copyProperties(card, copyCard);
+        return copyCard;
     }
 }
