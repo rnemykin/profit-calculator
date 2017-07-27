@@ -123,7 +123,9 @@ public class SavingAccountCalculator implements Calculator {
             log.info("next layer");
         }
 
+        normalizeAccountState(accountState);
         BigDecimal maxRate = new EffectiveRateCalculator(periodRates, accountState).calculate();
+
         if (cardOption != null) {
             cardOption.setRate(cardOption.getRate().multiply(V_100));
 
@@ -131,7 +133,6 @@ public class SavingAccountCalculator implements Calculator {
                 maxRate = maxRate.add(cardOption.getRate());
             }
         }
-        normalizeAccountState(accountState);
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
