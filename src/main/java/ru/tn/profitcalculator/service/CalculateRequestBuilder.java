@@ -48,7 +48,7 @@ public class CalculateRequestBuilder {
     }
 
     List<ProductCalculateRequest> makeRequests(List<Product> products, CalculateParams params) {
-        List<ProductCalculateRequest> result = products.stream()
+        List<ProductCalculateRequest> result = products.parallelStream()
                 .map(p -> ProductCalculateRequest.builder()
                         .product(p)
                         .params(params)
@@ -79,7 +79,7 @@ public class CalculateRequestBuilder {
     }
 
     private SavingAccount getCopyOfSavingAccount(List<Product> products) {
-        SavingAccount source = (SavingAccount) products.stream()
+        SavingAccount source = (SavingAccount) products.parallelStream()
                 .filter(p -> p.getType() == ProductTypeEnum.SAVING_ACCOUNT)
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Saving account product expected, but not found"));
@@ -89,17 +89,17 @@ public class CalculateRequestBuilder {
 
     private List<ProductCalculateRequest> makeRequestsWithCardOption(List<Product> products, CalculateParams params) {
         Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
-        BigDecimal maxCostSum = categories2Costs.entrySet().stream()
+        BigDecimal maxCostSum = categories2Costs.entrySet().parallelStream()
                 .max(Comparator.comparing(Map.Entry::getValue))
                 .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
                 .getValue();
 
-        List<PosCategoryEnum> costCategories = categories2Costs.entrySet().stream()
+        List<PosCategoryEnum> costCategories = categories2Costs.entrySet().parallelStream()
                 .filter(e -> maxCostSum.compareTo(e.getValue()) == 0)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        return costCategories.stream()
+        return costCategories.parallelStream()
                 .flatMap(category -> {
                     List<BonusOptionEnum> bonusOptions = new ArrayList<>();
 
@@ -136,7 +136,7 @@ public class CalculateRequestBuilder {
                                         .build();
                             })
                             .collect(Collectors.toList())
-                            .stream();
+                            .parallelStream();
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());

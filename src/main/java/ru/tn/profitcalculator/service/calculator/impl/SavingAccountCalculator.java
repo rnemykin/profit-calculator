@@ -105,7 +105,7 @@ public class SavingAccountCalculator implements Calculator {
                         SavingOptionProfitCalculator calculator = (SavingOptionProfitCalculator) optionProfitCalculatorFactory.get(BonusOptionEnum.SAVING);
                         BigDecimal optionProfitSum = calculator.calculateProfitSum(sum, rate, days);
                         monthProfit = monthProfit.add(optionProfitSum);
-                    } else {
+                    } else if(i == 1) {
                         optionTotalProfit = optionTotalProfit.add(cardOption.getCashback4Month());
                     }
                 }
