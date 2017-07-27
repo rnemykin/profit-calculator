@@ -123,15 +123,21 @@ public class SavingAccountCalculator implements Calculator {
             log.info("next layer");
         }
 
+        BigDecimal maxRate = new EffectiveRateCalculator(periodRates, accountState).calculate();
         if (cardOption != null) {
-            cardOption.setRate(cardOption.getRate().multiply(V_100));
+            if(cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
+                maxRate = maxRate.add(cardOption.getRate());
+                cardOption.setRate(null);
+            } else {
+                cardOption.setRate(cardOption.getRate().multiply(V_100));
+            }
         }
         normalizeAccountState(accountState);
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
                 .optionProfitSum(optionTotalProfit)
-                .maxRate(new EffectiveRateCalculator(periodRates, accountState).calculate())
+                .maxRate(maxRate)
                 .daysCount(daysCount)
                 .product(request.getProduct())
                 .recommendation(request.isRecommendation())
