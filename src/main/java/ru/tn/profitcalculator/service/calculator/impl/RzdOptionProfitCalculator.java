@@ -24,7 +24,7 @@ public class RzdOptionProfitCalculator implements OptionProfitCalculator {
         for (BigDecimal sum : categories2Costs.values()) {
             cashback = cashback.add(sum);
         }
-        cashback = cashback.divide(rate, 10, RoundingMode.HALF_UP);
+        cashback = BigDecimal.valueOf(cashback.divide(rate, 10, RoundingMode.HALF_UP).longValue());
         cardOption.setRate(rate);
         cardOption.setCashback4Month(cashback);
 

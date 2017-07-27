@@ -1,5 +1,6 @@
 package ru.tn.profitcalculator.steps;
 
+import cucumber.api.PendingException;
 import cucumber.api.java.ru.И;
 import cucumber.api.java.ru.Пусть;
 import cucumber.api.java.ru.Тогда;
@@ -68,7 +69,7 @@ public class OptionProfitCalculatorSteps {
         categories2Costs.put(PosCategoryEnum.OTHER, otherSum);
     }
 
-    @Тогда("^максимальная ставка по кешбеку составит (.+)%$")
+    @Тогда("^максимальная ставка по кешбеку составит (.+)$")
     public void максимальнаяСтавкаПоКешбекуСоставитСтавка(BigDecimal maxRate) {
         cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
         assertEquals(maxRate.doubleValue(), cardOption.getRate().doubleValue() * 100, 0);
@@ -84,5 +85,11 @@ public class OptionProfitCalculatorSteps {
         SavingOptionProfitCalculator calculator = (SavingOptionProfitCalculator) this.optionProfitCalculator;
         BigDecimal days = BigDecimal.valueOf(30);
         assertEquals(optionProfitSum.doubleValue(), calculator.calculateProfitSum(accountSum, cardOption.getRate(), days).doubleValue(), 0);
+    }
+
+    @Тогда("^лучший коэффициент по кешбеку составит (.+) рублей$")
+    public void лучшийКоэффициентПоКешбекуСоставитСтавкаРублей(BigDecimal rate) {
+        cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
+        assertEquals(rate.longValue(), cardOption.getRate().longValue());
     }
 }
