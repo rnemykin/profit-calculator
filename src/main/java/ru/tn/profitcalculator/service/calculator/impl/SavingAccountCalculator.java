@@ -149,7 +149,7 @@ public class SavingAccountCalculator implements Calculator {
 
         if (savingAccount.getLinkedProduct() instanceof Card && hasCardTransactions) {
             Card card = (Card) savingAccount.getLinkedProduct();
-            CardOption cardOption = card.getCardOption();
+            CardOption cardOption = card.getCardOption().clone();
 
             if (cardOption != null) {
                 OptionProfitCalculator optionProfitCalculator = optionProfitCalculatorFactory.get(cardOption.getBonusOption());

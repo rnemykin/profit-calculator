@@ -1,6 +1,7 @@
 package ru.tn.profitcalculator.model;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 
 import javax.persistence.Entity;
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-public class CardOption {
+public class CardOption implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card_option_id_seq")
     @SequenceGenerator(sequenceName = "card_option_id_seq", allocationSize = 1, name = "card_option_id_seq")
@@ -33,4 +34,10 @@ public class CardOption {
 
     @Transient
     private BigDecimal cashback4Month;
+
+    @Override
+    @SneakyThrows
+    public CardOption clone() {
+        return (CardOption) super.clone();
+    }
 }
