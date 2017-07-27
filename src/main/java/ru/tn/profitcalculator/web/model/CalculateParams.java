@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ public class CalculateParams {
 
     @NotNull
     @Min(91)
+    @Max(1830)
     private Integer daysCount;
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
