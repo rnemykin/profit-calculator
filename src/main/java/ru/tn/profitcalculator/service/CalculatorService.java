@@ -52,6 +52,7 @@ public class CalculatorService {
 
                     return ProductGroup.builder()
                             .resultSum(r.getTotalSum())
+                            .optionProfitSum(r.getOptionProfitSum())
                             .profitSum(r.getProfitSum())
                             .maxRate(r.getMaxRate())
                             .products(r.isRecommendation() ? emptyList() : products)
