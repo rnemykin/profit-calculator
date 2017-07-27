@@ -75,13 +75,10 @@ public class SavingAccountCalculator implements Calculator {
             refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
         }
 
-        log.info("start calculating");
         List<List<BigDecimal>> accountState = new ArrayList<>();
-
         CardOption cardOption = getCardOption(savingAccount, params.getCategories2Costs());
 
         for (Map.Entry<LocalDate, BigDecimal> layer : layers.entrySet()) {
-
             List<BigDecimal> layerAccountState = new ArrayList<>();
 
             LocalDate layerStartDate = layer.getKey();
@@ -118,13 +115,9 @@ public class SavingAccountCalculator implements Calculator {
 
                 totalSum = totalSum.add(monthProfit);
                 totalProfit = totalProfit.add(monthProfit);
-
-                log.info("monthProfit " + monthProfit);
-                log.info("layerProfitSum = " + layerProfitSum);
             }
 
             accountState.add(layerAccountState);
-            log.info("next layer");
         }
 
         normalizeAccountState(accountState);
@@ -137,6 +130,7 @@ public class SavingAccountCalculator implements Calculator {
                 maxRate = maxRate.add(cardOption.getRate());
             }
         }
+
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
                 .profitSum(totalProfit)
@@ -176,7 +170,6 @@ public class SavingAccountCalculator implements Calculator {
     }
 
     private BigDecimal calculatePeriodSum(BigDecimal totalSum, BigDecimal rate, BigDecimal periodDays) {
-        log.info("totalSum = " + totalSum + " rate = " + rate + " period = " + periodDays);
         return totalSum.multiply(
                 rate.multiply(periodDays.divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP))
         ).divide(V_100, 0, RoundingMode.HALF_UP);
