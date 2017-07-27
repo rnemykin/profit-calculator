@@ -22,19 +22,27 @@ public class CashbackOptionProfitCalculator implements OptionProfitCalculator {
 
     @Override
     public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
-        BigDecimal rate = cardOption.getRate1(); // 1% for all purchases
+        BigDecimal rate = getRate(cardOption); // 1% for all purchases
         BigDecimal cashback = BigDecimal.ZERO;
 
         for (BigDecimal sum : categories2Costs.values()) {
             cashback = cashback.add(sum.multiply(rate));
         }
+        cardOption.setRate(rate);
+        cardOption.setCashback4Month(limitCashback(cashback));
+
+        return cardOption;
+    }
+
+    protected BigDecimal limitCashback(BigDecimal cashback) {
         if (cashback.compareTo(maxCashbackSum) > 0) {
             cashback = maxCashbackSum;
         }
-        cardOption.setRate(rate);
-        cardOption.setCashback4Month(cashback);
+        return cashback;
+    }
 
-        return cardOption;
+    protected BigDecimal getRate(CardOption cardOption) {
+        return cardOption.getRate1();
     }
 
     @Override
