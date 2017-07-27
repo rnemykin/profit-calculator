@@ -9,6 +9,7 @@ import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
+import ru.tn.profitcalculator.service.ObjectService;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.OptionProfitCalculator;
 import ru.tn.profitcalculator.service.calculator.OptionProfitCalculatorFactory;
@@ -39,9 +40,11 @@ public class SavingAccountCalculator implements Calculator {
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
     private static final BigDecimal V_100 = valueOf(100);
 
+    private final ObjectService objectService;
     private final OptionProfitCalculatorFactory optionProfitCalculatorFactory;
 
-    public SavingAccountCalculator(OptionProfitCalculatorFactory optionProfitCalculatorFactory) {
+    public SavingAccountCalculator(ObjectService objectService, OptionProfitCalculatorFactory optionProfitCalculatorFactory) {
+        this.objectService = objectService;
         this.optionProfitCalculatorFactory = optionProfitCalculatorFactory;
     }
 
@@ -151,12 +154,10 @@ public class SavingAccountCalculator implements Calculator {
             Card card = (Card) savingAccount.getLinkedProduct();
 
             if (card.getCardOption() != null) {
-                CardOption cardOption = card.getCardOption().clone();
+                CardOption cardOption = objectService.clone(card.getCardOption());
 
                 OptionProfitCalculator optionProfitCalculator = optionProfitCalculatorFactory.get(cardOption.getBonusOption());
-                cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
-
-                return cardOption;
+                return optionProfitCalculator.calculate(cardOption, categories2Costs);
             }
         }
         return null;
