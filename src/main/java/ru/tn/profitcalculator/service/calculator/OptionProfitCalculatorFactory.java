@@ -21,6 +21,6 @@ public class OptionProfitCalculatorFactory {
 
     public OptionProfitCalculator get(BonusOptionEnum option) {
         return Optional.ofNullable(CALCULATORS.get(option))
-                .orElseThrow(() -> new IllegalArgumentException("No bonusOption rate calculator for bonusOption " + option));
+                .orElse(null);
     }
 }

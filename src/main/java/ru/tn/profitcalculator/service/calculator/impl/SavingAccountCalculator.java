@@ -149,8 +149,12 @@ public class SavingAccountCalculator implements Calculator {
 
             if (cardOption != null) {
                 OptionProfitCalculator optionProfitCalculator = optionProfitCalculatorFactory.get(cardOption.getBonusOption());
-                cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
-                return cardOption;
+                if(optionProfitCalculator == null) {
+                    log.warn("Option calculator not implemented for option " + cardOption);
+                } else {
+                    cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
+                    return cardOption;
+                }
             }
         }
         return null;
