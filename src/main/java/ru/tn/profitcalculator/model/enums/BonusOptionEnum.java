@@ -33,5 +33,10 @@ public enum BonusOptionEnum {
     /**
      * Cash back
      */
-    CASH_BACK
+    CASH_BACK,
+
+    /**
+     * РЖД
+     */
+    RZD
 }

@@ -114,10 +114,13 @@ public class CalculateRequestBuilder {
 
                         case TRAVEL:
                             bonusOptions.add(BonusOptionEnum.TRAVEL);
+                            bonusOptions.add(BonusOptionEnum.RZD);
                             break;
 
                         case OTHER:
-                            bonusOptions.addAll(Arrays.asList(BonusOptionEnum.SAVING, BonusOptionEnum.CASH_BACK, BonusOptionEnum.COLLECTION));
+                            bonusOptions.add(BonusOptionEnum.SAVING);
+                            bonusOptions.add(BonusOptionEnum.CASH_BACK);
+                            bonusOptions.add(BonusOptionEnum.COLLECTION);
                     }
 
                     if (bonusOptions.isEmpty()) {
