@@ -26,12 +26,21 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
         BigDecimal rate = result.getRate();
         BigDecimal cashback = BigDecimal.ZERO;
 
-        for (BigDecimal categoryTransactionsSum : categories2Costs.values()) {
-            cashback = cashback.add(categoryTransactionsSum.multiply(rate));
+        for (Map.Entry<PosCategoryEnum, BigDecimal> entry : categories2Costs.entrySet()) {
+            PosCategoryEnum category = entry.getKey();
+
+            if (getOptionCategory() == null || category == getOptionCategory()) {
+                cashback = cashback.add(entry.getValue().multiply(rate));
+            }
         }
-        result.setCashback4Month(limitCashback(cashback));
+        BigDecimal cashback4Month = limitCashback(cashback);
+        result.setCashback4Month(cashback4Month);
 
         return result;
+    }
+
+    PosCategoryEnum getOptionCategory() {
+        return null;
     }
 
     BigDecimal limitCashback(BigDecimal cashback) {

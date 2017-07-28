@@ -2,6 +2,7 @@ package ru.tn.profitcalculator.service.calculator.option.impl;
 
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
+import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 
 import java.math.BigDecimal;
 
@@ -14,6 +15,11 @@ public class TravelOptionProfitCalculator extends CashbackOptionProfitCalculator
     @Override
     public BonusOptionEnum getOption() {
         return BonusOptionEnum.TRAVEL;
+    }
+
+    @Override
+    PosCategoryEnum getOptionCategory() {
+        return PosCategoryEnum.TRAVEL;
     }
 
     @Override
