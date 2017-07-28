@@ -1,11 +1,10 @@
-package ru.tn.profitcalculator.service.calculator.impl;
+package ru.tn.profitcalculator.service.calculator.option.impl;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
-import ru.tn.profitcalculator.service.calculator.OptionProfitCalculator;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -14,31 +13,28 @@ import java.util.Map;
  * Калькулятор ставки и суммы кэшбека для опции мультикарты Cashback
  */
 @Service
-public class CashbackOptionProfitCalculator implements OptionProfitCalculator {
+public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
 
     @Value("${card.options.cashback.maxSum}")
     private BigDecimal maxCashbackSum;
 
     @Override
     public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
-        BigDecimal rate = getRate(cardOption); // 1% for all purchases
+
+        CardOption result = super.calculate(cardOption, categories2Costs);
+        BigDecimal rate = result.getRate();
         BigDecimal cashback = BigDecimal.ZERO;
 
-        for (BigDecimal sum : categories2Costs.values()) {
-            cashback = cashback.add(sum.multiply(rate));
+        for (BigDecimal categoryTransactionsSum : categories2Costs.values()) {
+            cashback = cashback.add(categoryTransactionsSum.multiply(rate));
         }
-        cardOption.setRate(rate);
-        cardOption.setCashback4Month(limitCashback(cashback));
+        result.setCashback4Month(limitCashback(cashback));
 
-        return cardOption;
+        return result;
     }
 
-    protected BigDecimal limitCashback(BigDecimal cashback) {
+    BigDecimal limitCashback(BigDecimal cashback) {
         return cashback.compareTo(maxCashbackSum) > 0 ? maxCashbackSum : cashback;
-    }
-
-    protected BigDecimal getRate(CardOption cardOption) {
-        return cardOption.getRate1();
     }
 
     @Override

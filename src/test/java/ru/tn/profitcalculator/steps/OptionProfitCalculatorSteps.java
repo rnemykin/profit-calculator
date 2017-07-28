@@ -1,6 +1,5 @@
 package ru.tn.profitcalculator.steps;
 
-import cucumber.api.PendingException;
 import cucumber.api.java.ru.И;
 import cucumber.api.java.ru.Пусть;
 import cucumber.api.java.ru.Тогда;
@@ -12,9 +11,9 @@ import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.repository.CardOptionRepository;
-import ru.tn.profitcalculator.service.calculator.OptionProfitCalculator;
+import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
 import ru.tn.profitcalculator.service.calculator.OptionProfitCalculatorFactory;
-import ru.tn.profitcalculator.service.calculator.impl.SavingOptionProfitCalculator;
+import ru.tn.profitcalculator.service.calculator.option.impl.SavingOptionProfitCalculator;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -32,7 +31,7 @@ public class OptionProfitCalculatorSteps {
     @Autowired
     private CardOptionRepository cardOptionRepository;
 
-    private OptionProfitCalculator optionProfitCalculator;
+    private IOptionProfitCalculator optionProfitCalculator;
     private Map<PosCategoryEnum, BigDecimal> categories2Costs = new HashMap<>();
     private CardOption cardOption;
 

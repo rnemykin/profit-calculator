@@ -1,7 +1,6 @@
-package ru.tn.profitcalculator.service.calculator.impl;
+package ru.tn.profitcalculator.service.calculator.option.impl;
 
 import org.springframework.stereotype.Service;
-import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 
 import java.math.BigDecimal;
@@ -13,17 +12,12 @@ import java.math.BigDecimal;
 public class TravelOptionProfitCalculator extends CashbackOptionProfitCalculator {
 
     @Override
-    protected BigDecimal getRate(CardOption cardOption) {
-        return cardOption.getRate3();
-    }
-
-    @Override
-    protected BigDecimal limitCashback(BigDecimal cashback) {
-        return cashback;
-    }
-
-    @Override
     public BonusOptionEnum getOption() {
         return BonusOptionEnum.TRAVEL;
+    }
+
+    @Override
+    BigDecimal limitCashback(BigDecimal cashback) {
+        return cashback;
     }
 }

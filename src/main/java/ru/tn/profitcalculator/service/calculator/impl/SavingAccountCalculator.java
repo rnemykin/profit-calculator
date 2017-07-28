@@ -11,10 +11,11 @@ import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.service.ObjectService;
 import ru.tn.profitcalculator.service.calculator.Calculator;
-import ru.tn.profitcalculator.service.calculator.OptionProfitCalculator;
+import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
 import ru.tn.profitcalculator.service.calculator.OptionProfitCalculatorFactory;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateResult;
+import ru.tn.profitcalculator.service.calculator.option.impl.SavingOptionProfitCalculator;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 
 import java.math.BigDecimal;
@@ -153,7 +154,7 @@ public class SavingAccountCalculator implements Calculator {
 
             if (card.getCardOption() != null) {
                 CardOption cardOption = objectService.clone(card.getCardOption());
-                OptionProfitCalculator optionProfitCalculator = optionProfitCalculatorFactory.get(cardOption.getBonusOption());
+                IOptionProfitCalculator optionProfitCalculator = optionProfitCalculatorFactory.get(cardOption.getBonusOption());
                 return optionProfitCalculator.calculate(cardOption, categories2Costs);
             }
         }
