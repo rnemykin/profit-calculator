@@ -9,7 +9,7 @@ import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.model.RefillOption;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
-import ru.tn.profitcalculator.model.enums.CardTypeEnum;
+import ru.tn.profitcalculator.model.enums.CardCategoryEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.repository.CardOptionRepository;
@@ -26,6 +26,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static ru.tn.profitcalculator.model.enums.CardCategoryEnum.CREDIT;
+import static ru.tn.profitcalculator.model.enums.CardCategoryEnum.DEBIT;
 import static ru.tn.profitcalculator.model.enums.RefillOptionEventTypeEnum.FIXED_DATE;
 import static ru.tn.profitcalculator.model.enums.RefillOptionSumTypeEnum.FIXED_SUM;
 
@@ -134,7 +136,7 @@ public class CalculateRequestBuilder {
                     return bonusOptions.parallelStream()
                             .map(option -> {
                                 SavingAccount savingAccount = getCopyOfSavingAccount(products);
-                                savingAccount.setLinkedProduct(getCard(option));
+                                savingAccount.setLinkedProduct(getCard(option, params.getCreditCard()));
 
                                 return ProductCalculateRequest.builder()
                                         .product(savingAccount)
@@ -148,9 +150,14 @@ public class CalculateRequestBuilder {
                 .collect(Collectors.toList());
     }
 
-    private Card getCard(BonusOptionEnum bonusOption) {
-        Card card = cardRepository.findFirstByCardTypeOrderByIdDesc(CardTypeEnum.VISA);
+    private Card getCard(BonusOptionEnum bonusOption, Boolean creditCard) {
+        CardCategoryEnum cardCategory = Boolean.TRUE.equals(creditCard) ? CREDIT : DEBIT;
+        Card card = cardRepository.findFirstByCardCategoryOrderByIdDesc(cardCategory);
         card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
+
+        if(CREDIT == cardCategory) {
+            card.setLinkedProduct(cardRepository.findFirstByCardCategoryOrderByIdDesc(DEBIT));
+        }
         return objectService.clone(card);
     }
 }
