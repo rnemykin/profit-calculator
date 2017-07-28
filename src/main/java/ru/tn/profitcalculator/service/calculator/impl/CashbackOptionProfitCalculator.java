@@ -8,7 +8,6 @@ import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.service.calculator.OptionProfitCalculator;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Map;
 
 /**
@@ -35,10 +34,7 @@ public class CashbackOptionProfitCalculator implements OptionProfitCalculator {
     }
 
     protected BigDecimal limitCashback(BigDecimal cashback) {
-        if (cashback.compareTo(maxCashbackSum) > 0) {
-            cashback = maxCashbackSum;
-        }
-        return cashback;
+        return cashback.compareTo(maxCashbackSum) > 0 ? maxCashbackSum : cashback;
     }
 
     protected BigDecimal getRate(CardOption cardOption) {
