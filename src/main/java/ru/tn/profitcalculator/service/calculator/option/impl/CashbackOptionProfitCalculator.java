@@ -1,6 +1,7 @@
 package ru.tn.profitcalculator.service.calculator.option.impl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
@@ -19,7 +20,7 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
     private BigDecimal maxCashbackSum;
 
     @Override
-    public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
+    public CardOption calculate(CardOption cardOption, Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs) {
 
         CardOption result = super.calculate(cardOption, categories2Costs);
         BigDecimal rate = result.getRate();

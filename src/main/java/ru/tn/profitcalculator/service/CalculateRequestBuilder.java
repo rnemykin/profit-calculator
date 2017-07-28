@@ -3,6 +3,7 @@ package ru.tn.profitcalculator.service;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.Product;
@@ -24,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static ru.tn.profitcalculator.model.enums.CardCategoryEnum.CREDIT;
@@ -93,16 +95,23 @@ public class CalculateRequestBuilder {
     }
 
     private List<ProductCalculateRequest> makeRequestsWithCardOption(List<Product> products, CalculateParams params) {
-        Map<PosCategoryEnum, BigDecimal> categories2Costs = params.getCategories2Costs();
+        Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs = params.getCategories2Costs();
         BigDecimal maxCostSum = categories2Costs.entrySet().parallelStream()
                 .max(Comparator.comparing(Map.Entry::getValue))
                 .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
                 .getValue();
 
-        List<PosCategoryEnum> costCategories = categories2Costs.entrySet().parallelStream()
+        Set<PosCategoryEnum> costCategories = categories2Costs.entrySet().parallelStream()
                 .filter(e -> maxCostSum.compareTo(e.getValue()) == 0)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                .map(e -> e.getKey().getFirst())
+                .collect(Collectors.toSet());
+
+        costCategories.addAll(
+                categories2Costs.keySet().stream()
+                    .filter(k -> Boolean.TRUE.equals(k.getSecond()))
+                    .map(Pair::getFirst)
+                    .collect(Collectors.toSet())
+        );
 
         return costCategories.parallelStream()
                 .flatMap(category -> {

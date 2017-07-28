@@ -5,14 +5,15 @@ import cucumber.api.java.ru.Пусть;
 import cucumber.api.java.ru.Тогда;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootContextLoader;
+import org.springframework.data.util.Pair;
 import org.springframework.test.context.ContextConfiguration;
 import ru.tn.profitcalculator.ProfitCalculatorApplication;
 import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.repository.CardOptionRepository;
-import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
 import ru.tn.profitcalculator.service.calculator.OptionProfitCalculatorFactory;
+import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
 import ru.tn.profitcalculator.service.calculator.option.impl.SavingOptionProfitCalculator;
 
 import java.math.BigDecimal;
@@ -32,7 +33,7 @@ public class OptionProfitCalculatorSteps {
     private CardOptionRepository cardOptionRepository;
 
     private IOptionProfitCalculator optionProfitCalculator;
-    private Map<PosCategoryEnum, BigDecimal> categories2Costs = new HashMap<>();
+    private Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs = new HashMap<>();
     private CardOption cardOption;
 
     @Пусть("^Ярик подключил для мультикарты опцию (\\w+)$")
@@ -45,7 +46,7 @@ public class OptionProfitCalculatorSteps {
     @И("^за месяц его POS-оборот по карте составил (.+) рублей$")
     public void заМесяцЕгоPOSОборотПоКартеСоставилРублей(BigDecimal sum) {
         categories2Costs.clear();
-        categories2Costs.put(PosCategoryEnum.FUN, sum);
+        categories2Costs.put(Pair.of(PosCategoryEnum.FUN, false), sum);
     }
 
     @Тогда("^надбавка к процентной ставке по накопительному счету равна (.+)%$")
@@ -57,15 +58,15 @@ public class OptionProfitCalculatorSteps {
     @И("^за месяц совершил покупки в категории Авто на сумму (.+) рублей, а также по другим категориям на сумму (.+) рублей$")
     public void заМесяцСовершилПокупкиВКатегорииАвтоАТакжеПоДругимКатегориям(BigDecimal autoSum, BigDecimal otherSum) {
         categories2Costs.clear();
-        categories2Costs.put(PosCategoryEnum.AUTO, autoSum);
-        categories2Costs.put(PosCategoryEnum.OTHER, otherSum);
+        categories2Costs.put(Pair.of(PosCategoryEnum.AUTO, false), autoSum);
+        categories2Costs.put(Pair.of(PosCategoryEnum.OTHER, false), otherSum);
     }
 
     @И("^за месяц совершил покупки в категории Развлечения на сумму (.+) рублей, а также по другим категориям на сумму (.+) рублей$")
     public void заМесяцСовершилПокупкиВКатегорииРазвлеченияАТакжеПоДругимКатегориям(BigDecimal autoSum, BigDecimal otherSum) {
         categories2Costs.clear();
-        categories2Costs.put(PosCategoryEnum.FUN, autoSum);
-        categories2Costs.put(PosCategoryEnum.OTHER, otherSum);
+        categories2Costs.put(Pair.of(PosCategoryEnum.FUN, false), autoSum);
+        categories2Costs.put(Pair.of(PosCategoryEnum.OTHER, false), otherSum);
     }
 
     @Тогда("^максимальная ставка по кешбеку составит (.+)$")

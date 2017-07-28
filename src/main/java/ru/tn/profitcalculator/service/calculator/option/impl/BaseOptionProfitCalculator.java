@@ -2,6 +2,7 @@ package ru.tn.profitcalculator.service.calculator.option.impl;
 
 import org.apache.commons.lang3.Range;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.util.Pair;
 import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
@@ -33,7 +34,7 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
     }
 
     @Override
-    public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
+    public CardOption calculate(CardOption cardOption, Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs) {
         BigDecimal rate = BigDecimal.ZERO;
         BigDecimal totalSum = BigDecimal.ZERO;
 

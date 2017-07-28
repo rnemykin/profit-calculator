@@ -2,6 +2,7 @@ package ru.tn.profitcalculator.service.calculator.impl;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.CardOption;
@@ -11,10 +12,10 @@ import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.service.ObjectService;
 import ru.tn.profitcalculator.service.calculator.Calculator;
-import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
 import ru.tn.profitcalculator.service.calculator.OptionProfitCalculatorFactory;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateResult;
+import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
 import ru.tn.profitcalculator.service.calculator.option.impl.SavingOptionProfitCalculator;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 
@@ -148,7 +149,7 @@ public class SavingAccountCalculator implements Calculator {
         return null;
     }
 
-    private CardOption getCardOption(SavingAccount savingAccount, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
+    private CardOption getCardOption(SavingAccount savingAccount, Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs) {
         if (savingAccount.getLinkedProduct() instanceof Card && !isEmpty(categories2Costs)) {
             Card card = (Card) savingAccount.getLinkedProduct();
 

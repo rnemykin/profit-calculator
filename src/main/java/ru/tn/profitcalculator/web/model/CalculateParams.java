@@ -2,6 +2,7 @@ package ru.tn.profitcalculator.web.model;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.util.Pair;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 
 import javax.validation.constraints.Max;
@@ -25,5 +26,5 @@ public class CalculateParams {
     private Boolean creditCard;
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
-    private Map<PosCategoryEnum, BigDecimal> categories2Costs = new HashMap<>();
+    private Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs = new HashMap<>();
 }
