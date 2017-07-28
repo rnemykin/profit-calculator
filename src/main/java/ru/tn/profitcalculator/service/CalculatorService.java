@@ -1,6 +1,7 @@
 package ru.tn.profitcalculator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.comparator.ProductGroupComparator;
 import ru.tn.profitcalculator.model.Product;
@@ -23,6 +24,9 @@ public class CalculatorService {
     private final ProductService productService;
     private final CalculatorFactory calculatorFactory;
     private final CalculateRequestBuilder calculateRequestBuilder;
+
+    @Value("${card.countLimit}")
+    long cardsCountLimit;
 
     @Autowired
     public CalculatorService(ProductService productService, CalculatorFactory calculatorFactory, CalculateRequestBuilder calculateRequestBuilder) {
@@ -60,6 +64,7 @@ public class CalculatorService {
                             .build();
                 })
                 .sorted(new ProductGroupComparator())
+                .limit(cardsCountLimit)
                 .collect(toList());
     }
 }

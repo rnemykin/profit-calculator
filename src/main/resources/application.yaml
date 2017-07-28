@@ -21,4 +21,5 @@ card:
       threshold1: 5000
       threshold2: 15000
       threshold3: 75000
-      maxSum4Rate: 1500000
+      maxSum4Rate: 150000
+  countLimit: 6
