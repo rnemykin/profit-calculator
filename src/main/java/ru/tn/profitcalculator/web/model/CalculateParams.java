@@ -21,6 +21,8 @@ public class CalculateParams {
     @Min(91)
     @Max(1830)
     private Integer daysCount;
+    private Boolean salaryClient;
+    private Boolean creditCard;
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
     private Map<PosCategoryEnum, BigDecimal> categories2Costs = new HashMap<>();
