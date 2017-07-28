@@ -2,6 +2,7 @@ package ru.tn.profitcalculator.service;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.Product;
@@ -19,7 +20,6 @@ import ru.tn.profitcalculator.web.model.CalculateParams;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,6 @@ import java.util.stream.Collectors;
 
 import static ru.tn.profitcalculator.model.enums.RefillOptionEventTypeEnum.FIXED_DATE;
 import static ru.tn.profitcalculator.model.enums.RefillOptionSumTypeEnum.FIXED_SUM;
-import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
 
 @Log4j
 @Service
@@ -38,6 +37,9 @@ public class CalculateRequestBuilder {
     private final CardOptionRepository cardOptionRepository;
     private final RefillOptionRepository refillOptionRepository;
     private final ObjectService objectService;
+
+    @Value("${savingAccount.defaultRefillSum}")
+    private BigDecimal defaultRefillSum;
 
     @Autowired
     public CalculateRequestBuilder(CardRepository cardRepository, CardOptionRepository cardOptionRepository, RefillOptionRepository refillOptionRepository, ObjectService objectService) {
@@ -56,7 +58,7 @@ public class CalculateRequestBuilder {
                 )
                 .collect(Collectors.toList());
 
-        if (!isGreatThenZero(params.getMonthRefillSum()) && !isGreatThenZero(params.getMonthWithdrawalSum())) {
+        if (Boolean.TRUE.equals(params.getSalaryClient())) {
             result.add(makeAutoRefillRequest(getCopyOfSavingAccount(products), params));
         }
 
@@ -71,10 +73,11 @@ public class CalculateRequestBuilder {
         RefillOption autoRefillOption = refillOptionRepository.findByEventTypeAndRefillSumType(FIXED_DATE, FIXED_SUM);
         savingAccount.setRefillOption(autoRefillOption);
 
+        CalculateParams refillParams = objectService.clone(params);
+        refillParams.setMonthRefillSum(defaultRefillSum);
         return ProductCalculateRequest.builder()
-                .recommendation(true)
                 .product(savingAccount)
-                .params(params)
+                .params(refillParams)
                 .build();
     }
 
