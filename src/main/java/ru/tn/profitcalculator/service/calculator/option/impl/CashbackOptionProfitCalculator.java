@@ -39,10 +39,6 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
         return result;
     }
 
-    PosCategoryEnum getOptionCategory() {
-        return null;
-    }
-
     BigDecimal limitCashback(BigDecimal cashback) {
         return cashback.compareTo(maxCashbackSum) > 0 ? maxCashbackSum : cashback;
     }

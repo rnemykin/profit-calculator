@@ -38,8 +38,12 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
         BigDecimal rate = BigDecimal.ZERO;
         BigDecimal totalSum = BigDecimal.ZERO;
 
-        for (BigDecimal categoryTransactionsSum : categories2Costs.values()) {
-            totalSum = totalSum.add(categoryTransactionsSum);
+        for (Map.Entry<PosCategoryEnum, BigDecimal> entry : categories2Costs.entrySet()) {
+            PosCategoryEnum category = entry.getKey();
+
+            if (getOptionCategory() == null || category == getOptionCategory()) {
+                totalSum = totalSum.add(entry.getValue());
+            }
         }
         if (range1.contains(totalSum)) {
             rate = cardOption.getRate1();
@@ -53,4 +57,7 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
         return cardOption;
     }
 
+    PosCategoryEnum getOptionCategory() {
+        return null;
+    }
 }

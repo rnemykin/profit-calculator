@@ -26,6 +26,8 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = ProfitCalculatorApplication.class, loader = SpringBootContextLoader.class)
 public class OptionProfitCalculatorSteps {
 
+    private static final double DELTA = 0.01;
+
     @Autowired
     private OptionProfitCalculatorFactory optionProfitCalculatorFactory;
 
@@ -52,7 +54,7 @@ public class OptionProfitCalculatorSteps {
     @Тогда("^надбавка к процентной ставке по накопительному счету равна (.+)%$")
     public void надбавкаКПроцентнойСтавкеПоНакопительномуСчетуРавна(BigDecimal rate) {
         cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
-        assertEquals(rate.doubleValue(), cardOption.getRate().doubleValue() * 100, 0);
+        assertEquals(rate.doubleValue(), cardOption.getRate().doubleValue() * 100, DELTA);
     }
 
     @И("^за месяц совершил покупки в категории Авто на сумму (.+) рублей, а также по другим категориям на сумму (.+) рублей$")
@@ -72,24 +74,24 @@ public class OptionProfitCalculatorSteps {
     @Тогда("^максимальная ставка по кешбеку составит (.+)$")
     public void максимальнаяСтавкаПоКешбекуСоставитСтавка(BigDecimal maxRate) {
         cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
-        assertEquals(maxRate.doubleValue(), cardOption.getRate().doubleValue() * 100, 0);
+        assertEquals(maxRate.doubleValue(), cardOption.getRate().doubleValue() * 100, DELTA);
     }
 
     @И("^общая сумма кешбека составит (.+) рублей$")
     public void общаяСуммаКешбекаСоставитCashbackРублей(BigDecimal cashback) {
-        assertEquals(cashback.doubleValue(), cardOption.getCashback4Month().doubleValue(), 0);
+        assertEquals(cashback.doubleValue(), cardOption.getCashback4Month().doubleValue(), DELTA);
     }
 
     @И("^сумма надбавки к накопительному счету на сумму (.+) рублей за месяц составит (.+) рублей$")
     public void суммаНадбавкиКНакопительномуСчетуНаСуммуРублейСоставитПрофитРублей(BigDecimal accountSum, BigDecimal optionProfitSum) {
         SavingOptionProfitCalculator calculator = (SavingOptionProfitCalculator) this.optionProfitCalculator;
         BigDecimal days = BigDecimal.valueOf(30);
-        assertEquals(optionProfitSum.doubleValue(), calculator.calculateProfitSum(accountSum, cardOption.getRate(), days).doubleValue(), 0);
+        assertEquals(optionProfitSum.doubleValue(), calculator.calculateProfitSum(accountSum, cardOption.getRate(), days).doubleValue(), DELTA);
     }
 
     @Тогда("^лучший коэффициент по кешбеку составит (.+) рублей$")
     public void лучшийКоэффициентПоКешбекуСоставитСтавкаРублей(BigDecimal rate) {
         cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
-        assertEquals(rate.longValue(), cardOption.getRate().longValue());
+        assertEquals(rate.doubleValue(), cardOption.getRate().doubleValue(), DELTA);
     }
 }
