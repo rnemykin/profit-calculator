@@ -26,8 +26,8 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
         BigDecimal rate = result.getRate();
         BigDecimal cashback = BigDecimal.ZERO;
 
-        for (Map.Entry<PosCategoryEnum, BigDecimal> entry : categories2Costs.entrySet()) {
-            PosCategoryEnum category = entry.getKey();
+        for (Map.Entry<Pair<PosCategoryEnum, Boolean>, BigDecimal> entry : categories2Costs.entrySet()) {
+            PosCategoryEnum category = entry.getKey().getFirst();
 
             if (getOptionCategory() == null || category == getOptionCategory()) {
                 cashback = cashback.add(entry.getValue().multiply(rate));

@@ -38,8 +38,8 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
         BigDecimal rate = BigDecimal.ZERO;
         BigDecimal totalSum = BigDecimal.ZERO;
 
-        for (Map.Entry<PosCategoryEnum, BigDecimal> entry : categories2Costs.entrySet()) {
-            PosCategoryEnum category = entry.getKey();
+        for (Map.Entry<Pair<PosCategoryEnum, Boolean>, BigDecimal> entry : categories2Costs.entrySet()) {
+            PosCategoryEnum category = entry.getKey().getFirst();
 
             if (getOptionCategory() == null || category == getOptionCategory()) {
                 totalSum = totalSum.add(entry.getValue());
