@@ -245,12 +245,28 @@
             <column name="status">ACTIVE</column>
             <column name="create_date" valueComputed="${now}"/>
             <column name="update_date" valueComputed="${now}"/>
-            <column name="weight">2</column>
+            <column name="weight">1</column>
         </insert>
         <insert tableName="card">
-            <column name="id" valueComputed="(SELECT id FROM product WHERE type = 'CARD' AND name = 'Мультикарта')"/>
+            <column name="id" valueComputed="(SELECT id FROM product WHERE id = product_id_seq.currval)"/>
             <column name="card_type">VISA</column>
             <column name="card_category">DEBIT</column>
+        </insert>
+
+
+        <insert tableName="product">
+            <column name="id" valueComputed="(product_id_seq.nextval)"/>
+            <column name="name">Мультикарта</column>
+            <column name="type">CARD</column>
+            <column name="status">ACTIVE</column>
+            <column name="create_date" valueComputed="${now}" />
+            <column name="update_date" valueComputed="${now}" />
+            <column name="weight">1</column>
+        </insert>
+        <insert tableName="card">
+            <column name="id" valueComputed="(SELECT id FROM product WHERE id = product_id_seq.currval)"/>
+            <column name="card_type">MC</column>
+            <column name="card_category">CREDIT</column>
         </insert>
     </changeSet>
 
