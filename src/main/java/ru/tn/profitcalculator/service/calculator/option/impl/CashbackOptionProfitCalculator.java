@@ -20,10 +20,15 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
 
     @Override
     public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, BigDecimal> categories2Costs) {
-        CardOption result = super.calculate(cardOption, categories2Costs);
 
-        BigDecimal cashback4Month = result.getCashback4Month();
-        result.setCashback4Month(limitCashback(cashback4Month));
+        CardOption result = super.calculate(cardOption, categories2Costs);
+        BigDecimal rate = result.getRate();
+        BigDecimal cashback = BigDecimal.ZERO;
+
+        for (BigDecimal categoryTransactionsSum : categories2Costs.values()) {
+            cashback = cashback.add(categoryTransactionsSum.multiply(rate));
+        }
+        result.setCashback4Month(limitCashback(cashback));
 
         return result;
     }
