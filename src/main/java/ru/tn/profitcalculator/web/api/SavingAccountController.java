@@ -2,12 +2,9 @@ package ru.tn.profitcalculator.web.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.tn.profitcalculator.model.Deposit;
+import org.springframework.web.bind.annotation.*;
 import ru.tn.profitcalculator.model.SavingAccount;
+import ru.tn.profitcalculator.repository.ProductRateRepository;
 import ru.tn.profitcalculator.repository.SavingAccountRepository;
 
 import java.util.List;
@@ -16,16 +13,26 @@ import java.util.List;
 @RequestMapping("/api/v1/savingAccounts")
 @Slf4j
 public class SavingAccountController {
-    private final SavingAccountRepository repository;
+    private final SavingAccountRepository savingAccountRepository;
+    private final ProductRateRepository productRateRepository;
 
     @Autowired
-    public SavingAccountController(SavingAccountRepository repository) {
-        this.repository = repository;
+    public SavingAccountController(SavingAccountRepository savingAccountRepository, ProductRateRepository productRateRepository) {
+        this.savingAccountRepository = savingAccountRepository;
+        this.productRateRepository = productRateRepository;
     }
 
     @GetMapping
     public List<SavingAccount> getAll() {
-        return repository.findAll();
+        return savingAccountRepository.findAll();
+    }
+
+    @PostMapping
+    public void save(@RequestBody List<SavingAccount> savingAccounts) {
+        savingAccountRepository.save(savingAccounts);
+        for (SavingAccount savingAccount : savingAccounts) {
+            productRateRepository.save(savingAccount.getRates());
+        }
     }
 
 }

@@ -2,9 +2,7 @@ package ru.tn.profitcalculator.web.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.repository.CardRepository;
 
@@ -24,5 +22,10 @@ public class CardController {
     @GetMapping
     public List<Card> getAll() {
         return repository.findAll();
+    }
+
+    @PostMapping
+    public void save(@RequestBody List<Card> cards) {
+        repository.save(cards);
     }
 }
