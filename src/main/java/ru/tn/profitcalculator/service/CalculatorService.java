@@ -12,6 +12,7 @@ import ru.tn.profitcalculator.web.model.ProductGroup;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -77,6 +78,17 @@ public class CalculatorService {
                 .filter(Objects::nonNull)
                 .sorted(new ProductGroupComparator())
                 .limit(offersCountLimit)
+                .peek(pg -> {
+                    if (pg.getProfitSum() != null) {
+                        pg.setProfitSum(pg.getProfitSum().setScale(0, RoundingMode.HALF_UP));
+                    }
+                    if (pg.getResultSum() != null) {
+                        pg.setResultSum(pg.getResultSum().setScale(0, RoundingMode.HALF_UP));
+                    }
+                    if (pg.getOptionProfitSum() != null) {
+                        pg.setOptionProfitSum(pg.getOptionProfitSum().setScale(0, RoundingMode.HALF_UP));
+                    }
+                })
                 .collect(toList());
     }
 }
