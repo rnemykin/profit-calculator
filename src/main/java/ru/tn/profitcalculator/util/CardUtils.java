@@ -21,12 +21,12 @@ public class CardUtils {
 
             case TRAVEL:
                 bonusOptions.add(BonusOptionEnum.TRAVEL);
-                bonusOptions.add(BonusOptionEnum.RZD);
                 break;
 
             case OTHER:
                 bonusOptions.add(BonusOptionEnum.SAVING);
                 bonusOptions.add(BonusOptionEnum.CASH_BACK);
+                bonusOptions.add(BonusOptionEnum.TRAVEL);
                 bonusOptions.add(BonusOptionEnum.COLLECTION);
         }
 

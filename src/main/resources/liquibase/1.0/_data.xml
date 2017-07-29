@@ -352,36 +352,43 @@
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
             <column name="key">savingAccount.defaultRefillSum</column>
+            <column name="name">Сумма ежемесячного пополнения</column>
             <column name="int_value">10000</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
             <column name="key">card.options.cashback.maxSum</column>
+            <column name="name">Максимальная сумма кэшбека</column>
             <column name="int_value">15000</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
             <column name="key">card.options.saving.threshold1</column>
+            <column name="name">Порог POS-оборота 1</column>
             <column name="int_value">5000</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
             <column name="key">card.options.saving.threshold2</column>
+            <column name="name">Порог POS-оборота 2</column>
             <column name="int_value">15000</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
             <column name="key">card.options.saving.threshold3</column>
+            <column name="name">Порог POS-оборота 3</column>
             <column name="int_value">75000</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
             <column name="key">card.options.saving.maxSum4Rate</column>
+            <column name="name">Максимальная сумма, на которую может быть начислена надбавка к % ставке по накопительному счету за покупки по Мультикарте с опцией "Сбережения"</column>
             <column name="int_value">1500000</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
             <column name="key">offer.countLimit</column>
+            <column name="name">Максимальное количество карточек с предложениями</column>
             <column name="int_value">6</column>
         </insert>
     </changeSet>

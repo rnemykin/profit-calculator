@@ -142,6 +142,9 @@
             <column name="key" type="VARCHAR(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
             <column name="int_value" type="INTEGER">
                 <constraints nullable="false"/>
             </column>

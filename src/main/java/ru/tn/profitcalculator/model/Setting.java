@@ -18,5 +18,6 @@ public class Setting {
     private Long id;
 
     private String key;
+    private String name;
     private Integer intValue;
 }
