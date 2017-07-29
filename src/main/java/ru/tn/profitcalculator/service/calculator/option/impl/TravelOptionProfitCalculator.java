@@ -18,11 +18,6 @@ public class TravelOptionProfitCalculator extends CashbackOptionProfitCalculator
     }
 
     @Override
-    PosCategoryEnum getOptionCategory() {
-        return PosCategoryEnum.TRAVEL;
-    }
-
-    @Override
     BigDecimal limitCashback(BigDecimal cashback) {
         return cashback;
     }

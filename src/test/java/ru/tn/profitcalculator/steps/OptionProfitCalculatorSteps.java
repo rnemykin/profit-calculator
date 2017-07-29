@@ -45,12 +45,6 @@ public class OptionProfitCalculatorSteps {
         assertNotNull(cardOption);
     }
 
-    @И("^за месяц его POS-оборот по карте составил (.+) рублей$")
-    public void заМесяцЕгоPOSОборотПоКартеСоставилРублей(BigDecimal sum) {
-        categories2Costs.clear();
-        categories2Costs.put(Pair.of(PosCategoryEnum.FUN, false), sum);
-    }
-
     @Тогда("^надбавка к процентной ставке по накопительному счету равна (.+)%$")
     public void надбавкаКПроцентнойСтавкеПоНакопительномуСчетуРавна(BigDecimal rate) {
         cardOption = optionProfitCalculator.calculate(cardOption, categories2Costs);
