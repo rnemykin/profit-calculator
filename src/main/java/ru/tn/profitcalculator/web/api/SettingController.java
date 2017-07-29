@@ -12,8 +12,6 @@ import ru.tn.profitcalculator.model.ProductRate;
 import ru.tn.profitcalculator.model.RefillOption;
 import ru.tn.profitcalculator.model.Setting;
 import ru.tn.profitcalculator.repository.CardOptionRepository;
-import ru.tn.profitcalculator.repository.CardRepository;
-import ru.tn.profitcalculator.repository.DepositRepository;
 import ru.tn.profitcalculator.repository.ProductRateRepository;
 import ru.tn.profitcalculator.repository.RefillOptionRepository;
 import ru.tn.profitcalculator.repository.SettingRepository;
@@ -28,17 +26,13 @@ public class SettingController {
     private final SettingRepository settingRepository;
     private final CardOptionRepository cardOptionRepository;
     private final ProductRateRepository productRateRepository;
-    private final CardRepository cardRepository;
-    private final DepositRepository depositRepository;
     private final RefillOptionRepository refillOptionRepository;
 
     @Autowired
-    public SettingController(SettingRepository settingRepository, CardOptionRepository cardOptionRepository, ProductRateRepository productRateRepository, CardRepository cardRepository, DepositRepository depositRepository, RefillOptionRepository refillOptionRepository) {
+    public SettingController(SettingRepository settingRepository, CardOptionRepository cardOptionRepository, ProductRateRepository productRateRepository, RefillOptionRepository refillOptionRepository) {
         this.settingRepository = settingRepository;
         this.cardOptionRepository = cardOptionRepository;
         this.productRateRepository = productRateRepository;
-        this.cardRepository = cardRepository;
-        this.depositRepository = depositRepository;
         this.refillOptionRepository = refillOptionRepository;
     }
 
