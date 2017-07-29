@@ -132,4 +132,20 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="29.07.2017-1-1" author="ilysenko">
+        <createSequence sequenceName="setting_id_seq" startValue="1" incrementBy="1"/>
+
+        <createTable tableName="setting">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="key" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="int_value" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

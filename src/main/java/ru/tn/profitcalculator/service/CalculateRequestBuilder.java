@@ -2,7 +2,6 @@ package ru.tn.profitcalculator.service;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
@@ -19,6 +18,7 @@ import ru.tn.profitcalculator.repository.RefillOptionRepository;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -40,17 +40,23 @@ public class CalculateRequestBuilder {
     private final CardRepository cardRepository;
     private final CardOptionRepository cardOptionRepository;
     private final RefillOptionRepository refillOptionRepository;
+    private final SettingsService settingsService;
     private final ObjectService objectService;
 
-    @Value("${savingAccount.defaultRefillSum}")
     private BigDecimal defaultRefillSum;
 
     @Autowired
-    public CalculateRequestBuilder(CardRepository cardRepository, CardOptionRepository cardOptionRepository, RefillOptionRepository refillOptionRepository, ObjectService objectService) {
+    public CalculateRequestBuilder(CardRepository cardRepository, CardOptionRepository cardOptionRepository, RefillOptionRepository refillOptionRepository, SettingsService settingsService, ObjectService objectService) {
         this.cardRepository = cardRepository;
         this.cardOptionRepository = cardOptionRepository;
         this.refillOptionRepository = refillOptionRepository;
+        this.settingsService = settingsService;
         this.objectService = objectService;
+    }
+
+    @PostConstruct
+    public void init() {
+        defaultRefillSum = settingsService.getBigDecimal("savingAccount.defaultRefillSum");
     }
 
     List<ProductCalculateRequest> makeRequests(List<Product> products, CalculateParams params) {
@@ -164,7 +170,7 @@ public class CalculateRequestBuilder {
         Card card = cardRepository.findFirstByCardCategoryOrderByIdDesc(cardCategory);
         card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
 
-        if(CREDIT == cardCategory) {
+        if (CREDIT == cardCategory) {
             card.setLinkedProduct(cardRepository.findFirstByCardCategoryOrderByIdDesc(DEBIT));
         }
         return objectService.clone(card);

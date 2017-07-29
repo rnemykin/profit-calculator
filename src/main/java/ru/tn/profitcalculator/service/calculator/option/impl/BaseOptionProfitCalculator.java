@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
+import ru.tn.profitcalculator.service.SettingsService;
 import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
 
 import javax.annotation.PostConstruct;
@@ -13,21 +14,24 @@ import java.util.Map;
 
 public abstract class BaseOptionProfitCalculator implements IOptionProfitCalculator {
 
-    @Value("${card.options.saving.threshold1}")
-    private BigDecimal threshold1;
+    private static final String SETTING_PREFIX = "card.options.saving.";
 
-    @Value("${card.options.saving.threshold2}")
-    private BigDecimal threshold2;
-
-    @Value("${card.options.saving.threshold3}")
-    private BigDecimal threshold3;
+    final SettingsService settingsService;
 
     private Range<BigDecimal> range1;
     private Range<BigDecimal> range2;
     private Range<BigDecimal> range3;
 
+    public BaseOptionProfitCalculator(SettingsService settingsService) {
+        this.settingsService = settingsService;
+    }
+
     @PostConstruct
     public void init() {
+        BigDecimal threshold1 = settingsService.getBigDecimal(SETTING_PREFIX + "threshold1");
+        BigDecimal threshold2 = settingsService.getBigDecimal(SETTING_PREFIX + "threshold2");
+        BigDecimal threshold3 = settingsService.getBigDecimal(SETTING_PREFIX + "threshold3");
+
         range1 = Range.between(threshold1, threshold2.subtract(BigDecimal.valueOf(0.01)));
         range2 = Range.between(threshold2, threshold3.subtract(BigDecimal.valueOf(0.01)));
         range3 = Range.between(threshold3, BigDecimal.valueOf(Double.MAX_VALUE));

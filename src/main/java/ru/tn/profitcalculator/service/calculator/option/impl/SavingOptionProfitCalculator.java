@@ -1,9 +1,10 @@
 package ru.tn.profitcalculator.service.calculator.option.impl;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
+import ru.tn.profitcalculator.service.SettingsService;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -17,8 +18,16 @@ public class SavingOptionProfitCalculator extends BaseOptionProfitCalculator {
 
     private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
 
-    @Value("${card.options.saving.maxSum4Rate}")
     private BigDecimal maxSum4Rate;
+
+    public SavingOptionProfitCalculator(SettingsService settingsService) {
+        super(settingsService);
+    }
+
+    @PostConstruct
+    public void init() {
+        maxSum4Rate = settingsService.getBigDecimal("card.options.saving.maxSum4Rate");
+    }
 
     public BigDecimal calculateProfitSum(BigDecimal sum, BigDecimal rate, BigDecimal days) {
         if(sum.compareTo(maxSum4Rate) > 0) {

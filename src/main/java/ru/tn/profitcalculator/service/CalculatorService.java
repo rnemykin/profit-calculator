@@ -1,7 +1,6 @@
 package ru.tn.profitcalculator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.comparator.ProductGroupComparator;
 import ru.tn.profitcalculator.model.Product;
@@ -11,6 +10,7 @@ import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 import ru.tn.profitcalculator.web.model.ProductGroup;
 
+import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +24,21 @@ public class CalculatorService {
     private final ProductService productService;
     private final CalculatorFactory calculatorFactory;
     private final CalculateRequestBuilder calculateRequestBuilder;
+    private final SettingsService settingsService;
 
-    @Value("${card.countLimit}")
-    long cardsCountLimit;
+    private long offersCountLimit;
 
     @Autowired
-    public CalculatorService(ProductService productService, CalculatorFactory calculatorFactory, CalculateRequestBuilder calculateRequestBuilder) {
+    public CalculatorService(ProductService productService, CalculatorFactory calculatorFactory, CalculateRequestBuilder calculateRequestBuilder, SettingsService settingsService) {
         this.productService = productService;
         this.calculatorFactory = calculatorFactory;
         this.calculateRequestBuilder = calculateRequestBuilder;
+        this.settingsService = settingsService;
+    }
+
+    @PostConstruct
+    public void init() {
+        offersCountLimit = settingsService.getInt("offer.countLimit");
     }
 
     public List<ProductGroup> calculateOffers(CalculateParams params) {
@@ -50,7 +56,7 @@ public class CalculatorService {
                 .map(r -> {
                     List<Product> products = new ArrayList<>();
                     products.add(r.getProduct());
-                    if(r.getProduct().getLinkedProduct() != null) {
+                    if (r.getProduct().getLinkedProduct() != null) {
                         products.add(r.getProduct().getLinkedProduct());
                     }
 
@@ -64,7 +70,7 @@ public class CalculatorService {
                             .build();
                 })
                 .sorted(new ProductGroupComparator())
-                .limit(cardsCountLimit)
+                .limit(offersCountLimit)
                 .collect(toList());
     }
 }
