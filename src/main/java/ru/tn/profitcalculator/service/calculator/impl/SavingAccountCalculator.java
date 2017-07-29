@@ -63,10 +63,10 @@ public class SavingAccountCalculator implements Calculator {
         Integer daysCount = params.getDaysCount();
         LocalDate startDate = LocalDate.now();
         LocalDate endDate = startDate.plusDays(daysCount);
-        BigDecimal totalSum = params.getInitSum();
         BigDecimal totalProfit = ZERO;
-
         BigDecimal refillSum = ZERO;
+
+        BigDecimal totalSum = params.getInitSum();
         if(isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
             Card card = (Card) savingAccount.getLinkedProduct();
             if(isLinkedProductCard(card, CardCategoryEnum.DEBIT)) {
