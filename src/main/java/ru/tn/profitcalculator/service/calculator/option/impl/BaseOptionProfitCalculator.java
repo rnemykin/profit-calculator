@@ -1,7 +1,6 @@
 package ru.tn.profitcalculator.service.calculator.option.impl;
 
 import org.apache.commons.lang3.Range;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import ru.tn.profitcalculator.model.CardOption;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
@@ -13,8 +12,6 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 public abstract class BaseOptionProfitCalculator implements IOptionProfitCalculator {
-
-    private static final String SETTING_PREFIX = "card.options.saving.";
 
     final SettingsService settingsService;
 
@@ -28,9 +25,9 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
 
     @PostConstruct
     public void init() {
-        BigDecimal threshold1 = settingsService.getBigDecimal(SETTING_PREFIX + "threshold1");
-        BigDecimal threshold2 = settingsService.getBigDecimal(SETTING_PREFIX + "threshold2");
-        BigDecimal threshold3 = settingsService.getBigDecimal(SETTING_PREFIX + "threshold3");
+        BigDecimal threshold1 = settingsService.getBigDecimal("card.threshold1");
+        BigDecimal threshold2 = settingsService.getBigDecimal("card.threshold2");
+        BigDecimal threshold3 = settingsService.getBigDecimal("card.threshold3");
 
         range1 = Range.between(threshold1, threshold2.subtract(BigDecimal.valueOf(0.01)));
         range2 = Range.between(threshold2, threshold3.subtract(BigDecimal.valueOf(0.01)));

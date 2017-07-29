@@ -363,19 +363,19 @@
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
-            <column name="key">card.options.saving.threshold1</column>
+            <column name="key">card.threshold1</column>
             <column name="name">Порог POS-оборота по Мультикарте 1</column>
             <column name="int_value">5000</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
-            <column name="key">card.options.saving.threshold2</column>
+            <column name="key">card.threshold2</column>
             <column name="name">Порог POS-оборота по Мультикарте 2</column>
             <column name="int_value">15000</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
-            <column name="key">card.options.saving.threshold3</column>
+            <column name="key">card.threshold3</column>
             <column name="name">Порог POS-оборота по Мультикарте 3</column>
             <column name="int_value">75000</column>
         </insert>
