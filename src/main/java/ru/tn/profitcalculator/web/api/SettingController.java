@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.CardOption;
-import ru.tn.profitcalculator.model.Deposit;
 import ru.tn.profitcalculator.model.ProductRate;
 import ru.tn.profitcalculator.model.RefillOption;
 import ru.tn.profitcalculator.model.Setting;
@@ -72,26 +70,6 @@ public class SettingController {
     @PostMapping("product-rates")
     public void saveProductRates(@RequestBody List<ProductRate> productRates) {
         productRateRepository.save(productRates);
-    }
-
-    @GetMapping("cards")
-    public List<Card> getAllCards() {
-        return cardRepository.findAll();
-    }
-
-    @PostMapping("cards")
-    public void saveCards(@RequestBody List<Card> cards) {
-        cardRepository.save(cards);
-    }
-
-    @GetMapping("deposits")
-    public List<Deposit> getAllDeposits() {
-        return depositRepository.findAll();
-    }
-
-    @PostMapping("deposits")
-    public void saveDeposits(@RequestBody List<Deposit> deposits) {
-        depositRepository.save(deposits);
     }
 
     @GetMapping("refill-options")
