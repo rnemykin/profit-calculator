@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static java.math.BigDecimal.valueOf;
+
 public abstract class BaseOptionProfitCalculator implements IOptionProfitCalculator {
 
     final SettingsService settingsService;
@@ -29,9 +31,9 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
         BigDecimal threshold2 = settingsService.getBigDecimal("card.threshold2");
         BigDecimal threshold3 = settingsService.getBigDecimal("card.threshold3");
 
-        range1 = Range.between(threshold1, threshold2.subtract(BigDecimal.valueOf(0.01)));
-        range2 = Range.between(threshold2, threshold3.subtract(BigDecimal.valueOf(0.01)));
-        range3 = Range.between(threshold3, BigDecimal.valueOf(Double.MAX_VALUE));
+        range1 = Range.between(threshold1, threshold2.subtract(valueOf(0.01)));
+        range2 = Range.between(threshold2, threshold3.subtract(valueOf(0.01)));
+        range3 = Range.between(threshold3, valueOf(Double.MAX_VALUE));
     }
 
     @Override
