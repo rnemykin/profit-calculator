@@ -351,9 +351,9 @@
     <changeSet id="29.07.2017-1-1" author="ilysenko">
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
-            <column name="key">savingAccount.defaultRefillSum</column>
-            <column name="name">Сумма ежемесячного пополнения</column>
-            <column name="int_value">10000</column>
+            <column name="key">savingAccount.refillSumPercentage</column>
+            <column name="name">Процент ежемесячного пополнения от стартовой суммы</column>
+            <column name="int_value">15</column>
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>

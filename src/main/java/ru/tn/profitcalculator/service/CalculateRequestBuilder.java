@@ -21,6 +21,7 @@ import ru.tn.profitcalculator.web.model.CalculateParams;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class CalculateRequestBuilder {
     private final SettingsService settingsService;
     private final ObjectService objectService;
 
-    private BigDecimal defaultRefillSum;
+    private BigDecimal refillSumPercentage;
 
     @Autowired
     public CalculateRequestBuilder(CardRepository cardRepository, CardOptionRepository cardOptionRepository, RefillOptionRepository refillOptionRepository, SettingsService settingsService, ObjectService objectService) {
@@ -56,7 +57,7 @@ public class CalculateRequestBuilder {
 
     @PostConstruct
     public void init() {
-        defaultRefillSum = settingsService.getBigDecimal("savingAccount.defaultRefillSum");
+        refillSumPercentage = settingsService.getBigDecimal("savingAccount.refillSumPercentage");
     }
 
     List<ProductCalculateRequest> makeRequests(List<Product> products, CalculateParams params) {
@@ -84,7 +85,7 @@ public class CalculateRequestBuilder {
         savingAccount.setRefillOption(autoRefillOption);
 
         CalculateParams refillParams = objectService.clone(params);
-        refillParams.setMonthRefillSum(defaultRefillSum);
+        refillParams.setMonthRefillSum(params.getInitSum().multiply(refillSumPercentage).setScale(0, RoundingMode.HALF_UP));
         return ProductCalculateRequest.builder()
                 .product(savingAccount)
                 .params(refillParams)
