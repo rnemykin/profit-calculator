@@ -16,11 +16,11 @@ import ru.tn.profitcalculator.repository.CardOptionRepository;
 import ru.tn.profitcalculator.repository.CardRepository;
 import ru.tn.profitcalculator.repository.RefillOptionRepository;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
+import ru.tn.profitcalculator.util.CardUtils;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -101,48 +101,10 @@ public class CalculateRequestBuilder {
     }
 
     private List<ProductCalculateRequest> makeRequestsWithCardOption(List<Product> products, CalculateParams params) {
-        Map<PosCategoryEnum, Pair<Boolean, BigDecimal>> categories2Costs = params.getCategories2Costs();
-        BigDecimal maxCostSum = categories2Costs.entrySet().parallelStream()
-                .max(Comparator.comparing(x -> x.getValue().getSecond()))
-                .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
-                .getValue().getSecond();
-
-        Set<PosCategoryEnum> costCategories = categories2Costs.entrySet().parallelStream()
-                .filter(e -> maxCostSum.compareTo(e.getValue().getSecond()) == 0)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toSet());
-
-        costCategories.addAll(
-                categories2Costs.entrySet().stream()
-                        .filter(e -> Boolean.TRUE.equals(e.getValue().getFirst()))
-                        .map(Map.Entry::getKey)
-                        .collect(Collectors.toSet())
-        );
-
+        Set<PosCategoryEnum> costCategories = getRelevantCategories(params);
         return costCategories.parallelStream()
                 .flatMap(category -> {
-                    List<BonusOptionEnum> bonusOptions = new ArrayList<>();
-
-                    switch (category) {
-                        case AUTO:
-                            bonusOptions.add(BonusOptionEnum.AUTO);
-                            break;
-
-                        case FUN:
-                            bonusOptions.add(BonusOptionEnum.FUN);
-                            break;
-
-                        case TRAVEL:
-                            bonusOptions.add(BonusOptionEnum.TRAVEL);
-                            bonusOptions.add(BonusOptionEnum.RZD);
-                            break;
-
-                        case OTHER:
-                            bonusOptions.add(BonusOptionEnum.SAVING);
-                            bonusOptions.add(BonusOptionEnum.CASH_BACK);
-                            bonusOptions.add(BonusOptionEnum.COLLECTION);
-                    }
-
+                    List<BonusOptionEnum> bonusOptions = CardUtils.getBonusOptionsByPosCategories(category);
                     if (bonusOptions.isEmpty()) {
                         log.warn("bonus options not set for category " + category);
                         return null;
@@ -163,6 +125,27 @@ public class CalculateRequestBuilder {
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+    }
+
+    private Set<PosCategoryEnum> getRelevantCategories(CalculateParams params) {
+        Map<PosCategoryEnum, Pair<Boolean, BigDecimal>> categories2Costs = params.getCategories2Costs();
+        BigDecimal maxCostSum = categories2Costs.entrySet().parallelStream()
+                .max(Comparator.comparing(x -> x.getValue().getSecond()))
+                .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
+                .getValue().getSecond();
+
+        Set<PosCategoryEnum> costCategories = categories2Costs.entrySet().parallelStream()
+                .filter(e -> maxCostSum.compareTo(e.getValue().getSecond()) == 0)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+
+        costCategories.addAll(
+                categories2Costs.entrySet().stream()
+                        .filter(e -> Boolean.TRUE.equals(e.getValue().getFirst()))
+                        .map(Map.Entry::getKey)
+                        .collect(Collectors.toSet())
+        );
+        return costCategories;
     }
 
     private Card getCard(BonusOptionEnum bonusOption, Boolean creditCard) {
