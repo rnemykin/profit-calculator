@@ -1,4 +1,5 @@
 # language: ru
+@Ignore
   Функционал: Накопительный счет
 
     @Ignore
