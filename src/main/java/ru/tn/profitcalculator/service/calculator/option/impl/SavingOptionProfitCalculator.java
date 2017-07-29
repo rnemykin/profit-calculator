@@ -7,11 +7,15 @@ import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static java.math.BigDecimal.valueOf;
+
 /**
  * Калькулятор ставки и профита для опции Сбережения
  */
 @Service
 public class SavingOptionProfitCalculator extends BaseOptionProfitCalculator {
+
+    private static final BigDecimal DAYS_IN_YEAR = valueOf(365);
 
     @Value("${card.options.saving.maxSum4Rate}")
     private BigDecimal maxSum4Rate;
@@ -20,10 +24,10 @@ public class SavingOptionProfitCalculator extends BaseOptionProfitCalculator {
         if(sum.compareTo(maxSum4Rate) > 0) {
             sum = maxSum4Rate;
         }
-        BigDecimal daysInYear = BigDecimal.valueOf(365);
-        BigDecimal period = days.divide(daysInYear, 10, RoundingMode.HALF_UP);
+        BigDecimal period = days.divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP);
         long profitSum = sum.multiply(rate.multiply(period)).longValue();
-        return BigDecimal.valueOf(profitSum);
+
+        return valueOf(profitSum);
     }
 
     @Override

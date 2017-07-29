@@ -10,6 +10,8 @@ import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import static java.math.BigDecimal.valueOf;
+
 /**
  * Калькулятор ставки и суммы кэшбека для опции мультикарты Cashback
  */
@@ -33,8 +35,8 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
                 cashback = cashback.add(entry.getValue().multiply(rate));
             }
         }
-        BigDecimal cashback4Month = limitCashback(cashback);
-        result.setCashback4Month(cashback4Month);
+        long cashback4Month = limitCashback(cashback).longValue();
+        result.setCashback4Month(valueOf(cashback4Month));
 
         return result;
     }
