@@ -95,20 +95,20 @@ public class CalculateRequestBuilder {
     }
 
     private List<ProductCalculateRequest> makeRequestsWithCardOption(List<Product> products, CalculateParams params) {
-        Map<PosCategoryEnum, Pair<BigDecimal, Boolean>> categories2Costs = params.getCategories2Costs();
+        Map<PosCategoryEnum, Pair<Boolean, BigDecimal>> categories2Costs = params.getCategories2Costs();
         BigDecimal maxCostSum = categories2Costs.entrySet().parallelStream()
-                .max(Comparator.comparing(x -> x.getValue().getFirst()))
+                .max(Comparator.comparing(x -> x.getValue().getSecond()))
                 .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
-                .getValue().getFirst();
+                .getValue().getSecond();
 
         Set<PosCategoryEnum> costCategories = categories2Costs.entrySet().parallelStream()
-                .filter(e -> maxCostSum.compareTo(e.getValue().getFirst()) == 0)
+                .filter(e -> maxCostSum.compareTo(e.getValue().getSecond()) == 0)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
 
         costCategories.addAll(
                 categories2Costs.entrySet().stream()
-                        .filter(e -> Boolean.TRUE.equals(e.getValue().getSecond()))
+                        .filter(e -> Boolean.TRUE.equals(e.getValue().getFirst()))
                         .map(Map.Entry::getKey)
                         .collect(Collectors.toSet())
         );

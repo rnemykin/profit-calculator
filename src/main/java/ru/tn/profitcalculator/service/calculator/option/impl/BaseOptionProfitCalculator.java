@@ -34,15 +34,15 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
     }
 
     @Override
-    public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, Pair<BigDecimal, Boolean>> categories2Costs) {
+    public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, Pair<Boolean, BigDecimal>> categories2Costs) {
         BigDecimal rate = BigDecimal.ZERO;
         BigDecimal totalSum = BigDecimal.ZERO;
 
-        for (Map.Entry<PosCategoryEnum, Pair<BigDecimal, Boolean>> entry : categories2Costs.entrySet()) {
+        for (Map.Entry<PosCategoryEnum, Pair<Boolean, BigDecimal>> entry : categories2Costs.entrySet()) {
             PosCategoryEnum category = entry.getKey();
 
             if (getOptionCategory() == null || category == getOptionCategory()) {
-                totalSum = totalSum.add(entry.getValue().getFirst());
+                totalSum = totalSum.add(entry.getValue().getSecond());
             }
         }
         if (range1.contains(totalSum)) {
