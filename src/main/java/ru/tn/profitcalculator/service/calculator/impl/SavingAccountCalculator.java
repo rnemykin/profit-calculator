@@ -142,9 +142,9 @@ public class SavingAccountCalculator implements Calculator {
         BigDecimal optionTotalProfit = calculateTotalOptionProfit4Period(cardOption, startDate, endDate);
 
         return ProductCalculateResult.builder()
-                .totalSum(totalSum.add(refillSum))
-                .profitSum(totalProfit)
-                .optionProfitSum(optionTotalProfit)
+                .totalSum(totalSum.add(refillSum).setScale(0, RoundingMode.HALF_UP))
+                .profitSum(totalProfit.setScale(0, RoundingMode.HALF_UP))
+                .optionProfitSum(optionTotalProfit.setScale(0, RoundingMode.HALF_UP))
                 .maxRate(maxRate)
                 .daysCount(daysCount)
                 .product(request.getProduct())
