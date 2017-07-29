@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
 import ru.tn.profitcalculator.service.SettingsService;
 
-import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -34,10 +33,9 @@ public class SavingOptionProfitCalculator extends BaseOptionProfitCalculator {
         if(sum.compareTo(maxSum4Rate) > 0) {
             sum = maxSum4Rate;
         }
-        BigDecimal period = days.divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP);
-        long profitSum = sum.multiply(rate.multiply(period)).longValue();
 
-        return valueOf(profitSum);
+        BigDecimal period = days.divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP);
+        return sum.multiply(rate.multiply(period));
     }
 
     @Override
