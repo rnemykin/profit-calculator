@@ -24,8 +24,9 @@ public class SavingOptionProfitCalculator extends BaseOptionProfitCalculator {
         super(settingsService);
     }
 
-    @PostConstruct
+    @Override
     public void init() {
+        super.init();
         maxSum4Rate = settingsService.getBigDecimal("card.options.saving.maxSum4Rate");
     }
 
