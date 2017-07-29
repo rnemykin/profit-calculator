@@ -12,9 +12,13 @@ import ru.tn.profitcalculator.web.model.ProductGroup;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -49,6 +53,9 @@ public class CalculatorService {
 
         List<Product> foundProducts = productService.searchProducts(daysCount, monthRefillSum, monthWithdrawalSum);
         List<ProductCalculateRequest> calculateRequests = calculateRequestBuilder.makeRequests(foundProducts, params);
+
+        Set<String> dublicateChecker = new HashSet<>();
+
         return calculateRequests.stream()
                 .map(r -> {
                     Calculator calculator = calculatorFactory.get(r.getProduct().getType());
@@ -79,6 +86,14 @@ public class CalculatorService {
                             .build();
                 })
                 .filter(Objects::nonNull)
+                .filter(pg -> {
+                    int p1 = pg.getProfitSum().intValue();
+                    int p2 = Optional.ofNullable(pg.getOptionProfitSum()).orElse(BigDecimal.ZERO).intValue();
+                    float p3 = pg.getMaxRate().floatValue();
+
+                    String hash = MessageFormat.format("{0}:{1}:{2}", p1, p2, p3);
+                    return dublicateChecker.add(hash);
+                })
                 .sorted(new ProductGroupComparator())
                 .limit(offersCountLimit)
                 .collect(toList());
