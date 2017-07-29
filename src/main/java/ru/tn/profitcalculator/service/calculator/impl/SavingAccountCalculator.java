@@ -127,7 +127,7 @@ public class SavingAccountCalculator implements Calculator {
                 maxRate = maxRate.add(cardOption.getRate());
             }
         }
-        Long optionTotalProfit = calculateTotalOptionProfit4Period(cardOption, startDate, endDate);
+        BigDecimal optionTotalProfit = calculateTotalOptionProfit4Period(cardOption, startDate, endDate);
 
         return ProductCalculateResult.builder()
                 .totalSum(totalSum.add(refillSum))
@@ -140,11 +140,11 @@ public class SavingAccountCalculator implements Calculator {
                 .build();
     }
 
-    private Long calculateTotalOptionProfit4Period(CardOption cardOption, LocalDate startDate, LocalDate endDate) {
+    private BigDecimal calculateTotalOptionProfit4Period(CardOption cardOption, LocalDate startDate, LocalDate endDate) {
         if (cardOption != null && cardOption.getBonusOption() != BonusOptionEnum.SAVING) {
             long days = DAYS.between(startDate, endDate);
-            BigDecimal monthes = valueOf(days).divide(DAYS_IN_MONTH, 4, RoundingMode.HALF_UP);
-            return cardOption.getCashback4Month().multiply(monthes).longValue();
+            BigDecimal months = valueOf(days).divide(DAYS_IN_MONTH, 4, RoundingMode.HALF_UP);
+            return cardOption.getCashback4Month().multiply(months);
         }
         return null;
     }

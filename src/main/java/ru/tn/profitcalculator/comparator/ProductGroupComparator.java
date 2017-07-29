@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Optional;
 
+import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 
 public class ProductGroupComparator implements Comparator<ProductGroup> {
@@ -24,8 +25,8 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
                 .average()
                 .orElse(1.0);
 
-        Optional<Long> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
-        BigDecimal profitSum = productGroup.getProfitSum().add(valueOf(optionProfitSum.orElse(0L)));
+        Optional<BigDecimal> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
+        BigDecimal profitSum = productGroup.getProfitSum().add(optionProfitSum.orElse(ZERO));
         BigDecimal weight = valueOf(weightSum * Math.pow(10, profitSum.precision()));
         return profitSum.multiply(SUM_RATIO).add(weight.multiply(WEIGHT_RATIO));
     }

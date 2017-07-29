@@ -14,6 +14,7 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
@@ -54,6 +55,10 @@ public class CalculatorService {
                     return calculator.calculate(r);
                 })
                 .map(r -> {
+                    if(r.getOptionProfitSum() != null && BigDecimal.ZERO.compareTo(r.getOptionProfitSum()) == 0) {
+                        return null;
+                    }
+
                     List<Product> products = new ArrayList<>();
                     products.add(r.getProduct());
                     if (r.getProduct().getLinkedProduct() != null) {
@@ -69,6 +74,7 @@ public class CalculatorService {
                             .optionalProducts(r.isRecommendation() ? products : emptyList())
                             .build();
                 })
+                .filter(Objects::nonNull)
                 .sorted(new ProductGroupComparator())
                 .limit(offersCountLimit)
                 .collect(toList());
