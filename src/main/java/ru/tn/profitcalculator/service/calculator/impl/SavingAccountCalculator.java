@@ -155,6 +155,7 @@ public class SavingAccountCalculator implements Calculator {
 
             if (card.getCardOption() != null) {
                 CardOption cardOption = objectService.clone(card.getCardOption());
+                card.setCardOption(cardOption);
                 IOptionProfitCalculator optionProfitCalculator = optionProfitCalculatorFactory.get(cardOption.getBonusOption());
                 return optionProfitCalculator.calculate(cardOption, categories2Costs);
             }
