@@ -61,8 +61,12 @@ public class CalculatorService {
 
                     List<Product> products = new ArrayList<>();
                     products.add(r.getProduct());
-                    if (r.getProduct().getLinkedProduct() != null) {
-                        products.add(r.getProduct().getLinkedProduct());
+                    Product linkedProduct = r.getProduct().getLinkedProduct();
+                    if (linkedProduct != null) {
+                        products.add(linkedProduct);
+                        if(linkedProduct.getLinkedProduct() != null) {
+                            products.add(linkedProduct.getLinkedProduct());
+                        }
                     }
 
                     return ProductGroup.builder()

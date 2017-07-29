@@ -154,7 +154,7 @@ public class CalculateRequestBuilder {
         Card card = cardRepository.findFirstByCardCategoryOrderByIdDesc(cardCategory);
         card.setCardOption(cardOptionRepository.findFirstByBonusOptionOrderByIdDesc(bonusOption));
 
-        if (CREDIT == cardCategory) {
+        if (CREDIT == cardCategory && BonusOptionEnum.SAVING == bonusOption) {
             card.setLinkedProduct(cardRepository.findFirstByCardCategoryOrderByIdDesc(DEBIT));
         }
         return objectService.clone(card);

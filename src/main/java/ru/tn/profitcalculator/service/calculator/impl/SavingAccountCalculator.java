@@ -6,8 +6,10 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.CardOption;
+import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.model.enums.BonusOptionEnum;
+import ru.tn.profitcalculator.model.enums.CardCategoryEnum;
 import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.model.enums.ProductTypeEnum;
 import ru.tn.profitcalculator.service.ObjectService;
@@ -65,6 +67,16 @@ public class SavingAccountCalculator implements Calculator {
         BigDecimal totalProfit = ZERO;
 
         BigDecimal refillSum = ZERO;
+        if(isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
+            Card card = (Card) savingAccount.getLinkedProduct();
+            if(isLinkedProductCard(card, CardCategoryEnum.DEBIT)) {
+                if(isGreatThenZero(params.getMonthRefillSum())) { // first refill go to first month, other refill go to credit repayment
+                    totalSum = totalSum.add(params.getMonthRefillSum());
+                    params.setMonthRefillSum(ZERO);
+                }
+            }
+        }
+
         Map<LocalDate, BigDecimal> layers = new TreeMap<>();
         layers.put(startDate, totalSum);
 
@@ -138,6 +150,11 @@ public class SavingAccountCalculator implements Calculator {
                 .product(request.getProduct())
                 .recommendation(request.isRecommendation())
                 .build();
+    }
+
+    private boolean isLinkedProductCard(Product product, CardCategoryEnum category) {
+        Product linkedProduct = product.getLinkedProduct();
+        return linkedProduct instanceof Card && ((Card) linkedProduct).getCardCategory() == category;
     }
 
     private BigDecimal calculateTotalOptionProfit4Period(CardOption cardOption, LocalDate startDate, LocalDate endDate) {
