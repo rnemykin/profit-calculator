@@ -17,7 +17,7 @@ public interface IOptionProfitCalculator {
      * @param categories2Costs затраты по категориям трат
      * @return исходный объект опции со ставкой и суммой профита (кэшбека)
      */
-    CardOption calculate(CardOption cardOption, Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs);
+    CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, Pair<BigDecimal, Boolean>> categories2Costs);
 
     BonusOptionEnum getOption();
 }

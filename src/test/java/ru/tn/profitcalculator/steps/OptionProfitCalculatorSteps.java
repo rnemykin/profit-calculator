@@ -35,7 +35,7 @@ public class OptionProfitCalculatorSteps {
     private CardOptionRepository cardOptionRepository;
 
     private IOptionProfitCalculator optionProfitCalculator;
-    private Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs = new HashMap<>();
+    private Map<PosCategoryEnum, Pair<BigDecimal, Boolean>> categories2Costs = new HashMap<>();
     private CardOption cardOption;
 
     @Пусть("^Ярик подключил для мультикарты опцию (\\w+)$")
@@ -54,15 +54,15 @@ public class OptionProfitCalculatorSteps {
     @И("^за месяц совершил покупки в категории Авто на сумму (.+) рублей, а также по другим категориям на сумму (.+) рублей$")
     public void заМесяцСовершилПокупкиВКатегорииАвтоАТакжеПоДругимКатегориям(BigDecimal autoSum, BigDecimal otherSum) {
         categories2Costs.clear();
-        categories2Costs.put(Pair.of(PosCategoryEnum.AUTO, false), autoSum);
-        categories2Costs.put(Pair.of(PosCategoryEnum.OTHER, false), otherSum);
+        categories2Costs.put(PosCategoryEnum.AUTO, Pair.of(autoSum, false));
+        categories2Costs.put(PosCategoryEnum.OTHER, Pair.of(otherSum, false));
     }
 
     @И("^за месяц совершил покупки в категории Развлечения на сумму (.+) рублей, а также по другим категориям на сумму (.+) рублей$")
     public void заМесяцСовершилПокупкиВКатегорииРазвлеченияАТакжеПоДругимКатегориям(BigDecimal autoSum, BigDecimal otherSum) {
         categories2Costs.clear();
-        categories2Costs.put(Pair.of(PosCategoryEnum.FUN, false), autoSum);
-        categories2Costs.put(Pair.of(PosCategoryEnum.OTHER, false), otherSum);
+        categories2Costs.put(PosCategoryEnum.FUN, Pair.of(autoSum, false));
+        categories2Costs.put(PosCategoryEnum.OTHER, Pair.of(otherSum, false));
     }
 
     @Тогда("^максимальная ставка по кешбеку составит (.+)$")

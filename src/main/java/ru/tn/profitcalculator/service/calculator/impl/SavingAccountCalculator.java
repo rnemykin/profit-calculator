@@ -149,7 +149,7 @@ public class SavingAccountCalculator implements Calculator {
         return null;
     }
 
-    private CardOption getCardOption(SavingAccount savingAccount, Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs) {
+    private CardOption getCardOption(SavingAccount savingAccount, Map<PosCategoryEnum, Pair<BigDecimal, Boolean>> categories2Costs) {
         if (savingAccount.getLinkedProduct() instanceof Card && !isEmpty(categories2Costs)) {
             Card card = (Card) savingAccount.getLinkedProduct();
 

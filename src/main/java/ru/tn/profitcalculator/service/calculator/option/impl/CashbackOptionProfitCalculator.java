@@ -22,17 +22,17 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
     private BigDecimal maxCashbackSum;
 
     @Override
-    public CardOption calculate(CardOption cardOption, Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs) {
+    public CardOption calculate(CardOption cardOption, Map<PosCategoryEnum, Pair<BigDecimal, Boolean>> categories2Costs) {
 
         CardOption result = super.calculate(cardOption, categories2Costs);
         BigDecimal rate = result.getRate();
         BigDecimal cashback = BigDecimal.ZERO;
 
-        for (Map.Entry<Pair<PosCategoryEnum, Boolean>, BigDecimal> entry : categories2Costs.entrySet()) {
-            PosCategoryEnum category = entry.getKey().getFirst();
+        for (Map.Entry<PosCategoryEnum, Pair<BigDecimal, Boolean>> entry : categories2Costs.entrySet()) {
+            PosCategoryEnum category = entry.getKey();
 
             if (getOptionCategory() == null || category == getOptionCategory()) {
-                cashback = cashback.add(entry.getValue().multiply(rate));
+                cashback = cashback.add(entry.getValue().getFirst().multiply(rate));
             }
         }
         long cashback4Month = limitCashback(cashback).longValue();

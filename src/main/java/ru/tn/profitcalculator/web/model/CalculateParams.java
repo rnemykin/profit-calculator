@@ -26,5 +26,5 @@ public class CalculateParams {
     private Boolean creditCard;
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
-    private Map<Pair<PosCategoryEnum, Boolean>, BigDecimal> categories2Costs = new HashMap<>();
+    private Map<PosCategoryEnum, Pair<BigDecimal, Boolean>> categories2Costs = new HashMap<>();
 }
