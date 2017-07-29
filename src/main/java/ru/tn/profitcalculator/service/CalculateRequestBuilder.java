@@ -62,7 +62,7 @@ public class CalculateRequestBuilder {
                 )
                 .collect(Collectors.toList());
 
-        if (Boolean.TRUE.equals(params.getSalaryClient())) {
+        if (Boolean.TRUE.equals(params.getPayrollProject())) {
             result.add(makeAutoRefillRequest(getCopyOfSavingAccount(products), params));
         }
 

@@ -22,7 +22,7 @@ public class CalculateParams {
     @Min(91)
     @Max(1830)
     private Integer daysCount;
-    private Boolean salaryClient;
+    private Boolean payrollProject;
     private Boolean creditCard;
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
