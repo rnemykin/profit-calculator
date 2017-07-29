@@ -27,7 +27,7 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
 
     @PostConstruct
     public void init() {
-        maxCashbackSum = settingsService.getBigDecimal("card.options.cashback.maxSum");
+        maxCashbackSum = settingsService.getBigDecimal("card.cashback.maxSum");
     }
 
     @Override

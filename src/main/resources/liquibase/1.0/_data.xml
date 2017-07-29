@@ -357,7 +357,7 @@
         </insert>
         <insert tableName="setting">
             <column name="id" valueComputed="(setting_id_seq.nextval)"/>
-            <column name="key">card.options.cashback.maxSum</column>
+            <column name="key">card.cashback.maxSum</column>
             <column name="name">Максимальная сумма кэшбека</column>
             <column name="int_value">15000</column>
         </insert>
