@@ -76,7 +76,14 @@ public class CalculatorService {
                         }
                     }
 
+                    //TODO убрать потом
+                    HashSet<String> notes = new HashSet<>();
+                    notes.add("Снятие средств без потери начисленных процентов");
+                    notes.add("Сбережения застрахованы (ФЗ № 177-ФЗ от 23.12.2003)");
+                    notes.add("До 8,5% — базовая ставка");
+
                     return ProductGroup.builder()
+                            .notes(notes)
                             .resultSum(r.getTotalSum())
                             .optionProfitSum(r.getOptionProfitSum())
                             .profitSum(r.getProfitSum())
