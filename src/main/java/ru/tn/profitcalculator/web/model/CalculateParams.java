@@ -11,7 +11,9 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -31,4 +33,6 @@ public class CalculateParams {
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
     private Map<PosCategoryEnum, Pair<Boolean, BigDecimal>> categories2Costs = new HashMap<>();
+    private List<Transactions> transactions = new ArrayList<>();
+    private List<Payroll> payroll = new ArrayList<>();
 }
