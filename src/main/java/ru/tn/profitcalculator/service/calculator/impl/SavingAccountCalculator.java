@@ -1,6 +1,5 @@
 package ru.tn.profitcalculator.service.calculator.impl;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +35,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 import static java.time.temporal.ChronoUnit.MONTHS;
 import static org.springframework.util.CollectionUtils.isEmpty;
 import static ru.tn.profitcalculator.util.MathUtils.isGreatThenZero;
+import static ru.tn.profitcalculator.util.SavingAccountUtils.getRate4Month;
 
 @Log4j
 @Service
@@ -67,10 +66,10 @@ public class SavingAccountCalculator implements Calculator {
         BigDecimal refillSum = ZERO;
 
         BigDecimal totalSum = params.getInitSum();
-        if(isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
+        if (isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
             Card card = (Card) savingAccount.getLinkedProduct();
-            if(isLinkedProductCard(card, CardCategoryEnum.DEBIT)) {
-                if(isGreatThenZero(params.getMonthRefillSum())) { // first refill go to first month, other refill go to credit repayment
+            if (isLinkedProductCard(card, CardCategoryEnum.DEBIT)) {
+                if (isGreatThenZero(params.getMonthRefillSum())) { // first refill go to first month, other refill go to credit repayment
                     totalSum = totalSum.add(params.getMonthRefillSum());
                     params.setMonthRefillSum(ZERO);
                 }
@@ -119,7 +118,8 @@ public class SavingAccountCalculator implements Calculator {
                     monthProfit = monthProfit.add(optionProfitSum);
                 }
 
-                layerProfitSum = layerProfitSum.add(monthProfit);
+                // TODO uncomment to turn on capitalization of a saving account
+                // layerProfitSum = layerProfitSum.add(monthProfit);
                 layerStartDate = layerNextPeriodDate;
 
                 totalSum = totalSum.add(monthProfit);
@@ -135,7 +135,7 @@ public class SavingAccountCalculator implements Calculator {
         if (cardOption != null) {
             cardOption.setRate(cardOption.getRate().multiply(V_100));
 
-            if(cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
+            if (cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
                 maxRate = maxRate.add(cardOption.getRate());
             }
         }
@@ -186,14 +186,6 @@ public class SavingAccountCalculator implements Calculator {
         return rates;
     }
 
-    private BigDecimal getRate4Month(Map<Integer, BigDecimal> periodRates, int month) {
-        return periodRates.entrySet().stream()
-                .filter(e -> e.getKey().compareTo(month) <= 0)
-                .max(Comparator.comparing(Map.Entry::getKey))
-                .orElseThrow(() -> new RuntimeException("rate not found fot month " + month))
-                .getValue();
-    }
-
     private BigDecimal calculatePeriodSum(BigDecimal totalSum, BigDecimal rate, BigDecimal periodDays) {
         return totalSum.multiply(
                 rate.multiply(periodDays.divide(DAYS_IN_YEAR, 10, RoundingMode.HALF_UP))
@@ -213,50 +205,4 @@ public class SavingAccountCalculator implements Calculator {
     public ProductTypeEnum type() {
         return ProductTypeEnum.SAVING_ACCOUNT;
     }
-
-    @AllArgsConstructor
-    private class EffectiveRateCalculator {
-        private Map<Integer, BigDecimal> rates;
-        private List<List<BigDecimal>> accountState;
-
-        private BigDecimal calculate() {
-            BigDecimal b12 = getMinSumForPeriod(12);
-            BigDecimal b6 = getMinSumForPeriod(6);
-            BigDecimal b3 = getMinSumForPeriod(3);
-            BigDecimal b1 = getMinSumForPeriod(1);
-
-            BigDecimal rate12 = getRate4Month(rates, 12);
-            BigDecimal rate6 = getRate4Month(rates, 6);
-            BigDecimal rate3 = getRate4Month(rates, 3);
-            BigDecimal rate1 = getRate4Month(rates, 1);
-
-            return (b12.multiply(rate12)
-                    .add(b6.subtract(b12).multiply(rate6))
-                    .add(b3.subtract(b6).multiply(rate3))
-                    .add(b1.subtract(b3).multiply(rate1))
-            ).divide(b1, 1, RoundingMode.HALF_UP);
-        }
-
-        private BigDecimal getMinSumForPeriod(int period) {
-            List<BigDecimal> initLayer = accountState.get(0);
-            if (initLayer.size() < period) {
-                return BigDecimal.ZERO;
-            }
-
-            int size = initLayer.size();
-            List<BigDecimal> monthsSum = new ArrayList<>();
-            for (int i = size - period; i < size; i++) {
-                BigDecimal monthSum = ZERO;
-                for (List<BigDecimal> state : accountState) {
-                    monthSum = monthSum.add(state.get(i));
-                }
-                monthsSum.add(monthSum);
-            }
-
-            return monthsSum.stream()
-                    .min(BigDecimal::compareTo)
-                    .orElse(BigDecimal.ZERO);
-        }
-    }
-
 }
