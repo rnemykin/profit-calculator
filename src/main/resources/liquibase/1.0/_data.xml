@@ -16,7 +16,7 @@
             <column name="status">ACTIVE</column>
             <column name="create_date" valueComputed="${now}"/>
             <column name="update_date" valueComputed="${now}"/>
-            <column name="weight">2</column>
+            <column name="weight">1</column>
         </insert>
 
         <insert tableName="saving_account">

@@ -69,6 +69,6 @@ public class RangingSteps {
     public void значениеРангаПоДанномуПредложениюРавноРанг(BigDecimal rank) {
         ProductGroup productGroup = builder.build();
         ProductGroupComparator comparator = new ProductGroupComparator();
-        assertEquals(rank, comparator.calculateRating(productGroup));
+        assertEquals(rank.doubleValue(), comparator.calculateRating(productGroup).doubleValue(), 0.01);
     }
 }

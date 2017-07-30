@@ -5,6 +5,8 @@ import ru.tn.profitcalculator.web.model.ProductGroup;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -29,15 +31,31 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
 
         Optional<BigDecimal> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
         BigDecimal profitSum = productGroup.getProfitSum().add(optionProfitSum.orElse(ZERO));
-        double profitSumPrecision = Math.pow(10, profitSum.precision());
 
-        BigDecimal rate = productGroup.getMaxRate().multiply(valueOf(profitSumPrecision));
-        BigDecimal weight = valueOf(weightSum * profitSumPrecision);
+        BigDecimal rate = productGroup.getMaxRate();
+        BigDecimal weight = valueOf(weightSum);
 
         BigDecimal profitRatio = profitSum.multiply(SUM_RATIO);
         BigDecimal rateRatio = rate.multiply(RATE_RATIO);
         BigDecimal weightRatio = weight.multiply(WEIGHT_RATIO);
 
+        BigDecimal max = Collections.max(Arrays.asList(profitRatio, rateRatio, weightRatio));
+        int digitsCount = getDigitsCount(max);
+
+        profitRatio = alignValue(profitRatio, digitsCount);
+        rateRatio = alignValue(rateRatio, digitsCount);
+        weightRatio = alignValue(weightRatio, digitsCount);
+
         return profitRatio.add(rateRatio.add(weightRatio)).setScale(0, RoundingMode.HALF_UP);
+    }
+
+    private BigDecimal alignValue(BigDecimal value, int digitsCount) {
+        int valueDigitsCount = getDigitsCount(value);
+        int diff = digitsCount - valueDigitsCount;
+        return value.multiply(valueOf(Math.pow(10, diff)));
+    }
+
+    private int getDigitsCount(BigDecimal value) {
+        return String.valueOf(value.longValue()).length();
     }
 }
