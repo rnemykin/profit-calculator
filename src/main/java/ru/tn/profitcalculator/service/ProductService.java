@@ -29,7 +29,6 @@ public class ProductService {
         this.savingAccountRepository = savingAccountRepository;
     }
 
-
     public List<Product> searchProducts(int monthsCount, BigDecimal refillSum, BigDecimal withdrawalSum) {
         List<Deposit> deposits = depositRepository.findAll(new DepositSpecification<>(
                 ProductFilter.builder()
@@ -42,5 +41,4 @@ public class ProductService {
         List<SavingAccount> savingAccounts = savingAccountRepository.findAll();
         return Stream.of(deposits, savingAccounts).flatMap(Collection::stream).collect(toList());
     }
-
 }

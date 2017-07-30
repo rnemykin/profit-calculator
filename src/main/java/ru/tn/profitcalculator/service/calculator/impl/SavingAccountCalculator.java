@@ -118,8 +118,10 @@ public class SavingAccountCalculator implements Calculator {
                     monthProfit = monthProfit.add(optionProfitSum);
                 }
 
-                // TODO uncomment to turn on capitalization of a saving account
-                // layerProfitSum = layerProfitSum.add(monthProfit);
+                //TODO решить вопрос по капитализации на НС
+//                if(savingAccount.isCapitalization()) {
+                     layerProfitSum = layerProfitSum.add(monthProfit);
+//                }
                 layerStartDate = layerNextPeriodDate;
 
                 totalSum = totalSum.add(monthProfit);

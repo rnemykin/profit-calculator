@@ -22,6 +22,7 @@ import ru.tn.profitcalculator.web.model.CalculateParams;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class CalculateRequestBuilder {
             result.add(makeAutoRefillRequest(getCopyOfSavingAccount(products), params));
         }
 
-        if (params.getCategories2Costs() != null) {
+        if (Boolean.TRUE.equals(params.getDecrease()) && params.getCategories2Costs() != null) {
             result.addAll(makeRequestsWithCardOption(products, params));
         }
 

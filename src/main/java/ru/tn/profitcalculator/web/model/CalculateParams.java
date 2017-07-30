@@ -33,6 +33,7 @@ public class CalculateParams {
     private BigDecimal monthRefillSum;
     private BigDecimal monthWithdrawalSum;
     private Map<PosCategoryEnum, Pair<Boolean, BigDecimal>> categories2Costs = new HashMap<>();
+    private Boolean decrease;
     private List<Transactions> transactions = new ArrayList<>();
     private List<Payroll> payroll = new ArrayList<>();
 }

@@ -38,4 +38,7 @@ public abstract class Product {
 
     @Transient
     private Product linkedProduct;
+
+    @Transient
+    private boolean capitalization;
 }
