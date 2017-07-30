@@ -35,18 +35,18 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
         BigDecimal rate = productGroup.getMaxRate();
         BigDecimal weight = valueOf(weightSum);
 
-        BigDecimal profitRatio = profitSum.multiply(SUM_RATIO);
-        BigDecimal rateRatio = rate.multiply(RATE_RATIO);
-        BigDecimal weightRatio = weight.multiply(WEIGHT_RATIO);
+        BigDecimal profitRank = profitSum.multiply(SUM_RATIO);
+        BigDecimal rateRank = rate.multiply(RATE_RATIO);
+        BigDecimal weightRank = weight.multiply(WEIGHT_RATIO);
 
-        BigDecimal max = Collections.max(Arrays.asList(profitRatio, rateRatio, weightRatio));
+        BigDecimal max = Collections.max(Arrays.asList(profitRank, rateRank, weightRank));
         int digitsCount = getDigitsCount(max);
 
-        profitRatio = alignValue(profitRatio, digitsCount);
-        rateRatio = alignValue(rateRatio, digitsCount);
-        weightRatio = alignValue(weightRatio, digitsCount);
+        profitRank = alignValue(profitRank, digitsCount);
+        rateRank = alignValue(rateRank, digitsCount);
+        weightRank = alignValue(weightRank, digitsCount);
 
-        return profitRatio.add(rateRatio.add(weightRatio)).setScale(0, RoundingMode.HALF_UP);
+        return profitRank.add(rateRank.add(weightRank)).setScale(0, RoundingMode.HALF_UP);
     }
 
     private BigDecimal alignValue(BigDecimal value, int digitsCount) {
