@@ -26,7 +26,7 @@ public class CalculateParams {
 
     @NotNull
     @Min(91)
-    @Max(1830)
+    @Max(1831)
     private Integer daysCount;
     private Boolean payrollProject;
     private Boolean creditCard;

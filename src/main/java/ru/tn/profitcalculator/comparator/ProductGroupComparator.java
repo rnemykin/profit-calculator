@@ -30,7 +30,6 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
 
         Optional<BigDecimal> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
         BigDecimal profitSum = productGroup.getProfitSum().add(optionProfitSum.orElse(ZERO));
-
         BigDecimal weight = valueOf(weightSum);
 
         BigDecimal profitRank = profitSum.multiply(SUM_RATIO);
