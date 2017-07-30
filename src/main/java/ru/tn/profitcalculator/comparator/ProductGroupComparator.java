@@ -16,7 +16,6 @@ import static java.math.BigDecimal.valueOf;
 public class ProductGroupComparator implements Comparator<ProductGroup> {
 
     private static final BigDecimal SUM_RATIO = valueOf(0.7);
-    private static final BigDecimal RATE_RATIO = valueOf(0.5);
     private static final BigDecimal WEIGHT_RATIO = valueOf(0.3);
 
     @Override
@@ -32,21 +31,18 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
         Optional<BigDecimal> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
         BigDecimal profitSum = productGroup.getProfitSum().add(optionProfitSum.orElse(ZERO));
 
-        BigDecimal rate = productGroup.getMaxRate();
         BigDecimal weight = valueOf(weightSum);
 
         BigDecimal profitRank = profitSum.multiply(SUM_RATIO);
-        BigDecimal rateRank = rate.multiply(RATE_RATIO);
         BigDecimal weightRank = weight.multiply(WEIGHT_RATIO);
 
-        BigDecimal max = Collections.max(Arrays.asList(profitRank, rateRank, weightRank));
+        BigDecimal max = Collections.max(Arrays.asList(profitRank, weightRank));
         int digitsCount = getDigitsCount(max);
 
         profitRank = alignValue(profitRank, digitsCount);
-        rateRank = alignValue(rateRank, digitsCount);
         weightRank = alignValue(weightRank, digitsCount);
 
-        return profitRank.add(rateRank.add(weightRank)).setScale(0, RoundingMode.HALF_UP);
+        return profitRank.add(weightRank).setScale(0, RoundingMode.HALF_UP);
     }
 
     private BigDecimal alignValue(BigDecimal value, int digitsCount) {
