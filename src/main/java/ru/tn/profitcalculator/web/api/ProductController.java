@@ -33,7 +33,7 @@ public class ProductController {
         List<ProductGroup> products = calculatorService.calculateOffers(request);
 
         stopWatch.stop();
-        log.info(stopWatch.prettyPrint());
+//        log.info(stopWatch.prettyPrint());
 
         return products;
     }
