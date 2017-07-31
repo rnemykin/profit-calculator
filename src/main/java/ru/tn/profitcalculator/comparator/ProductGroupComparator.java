@@ -24,9 +24,10 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
     }
 
     public BigDecimal calculateRating(ProductGroup productGroup) {
-        int weightSum = productGroup.getProducts().stream()
+        double weightSum = productGroup.getProducts().stream()
                 .mapToInt(Product::getWeight)
-                .reduce(0, (a, b) -> a + b);
+                .average()
+                .orElse(1.0);
 
         Optional<BigDecimal> optionProfitSum = Optional.ofNullable(productGroup.getOptionProfitSum());
         BigDecimal profitSum = productGroup.getProfitSum().add(optionProfitSum.orElse(ZERO));
@@ -35,10 +36,7 @@ public class ProductGroupComparator implements Comparator<ProductGroup> {
         BigDecimal profitRank = profitSum.multiply(SUM_RATIO);
         BigDecimal weightRank = weight.multiply(WEIGHT_RATIO);
 
-        BigDecimal max = Collections.max(Arrays.asList(profitRank, weightRank));
-        int digitsCount = getDigitsCount(max);
-
-        profitRank = alignValue(profitRank, digitsCount);
+        int digitsCount = getDigitsCount(profitRank);
         weightRank = alignValue(weightRank, digitsCount);
 
         return profitRank.add(weightRank).setScale(0, RoundingMode.HALF_UP);
