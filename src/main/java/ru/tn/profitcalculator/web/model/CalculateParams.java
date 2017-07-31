@@ -36,4 +36,5 @@ public class CalculateParams {
     private Boolean decrease;
     private List<Transactions> transactions = new ArrayList<>();
     private List<Payroll> payroll = new ArrayList<>();
+    private List<ClientProduct> clientProducts;
 }

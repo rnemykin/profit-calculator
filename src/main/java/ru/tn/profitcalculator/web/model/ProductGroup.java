@@ -18,4 +18,5 @@ public class ProductGroup {
     private BigDecimal profitSum;
     private BigDecimal optionProfitSum;
     private BigDecimal maxRate;
+    private boolean offerByClientProduct;
 }
