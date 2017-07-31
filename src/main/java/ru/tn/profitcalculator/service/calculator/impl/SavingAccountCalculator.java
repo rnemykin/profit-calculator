@@ -120,7 +120,7 @@ public class SavingAccountCalculator implements Calculator {
 
                 //TODO решить вопрос по капитализации на НС
 //                if(savingAccount.isCapitalization()) {
-                     layerProfitSum = layerProfitSum.add(monthProfit);
+//                     layerProfitSum = layerProfitSum.add(monthProfit);
 //                }
                 layerStartDate = layerNextPeriodDate;
 
