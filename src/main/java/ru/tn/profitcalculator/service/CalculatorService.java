@@ -116,11 +116,13 @@ public class CalculatorService {
     }
 
     private Boolean isHasRefillOption(ProductGroup pg) {
-        for (Product product : pg.getProducts()) {
-            if (product instanceof SavingAccount) {
-                SavingAccount savingAccount = (SavingAccount) product;
-                if(savingAccount.getRefillOption() != null) {
-                    return true;
+        if (pg != null && pg.getProducts() != null) {
+            for (Product product : pg.getProducts()) {
+                if (product instanceof SavingAccount) {
+                    SavingAccount savingAccount = (SavingAccount) product;
+                    if(savingAccount.getRefillOption() != null) {
+                        return true;
+                    }
                 }
             }
         }
