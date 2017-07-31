@@ -117,6 +117,7 @@
             <column name="refill_sum_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="description" type="VARCHAR(1000)" />
         </createTable>
     </changeSet>
 
