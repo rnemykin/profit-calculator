@@ -106,7 +106,10 @@ public class CalculateRequestBuilder {
         savingAccount.setRefillOption(autoRefillOption);
 
         CalculateParams refillParams = objectService.clone(params);
-        refillParams.setMonthRefillSum(params.getInitSum().multiply(refillSumPercentage).setScale(0, RoundingMode.HALF_UP));
+        BigDecimal refillPercent = refillSumPercentage.divide(BigDecimal.valueOf(100), 10, RoundingMode.HALF_UP);
+        BigDecimal monthRefillSum = params.getInitSum().multiply(refillPercent).setScale(0, RoundingMode.HALF_UP);
+        refillParams.setMonthRefillSum(monthRefillSum);
+
         return ProductCalculateRequest.builder()
                 .product(savingAccount)
                 .params(refillParams)
