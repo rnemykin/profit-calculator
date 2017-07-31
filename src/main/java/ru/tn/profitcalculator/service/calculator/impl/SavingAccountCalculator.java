@@ -83,15 +83,6 @@ public class SavingAccountCalculator implements Calculator {
             offerByClientProduct = true;
         } else {
             totalSum = params.getInitSum();
-            if (isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
-                Card card = (Card) savingAccount.getLinkedProduct();
-                if (isLinkedProductCard(card, CardCategoryEnum.DEBIT)) {
-                    if (isGreatThenZero(params.getMonthRefillSum())) { // first refill go to first month, other refill go to credit repayment
-                        totalSum = totalSum.add(params.getMonthRefillSum());
-                        params.setMonthRefillSum(ZERO);
-                    }
-                }
-            }
             layers.put(startDate, totalSum);
 
             if (isGreatThenZero(params.getMonthRefillSum())) {
@@ -100,6 +91,15 @@ public class SavingAccountCalculator implements Calculator {
                     layers.put(startDate.plusMonths(i), params.getMonthRefillSum());
                 }
                 refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
+            }
+        }
+        if (isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
+            Card card = (Card) savingAccount.getLinkedProduct();
+            if (isLinkedProductCard(card, CardCategoryEnum.DEBIT)) {
+                if (isGreatThenZero(params.getMonthRefillSum())) { // first refill go to first month, other refill go to credit repayment
+                    totalSum = totalSum.add(params.getMonthRefillSum());
+                    params.setMonthRefillSum(ZERO);
+                }
             }
         }
         List<List<BigDecimal>> accountState = new ArrayList<>();
