@@ -1,24 +1,30 @@
 package ru.tn.profitcalculator.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.comparator.ProductGroupComparator;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.Product;
+import ru.tn.profitcalculator.model.enums.PosCategoryEnum;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.web.model.CalculateParams;
 import ru.tn.profitcalculator.web.model.ProductGroup;
+import ru.tn.profitcalculator.web.model.Transactions;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 import static java.util.Collections.emptyList;
@@ -48,6 +54,8 @@ public class CalculatorService {
     }
 
     public List<ProductGroup> calculateOffers(CalculateParams params) {
+        processTransactions(params);
+
         Integer daysCount = params.getDaysCount();
         BigDecimal monthRefillSum = params.getMonthRefillSum();
         BigDecimal monthWithdrawalSum = params.getMonthWithdrawalSum();
@@ -106,6 +114,36 @@ public class CalculatorService {
                 .sorted(new ProductGroupComparator())
                 .limit(offersCountLimit)
                 .collect(toList());
+    }
+
+    private void processTransactions(CalculateParams params) {
+        List<Transactions> transactions = params.getTransactions();
+        if (transactions != null && !transactions.isEmpty()) {
+            BigDecimal average = BigDecimal.valueOf(transactions.stream()
+                    .flatMap(t -> t.getCategory2Cost().values().stream())
+                    .mapToInt(BigDecimal::intValue)
+                    .average()
+                    .orElse(1.0) * 1.3);
+
+            Map<PosCategoryEnum, Pair<Boolean, BigDecimal>> preferences = params.getCategories2Costs();
+            for (Map.Entry<PosCategoryEnum, Pair<Boolean, BigDecimal>> entry : preferences.entrySet()) {
+                Pair<Boolean, BigDecimal> value = Pair.of(entry.getValue().getFirst(), BigDecimal.ZERO);
+                entry.setValue(value);
+            }
+            for (Transactions transaction : transactions) {
+                for (Map.Entry<PosCategoryEnum, BigDecimal> entry : transaction.getCategory2Cost().entrySet()) {
+                    if(entry.getValue().compareTo(average) <= 0) {
+
+                        PosCategoryEnum category = entry.getKey();
+                        Pair<Boolean, BigDecimal> preference = preferences.get(category);
+                        BigDecimal cost = preference.getSecond().add(entry.getValue());
+
+                        Pair<Boolean, BigDecimal> value = Pair.of(preference.getFirst(), cost);
+                        preferences.put(category, value);
+                    }
+                }
+            }
+        }
     }
 
     private Set<String> getProductsNotes(List<Product> products) {
