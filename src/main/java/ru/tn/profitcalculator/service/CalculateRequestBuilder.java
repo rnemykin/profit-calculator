@@ -18,11 +18,12 @@ import ru.tn.profitcalculator.repository.RefillOptionRepository;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
 import ru.tn.profitcalculator.util.CardUtils;
 import ru.tn.profitcalculator.web.model.CalculateParams;
+import ru.tn.profitcalculator.web.model.ClientProduct;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,26 @@ public class CalculateRequestBuilder {
             result.addAll(makeRequestsWithCardOption(products, params));
         }
 
+        if (params.getClientProducts() != null && !params.getClientProducts().isEmpty()) {
+            result.addAll(makeSavingAccountRequestsByClientProducts(products, params));
+        }
         return result;
+    }
+
+    private List<ProductCalculateRequest> makeSavingAccountRequestsByClientProducts(List<Product> products, CalculateParams params) {
+        List<ProductCalculateRequest> requests = new ArrayList<>();
+        for (ClientProduct clientProduct : params.getClientProducts()) {
+
+            SavingAccount savingAccount = getCopyOfSavingAccount(products);
+            savingAccount.setLinkedProduct(getCard(BonusOptionEnum.SAVING, params.getCreditCard()));
+
+            requests.add(ProductCalculateRequest.builder()
+                            .product(savingAccount)
+                            .clientProduct(clientProduct)
+                            .params(params)
+                            .build());
+        }
+        return requests;
     }
 
     private ProductCalculateRequest makeAutoRefillRequest(SavingAccount savingAccount, CalculateParams params) {

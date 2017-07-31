@@ -19,6 +19,7 @@ import ru.tn.profitcalculator.service.calculator.ProductCalculateResult;
 import ru.tn.profitcalculator.service.calculator.option.IOptionProfitCalculator;
 import ru.tn.profitcalculator.service.calculator.option.impl.SavingOptionProfitCalculator;
 import ru.tn.profitcalculator.web.model.CalculateParams;
+import ru.tn.profitcalculator.web.model.ClientProduct;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -64,28 +65,42 @@ public class SavingAccountCalculator implements Calculator {
         LocalDate endDate = startDate.plusDays(daysCount);
         BigDecimal totalProfit = ZERO;
         BigDecimal refillSum = ZERO;
+        Map<LocalDate, BigDecimal> layers = new TreeMap<>();
+        BigDecimal totalSum;
+        boolean offerByClientProduct = false;
 
-        BigDecimal totalSum = params.getInitSum();
-        if (isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
-            Card card = (Card) savingAccount.getLinkedProduct();
-            if (isLinkedProductCard(card, CardCategoryEnum.DEBIT)) {
-                if (isGreatThenZero(params.getMonthRefillSum())) { // first refill go to first month, other refill go to credit repayment
-                    totalSum = totalSum.add(params.getMonthRefillSum());
-                    params.setMonthRefillSum(ZERO);
+        ClientProduct clientProduct = request.getClientProduct();
+        if (clientProduct != null && clientProduct.getAccountBalances() != null && !clientProduct.getAccountBalances().isEmpty()) {
+            List<Pair<LocalDate, BigDecimal>> accountBalances = clientProduct.getAccountBalances();
+            BigDecimal max = ZERO;
+            for (Pair<LocalDate, BigDecimal> accountBalance : accountBalances) {
+                layers.put(accountBalance.getFirst(), accountBalance.getSecond());
+                if(max.compareTo(accountBalance.getSecond()) < 0) {
+                    max = accountBalance.getSecond();
                 }
             }
-        }
-
-        Map<LocalDate, BigDecimal> layers = new TreeMap<>();
-        layers.put(startDate, totalSum);
-
-        if (isGreatThenZero(params.getMonthRefillSum())) {
-            long monthsCount = MONTHS.between(startDate, endDate);
-            for (int i = 1; i <= monthsCount; i++) {
-                layers.put(startDate.plusMonths(i), params.getMonthRefillSum());
+            totalSum = max;
+            offerByClientProduct = true;
+        } else {
+            totalSum = params.getInitSum();
+            if (isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
+                Card card = (Card) savingAccount.getLinkedProduct();
+                if (isLinkedProductCard(card, CardCategoryEnum.DEBIT)) {
+                    if (isGreatThenZero(params.getMonthRefillSum())) { // first refill go to first month, other refill go to credit repayment
+                        totalSum = totalSum.add(params.getMonthRefillSum());
+                        params.setMonthRefillSum(ZERO);
+                    }
+                }
             }
+            layers.put(startDate, totalSum);
 
-            refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
+            if (isGreatThenZero(params.getMonthRefillSum())) {
+                long monthsCount = MONTHS.between(startDate, endDate);
+                for (int i = 1; i <= monthsCount; i++) {
+                    layers.put(startDate.plusMonths(i), params.getMonthRefillSum());
+                }
+                refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
+            }
         }
         List<List<BigDecimal>> accountState = new ArrayList<>();
 
@@ -151,6 +166,7 @@ public class SavingAccountCalculator implements Calculator {
                 .daysCount(daysCount)
                 .product(request.getProduct())
                 .recommendation(request.isRecommendation())
+                .offerByClientProduct(offerByClientProduct)
                 .build();
     }
 

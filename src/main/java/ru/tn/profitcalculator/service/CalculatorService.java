@@ -92,6 +92,7 @@ public class CalculatorService {
                             .maxRate(r.getMaxRate())
                             .products(productList)
                             .optionalProducts(optionalProducts)
+                            .offerByClientProduct(r.isOfferByClientProduct())
                             .build();
                 })
                 .filter(Objects::nonNull)

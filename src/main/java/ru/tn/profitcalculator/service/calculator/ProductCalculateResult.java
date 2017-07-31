@@ -16,4 +16,5 @@ public class ProductCalculateResult {
     private Integer daysCount;
     private Product product;
     private boolean recommendation;
+    private boolean offerByClientProduct;
 }
