@@ -34,6 +34,4 @@ public class CardOption {
     @Transient
     private BigDecimal cashback4Month;
 
-    @Transient
-    private BigDecimal cashbackInFirstMonth;
 }
