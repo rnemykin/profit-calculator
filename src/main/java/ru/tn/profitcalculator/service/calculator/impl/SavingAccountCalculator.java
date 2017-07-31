@@ -128,10 +128,11 @@ public class SavingAccountCalculator implements Calculator {
 
                 if (cardOption != null && cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
                     BigDecimal sum = layer.getValue();
-                    BigDecimal rate = cardOption.getRate();
                     BigDecimal days = valueOf(periodDays);
 
                     SavingOptionProfitCalculator calculator = (SavingOptionProfitCalculator) optionProfitCalculatorFactory.get(BonusOptionEnum.SAVING);
+                    BigDecimal rate = i == 1 ? calculator.getMaxRate(cardOption) : cardOption.getRate();
+
                     BigDecimal optionProfitSum = calculator.calculateProfitSum(sum, rate, days);
                     monthProfit = monthProfit.add(optionProfitSum);
                 }

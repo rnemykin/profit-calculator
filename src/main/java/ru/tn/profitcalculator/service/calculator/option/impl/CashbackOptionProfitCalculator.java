@@ -63,8 +63,4 @@ public class CashbackOptionProfitCalculator extends BaseOptionProfitCalculator {
     public BonusOptionEnum getOption() {
         return BonusOptionEnum.CASH_BACK;
     }
-
-    private BigDecimal getMaxRate(CardOption cardOption) {
-        return cardOption.getRate3();
-    }
 }

@@ -63,4 +63,8 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
     PosCategoryEnum getOptionCategory() {
         return null;
     }
+
+    public BigDecimal getMaxRate(CardOption cardOption) {
+        return cardOption.getRate3();
+    }
 }
