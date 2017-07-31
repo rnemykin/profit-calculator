@@ -127,6 +127,11 @@ public class SavingAccountCalculator implements Calculator {
                 BigDecimal monthProfit = calculatePeriodSum(layerProfitSum, rate4Month, valueOf(periodDays));
 
                 if (cardOption != null && cardOption.getBonusOption() == BonusOptionEnum.SAVING) {
+                    if(i == 1) { // max rate in first month
+                        rate4Month = getRate4Month(periodRates, 12);
+                        monthProfit = calculatePeriodSum(layerProfitSum, rate4Month, valueOf(periodDays));
+                    }
+
                     BigDecimal sum = layer.getValue();
                     BigDecimal days = valueOf(periodDays);
 
