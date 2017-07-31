@@ -13,14 +13,17 @@ public class CardUtils {
         switch (category) {
             case AUTO:
                 bonusOptions.add(BonusOptionEnum.AUTO);
+                bonusOptions.add(BonusOptionEnum.SAVING);
                 break;
 
             case FUN:
                 bonusOptions.add(BonusOptionEnum.FUN);
+                bonusOptions.add(BonusOptionEnum.SAVING);
                 break;
 
             case TRAVEL:
                 bonusOptions.add(BonusOptionEnum.TRAVEL);
+                bonusOptions.add(BonusOptionEnum.SAVING);
                 break;
 
             case OTHER:

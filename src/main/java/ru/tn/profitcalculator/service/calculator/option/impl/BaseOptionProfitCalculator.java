@@ -44,7 +44,8 @@ public abstract class BaseOptionProfitCalculator implements IOptionProfitCalcula
         for (Map.Entry<PosCategoryEnum, Pair<Boolean, BigDecimal>> entry : categories2Costs.entrySet()) {
             PosCategoryEnum category = entry.getKey();
 
-            if (getOptionCategory() == null || category == getOptionCategory()) {
+            boolean isPreferredByClient = Boolean.TRUE.equals(entry.getValue().getFirst());
+            if (isPreferredByClient && (getOptionCategory() == null || category == getOptionCategory())) {
                 totalSum = totalSum.add(entry.getValue().getSecond());
             }
         }
