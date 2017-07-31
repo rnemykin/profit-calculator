@@ -3,6 +3,7 @@ package ru.tn.profitcalculator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.comparator.ProductGroupComparator;
+import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.Product;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
@@ -76,11 +77,12 @@ public class CalculatorService {
                         }
                     }
 
-                    //TODO убрать потом
-                    HashSet<String> notes = new HashSet<>();
-                    notes.add("Снятие средств без потери начисленных процентов");
-                    notes.add("Сбережения застрахованы (ФЗ № 177-ФЗ от 23.12.2003)");
-                    notes.add("До 8,5% — базовая ставка");
+                    List<Product> productList = r.isRecommendation() ? emptyList() : products;
+                    List<Product> optionalProducts = r.isRecommendation() ? products : emptyList();
+
+                    Set<String> notes = new HashSet<>();
+                    notes.addAll(getProductsNotes(productList));
+                    notes.addAll(getProductsNotes(optionalProducts));
 
                     return ProductGroup.builder()
                             .notes(notes)
@@ -88,8 +90,8 @@ public class CalculatorService {
                             .optionProfitSum(r.getOptionProfitSum())
                             .profitSum(r.getProfitSum())
                             .maxRate(r.getMaxRate())
-                            .products(r.isRecommendation() ? emptyList() : products)
-                            .optionalProducts(r.isRecommendation() ? products : emptyList())
+                            .products(productList)
+                            .optionalProducts(optionalProducts)
                             .build();
                 })
                 .filter(Objects::nonNull)
@@ -104,5 +106,19 @@ public class CalculatorService {
                 .sorted(new ProductGroupComparator())
                 .limit(offersCountLimit)
                 .collect(toList());
+    }
+
+    private Set<String> getProductsNotes(List<Product> products) {
+        Set<String> notes = new HashSet<>();
+
+        for (Product product : products) {
+            notes.add(product.getDescription());
+
+            if (product instanceof Card) {
+                Card card = (Card) product;
+                notes.add(card.getDescription());
+            }
+        }
+        return notes;
     }
 }

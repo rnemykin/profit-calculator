@@ -17,6 +17,25 @@
             <column name="create_date" valueComputed="${now}"/>
             <column name="update_date" valueComputed="${now}"/>
             <column name="weight">1</column>
+            <column name="description">
+                <![CDATA[
+                <h3>Накопительный счет</h3>
+                <ul>
+                    <li>Снятие средств без потери начисленных процентов</li>
+                    <li>Сбережения застрахованы (ФЗ № 177-ФЗ от 23.12.2003)</li>
+                    <li>До 8,5% — базовая ставка</li>
+                </ul>
+                <p>До 10% — повышенная ставка по Накопительному счету с Мультикартой ВТБ24</p>
+                <h4>Накопительный счет — удобный способ хранения и преумножения денежных средств:</h4>
+                <ul>
+                    <li>чем дольше средства находятся на счете, тем выше годовая % ставка;</li>
+                    <li>возможность автопополнения счета в ВТБ24-Онлайн;</li>
+                    <li>снятие и пополнение - без ограничений;</li>
+                    <li>снятие средств без потери начисленных процентов;</li>
+                    <li>страхование сбережений.</li>
+                </ul>
+                ]]>
+            </column>
         </insert>
 
         <insert tableName="saving_account">
@@ -58,6 +77,23 @@
             <column name="create_date" valueComputed="${now}"/>
             <column name="update_date" valueComputed="${now}"/>
             <column name="weight">1</column>
+            <column name="description">
+                <![CDATA[
+                    <h3>Bклад «Выгодный»</h3>
+                    <ul>
+                        <li>Ставка до 7,40%</li>
+                        <li>Льготные условия досрочного расторжения</li>
+                    </ul>
+                    <h4>Условия</h4>
+                    <ul>
+                        <li>Ежемесячное начисление процентов с капитализацией или выплатой на счет;</li>
+                        <li>Автоматическое продление вклада (не более 2 раз);</li>
+                        <li>Льготные условия досрочного расторжения (при закрытии вклада после 181 дня проценты выплачиваются в размере 0,60 процентной ставки, установленной при открытии/пролонгации);</li>
+                        <li>Дополнительные взносы не предусмотрены;</li>
+                        <li>Расходные операции не предусмотрены.</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
 
         <insert tableName="deposit">
@@ -122,6 +158,24 @@
             <column name="create_date" valueComputed="${now}"/>
             <column name="update_date" valueComputed="${now}"/>
             <column name="weight">1</column>
+            <column name="description">
+                <![CDATA[
+                    <h3>Bклад «Накопительный»</h3>
+                    <ul>
+                        <li>Ставка до 6,95%</li>
+                        <li>Пополнение без ограничений</li>
+                    </ul>
+                    <h4>Условия</h4>
+                    <ul>
+                        <li>Дополнительные взносы — от 30 000 Р/1000 $/1000 €</li>
+                        <li>Последний дополнительный взнос может быть внесен не менее чем за 30 дней до окончания срока вклада;</li>
+                        <li>Ежемесячное начисление процентов с капитализацией или выплатой на счет;</li>
+                        <li>Автоматическое продление вклада (не более 2 раз);</li>
+                        <li>При досрочном закрытии вклада проценты выплачиваются по ставке до востребования;</li>
+                        <li>Расходные операции не предусмотрены.</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
 
         <insert tableName="deposit">
@@ -187,6 +241,25 @@
             <column name="create_date" valueComputed="${now}"/>
             <column name="update_date" valueComputed="${now}"/>
             <column name="weight">1</column>
+            <column name="description">
+                <![CDATA[
+                    <h3>Bклад «Комфортный»</h3>
+                    <ul>
+                        <li>Ставка до 4,10%</li>
+                         <li>Пополнение</li>
+                        <li>Частичное снятие</li>
+                    </ul>
+                    <h4>Условия</h4>
+                    <ul>
+                        <li>Доступ к средствам на вкладе в любой момент: снятие от 15 000 Р​/500 $/500 €;</li>
+                        <li>Дополнительные взносы — от 30 000 Р/1000 $/1000 €;</li>
+                        <li>Последний дополнительный взнос может быть внесен не менее чем за 30 дней до окончания срока вклада;</li>
+                        <li>Ежемесячное начисление процентов с капитализацией или выплатой на счет;</li>
+                        <li>Автоматическое продление вклада (не более 2 раз);</li>
+                        <li>При досрочном закрытии вклада проценты выплачиваются по ставке до востребования.</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
 
         <insert tableName="deposit">
@@ -246,13 +319,37 @@
             <column name="create_date" valueComputed="${now}"/>
             <column name="update_date" valueComputed="${now}"/>
             <column name="weight">1</column>
+            <column name="description">
+                <![CDATA[
+                    <h3>Мультикарта</h3>
+                    <p>Бесплатное обслуживание.</p>
+                    <h4>Кредитная</h4>
+                    <ul>
+                        <li>Cashback до 10%</li>
+                        <li>Беспроцентный период до 50 дней</li>
+                        <li>Кредитный лимит до 1 млн. рублей</li>
+                    </ul>
+                    <h4>Дебетовая</h4>
+                    <ul>
+                        <li>Cashback до 10%</li>
+                        <li>Процент на остаток до 5%</li>
+                        <li>Снятие наличных в любых банкоматах, 0% комиссия</li>
+                    </ul>
+                    <p>Любые вознаграждения на ваш выбор. Вы можете менять опцию каждый месяц:</p>
+                    <ul>
+                        <li><strong>Авто или Рестораны</strong> до 10% сashback за покупки в категории</li>
+                        <li><strong>Cash back</strong> до 2% сashback за любые покупки</li>
+                        <li><strong>Коллекция или Путешествия</strong> до 4% Мили или бонусы за любые покупки</li>
+                        <li><strong>Сбережения</strong> до 10% по накопительному счету</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
         <insert tableName="card">
             <column name="id" valueComputed="(SELECT id FROM product WHERE id = product_id_seq.currval)"/>
             <column name="card_type">VISA</column>
             <column name="card_category">DEBIT</column>
         </insert>
-
 
         <insert tableName="product">
             <column name="id" valueComputed="(product_id_seq.nextval)"/>
@@ -262,6 +359,31 @@
             <column name="create_date" valueComputed="${now}" />
             <column name="update_date" valueComputed="${now}" />
             <column name="weight">1</column>
+            <column name="description">
+                <![CDATA[
+                    <h3>Мультикарта</h3>
+                    <p>Бесплатное обслуживание.</p>
+                    <h4>Кредитная</h4>
+                    <ul>
+                        <li>Cashback до 10%</li>
+                        <li>Беспроцентный период до 50 дней</li>
+                        <li>Кредитный лимит до 1 млн. рублей</li>
+                    </ul>
+                    <h4>Дебетовая</h4>
+                    <ul>
+                        <li>Cashback до 10%</li>
+                        <li>Процент на остаток до 5%</li>
+                        <li>Снятие наличных в любых банкоматах, 0% комиссия</li>
+                    </ul>
+                    <p>Любые вознаграждения на ваш выбор. Вы можете менять опцию каждый месяц:</p>
+                    <ul>
+                        <li><strong>Авто или Рестораны</strong> до 10% сashback за покупки в категории</li>
+                        <li><strong>Cash back</strong> до 2% сashback за любые покупки</li>
+                        <li><strong>Коллекция или Путешествия</strong> до 4% Мили или бонусы за любые покупки</li>
+                        <li><strong>Сбережения</strong> до 10% по накопительному счету</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
         <insert tableName="card">
             <column name="id" valueComputed="(SELECT id FROM product WHERE id = product_id_seq.currval)"/>
@@ -278,14 +400,38 @@
             <column name="rate1" valueNumeric="0.02" />
             <column name="rate2" valueNumeric="0.05" />
             <column name="rate3" valueNumeric="0.1" />
+            <column name="description">
+                <![CDATA[
+                    <h3>Опция «Авто»</h3>
+                    <p>Получайте cash back до 10% за покупки по Мультикарте на АЗС и за оплату парковок.</p>
+                    <p>Размер cash back зависит от суммы повседневных покупок по карте в месяц:</p>
+                    <ul>
+                        <li>от 5 до 15 тыс. руб. - 2%</li>
+                        <li>от 15 до 75 тыс. руб. - 5%</li>
+                        <li>от 75 тыс. руб. - 10%</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
-            <column name="name">Развлечения</column>
+            <column name="name">Рестораны</column>
             <column name="bonus_option">FUN</column>
             <column name="rate1" valueNumeric="0.02" />
             <column name="rate2" valueNumeric="0.05" />
             <column name="rate3" valueNumeric="0.1" />
+            <column name="description">
+                <![CDATA[
+                    <h3>Опция «Рестораны»</h3>
+                    <p>Получайте cash back до 10% за оплату счетов в ресторанах и кафе, а также за покупку билетов в театр и кино с помощью Мультикарты.</p>
+                    <p>Процент cash back зависит от суммы повседневных покупок по карте в месяц:</p>
+                    <ul>
+                        <li>от 5 до 15 тыс. руб. - 2%</li>
+                        <li>от 15 до 75 тыс. руб. - 5%</li>
+                        <li>от 75 тыс. руб. - 10%</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
@@ -294,6 +440,18 @@
             <column name="rate1" valueNumeric="0.01" />
             <column name="rate2" valueNumeric="0.015" />
             <column name="rate3" valueNumeric="0.02" />
+            <column name="description">
+                <![CDATA[
+                    <h3>Опция «CASH BACK»</h3>
+                    <p>Оплачивайте повседневные покупки картой и получайте cash back до 2%. Чем чаще Вы используете карту, тем больше зарабатываете.</p>
+                    <p>Процент cash back зависит от суммы по карте в месяц:</p>
+                    <ul>
+                        <li>от 5 до 15 тыс. руб. - 1%</li>
+                        <li>от 15 до 75 тыс. руб. - 1,5%</li>
+                        <li>от 75 тыс. руб. - 2%</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
@@ -302,6 +460,19 @@
             <column name="rate1" valueNumeric="0.01" />
             <column name="rate2" valueNumeric="0.02" />
             <column name="rate3" valueNumeric="0.04" />
+            <column name="description">
+                <![CDATA[
+                    <h3>Опция «Путешествия»</h3>
+                    <p>Накапливайте мили за повседневные покупки по карте.</p>
+                    <p>Обменивайте их на авиа и ж/д билеты, бронирование номеров отелей и аренду авто на <a href="travel.vtb24.ru">travel.vtb24.ru</a>.</p>
+                    <p>Размер вознаграждения зависит от суммы покупок по картам в месяц:</p>
+                    <ul>
+                        <li>от 5 до 15 тыс. руб. - 1%</li>
+                        <li>от 15 до 75 тыс. руб. - 2%</li>
+                        <li>от 75 тыс. руб. - 4%</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
@@ -310,6 +481,19 @@
             <column name="rate1" valueNumeric="0.01" />
             <column name="rate2" valueNumeric="0.02" />
             <column name="rate3" valueNumeric="0.04" />
+            <column name="description">
+                <![CDATA[
+                    <h3>Опция «Коллекция»</h3>
+                    <p>Оплачивайте покупки картой и получайте бонусы.</p>
+                    <p>Обменивайте бонусы на товары в каталоге «Коллекция» <a href="bonus.vtb24.ru">bonus.vtb24.ru</a>.</p>
+                    <p>Размер вознаграждения зависит от суммы покупок по картам в месяц:</p>
+                    <ul>
+                        <li>от 5 до 15 тыс. руб. - 1%</li>
+                        <li>от 15 до 75 тыс. руб. - 2%</li>
+                        <li>от 75 тыс. руб. - 4%</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
         <insert tableName="card_option">
             <column name="id" valueComputed="(card_option_id_seq.nextval)"/>
@@ -318,6 +502,20 @@
             <column name="rate1" valueNumeric="0.005"/>
             <column name="rate2" valueNumeric="0.01"/>
             <column name="rate3" valueNumeric="0.015"/>
+            <column name="description">
+                <![CDATA[
+                    <h3>Опция «Сбережения»</h3>
+                    <p>Позволяет получать повышенный доход по накопительному счету.</p>
+                    <p>До 10% годовых на остаток по Накопительному счету за покупки по Мультикарте ВТБ24</p>
+                    <p style="color: darkgray">Возможность получить 10% годовых на остаток по накопительному счету достигается путем начисления процентов по ставке 8,5% годовых по накопительному счету и бонусной надбавки (до 1,5% годовых на сумму не более 1,5 млн руб.).</p>
+                    <p>Размер надбавки к базовой ставке Накопительного счета зависит от суммы покупок по Мультикарте.</p>
+                    <ul>
+                        <li>от 5 до 15 тыс. руб. - 0,5%</li>
+                        <li>от 15 до 75 тыс. руб. - 1%</li>
+                        <li>от 75 тыс. руб. - 1,5%</li>
+                    </ul>
+                ]]>
+            </column>
         </insert>
     </changeSet>
 

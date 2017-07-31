@@ -30,6 +30,9 @@
             <column name="weight" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
+            <column name="description" type="VARCHAR(2000)">
+                <constraints nullable="false" />
+            </column>
         </createTable>
     </changeSet>
 
@@ -92,6 +95,9 @@
             </column>
             <column name="rate3" type="NUMERIC">
                 <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2000)">
+                <constraints nullable="false" />
             </column>
         </createTable>
     </changeSet>

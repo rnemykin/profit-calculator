@@ -29,6 +29,7 @@ public abstract class Product {
     private LocalDateTime updateDate;
     private LocalDateTime archiveDate;
     private Integer weight;
+    private String description;
 
     @Enumerated(EnumType.STRING)
     private ProductStatusEnum status;
