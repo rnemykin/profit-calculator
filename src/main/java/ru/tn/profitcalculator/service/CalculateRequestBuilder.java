@@ -138,7 +138,7 @@ public class CalculateRequestBuilder {
 
         return categories2Costs.entrySet().parallelStream()
                 .filter(e -> Boolean.TRUE.equals(e.getValue().getFirst()))
-                .filter(e -> maxCostSum.compareTo(e.getValue().getSecond()) == 0)
+//                .filter(e -> maxCostSum.compareTo(e.getValue().getSecond()) == 0)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }
