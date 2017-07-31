@@ -2,7 +2,6 @@ package ru.tn.profitcalculator.web.api;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,14 +26,6 @@ public class ProductController {
 
     @PostMapping
     public List<ProductGroup> calculateProducts(@Valid @RequestBody CalculateParams request) {
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start("calculateOffers");
-
-        List<ProductGroup> products = calculatorService.calculateOffers(request);
-
-        stopWatch.stop();
-//        log.info(stopWatch.prettyPrint());
-
-        return products;
+        return calculatorService.calculateOffers(request);
     }
 }

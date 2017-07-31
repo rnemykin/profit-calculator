@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.util.Pair;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @Builder
@@ -21,5 +21,5 @@ public class ClientProduct {
     /**
      * Минимальные остатки на счете на первые числа месяцев за последний год
      */
-    Map<LocalDate, BigDecimal> accountBalances;
+    List<Pair<LocalDate, BigDecimal>> accountBalances;
 }
