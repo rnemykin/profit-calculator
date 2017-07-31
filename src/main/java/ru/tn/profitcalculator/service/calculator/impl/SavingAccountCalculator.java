@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static java.math.BigDecimal.ONE;
 import static java.math.BigDecimal.ZERO;
 import static java.math.BigDecimal.valueOf;
 import static java.time.temporal.ChronoUnit.DAYS;
@@ -176,8 +177,16 @@ public class SavingAccountCalculator implements Calculator {
     private BigDecimal calculateTotalOptionProfit4Period(CardOption cardOption, LocalDate startDate, LocalDate endDate) {
         if (cardOption != null && cardOption.getBonusOption() != BonusOptionEnum.SAVING) {
             long days = DAYS.between(startDate, endDate);
-            BigDecimal months = valueOf(days).divide(DAYS_IN_MONTH, 4, RoundingMode.HALF_UP);
-            return cardOption.getCashback4Month().multiply(months).setScale(0, RoundingMode.HALF_UP);
+            BigDecimal months = valueOf(days).divide(DAYS_IN_MONTH, 4, RoundingMode.HALF_UP).subtract(ONE);
+
+            if(months.compareTo(ONE) > 0) {
+                BigDecimal cashback = cardOption.getCashback4Month().multiply(months);
+                cashback = cashback.add(cardOption.getCashbackInFirstMonth());
+
+                return cashback.setScale(0, RoundingMode.HALF_UP);
+            } else {
+                return cardOption.getCashbackInFirstMonth().multiply(months).setScale(0, RoundingMode.HALF_UP);
+            }
         }
         return null;
     }
