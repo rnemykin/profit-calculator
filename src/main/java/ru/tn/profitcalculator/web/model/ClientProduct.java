@@ -17,6 +17,7 @@ import java.util.List;
 public class ClientProduct {
 
     Long idProduct;
+    String name;
 
     /**
      * Минимальные остатки на счете на первые числа месяцев за последний год

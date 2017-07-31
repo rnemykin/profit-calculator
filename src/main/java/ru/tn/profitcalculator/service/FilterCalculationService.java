@@ -61,6 +61,7 @@ public class FilterCalculationService {
                 .daysCount(params.getDaysCount() != null ? params.getDaysCount() : 361)
                 .creditCard(params.getCreditCard())
                 .transactions(params.getTransactions())
+                .clientProducts(params.getClientProducts())
                 .payroll(params.getPayroll())
                 .payrollProject(params.getPayrollProject())
                 .categories2Costs(toCategory2Cost(averageMonthCost2Category))
