@@ -20,6 +20,9 @@ public class CardUtils {
                 break;
 
             case TRAVEL:
+                bonusOptions.add(BonusOptionEnum.TRAVEL);
+                break;
+
             case OTHER:
             default:
                 bonusOptions.add(BonusOptionEnum.SAVING);
