@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.comparator.ProductGroupComparator;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.Product;
+import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
 import ru.tn.profitcalculator.service.calculator.ProductCalculateRequest;
@@ -100,8 +101,17 @@ public class CalculatorService {
                     int p1 = pg.getProfitSum().intValue();
                     int p2 = Optional.ofNullable(pg.getOptionProfitSum()).orElse(BigDecimal.ZERO).intValue();
                     float p3 = pg.getMaxRate().floatValue();
-
-                    String hash = MessageFormat.format("{0}:{1}:{2}", p1, p2, p3);
+                    boolean p4 = false;
+                    for (Product product : pg.getProducts()) {
+                        if (product instanceof SavingAccount) {
+                            SavingAccount savingAccount = (SavingAccount) product;
+                            if(savingAccount.getRefillOption() != null) {
+                                p4 = true;
+                                break;
+                            }
+                        }
+                    }
+                    String hash = MessageFormat.format("{0}:{1}:{2}:{3}", p1, p2, p3, p4);
                     return dublicateChecker.add(hash);
                 })
                 .sorted(new ProductGroupComparator())
