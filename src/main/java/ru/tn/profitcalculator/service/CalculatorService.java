@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.tn.profitcalculator.comparator.ProductGroupComparator;
 import ru.tn.profitcalculator.model.Card;
 import ru.tn.profitcalculator.model.Product;
+import ru.tn.profitcalculator.model.RefillOption;
 import ru.tn.profitcalculator.model.SavingAccount;
 import ru.tn.profitcalculator.service.calculator.Calculator;
 import ru.tn.profitcalculator.service.calculator.CalculatorFactory;
@@ -16,7 +17,6 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -100,7 +100,7 @@ public class CalculatorService {
                 .sorted((pg1, pg2) -> isHasRefillOption(pg2).compareTo(isHasRefillOption(pg1)))
                 .collect(toList());
 
-        return  offers.stream()
+        return offers.stream()
                 .filter(Objects::nonNull)
                 .filter(pg -> {
                     int p1 = pg.getProfitSum().intValue();
@@ -120,7 +120,7 @@ public class CalculatorService {
             for (Product product : pg.getProducts()) {
                 if (product instanceof SavingAccount) {
                     SavingAccount savingAccount = (SavingAccount) product;
-                    if(savingAccount.getRefillOption() != null) {
+                    if (savingAccount.getRefillOption() != null) {
                         return true;
                     }
                 }
@@ -138,6 +138,14 @@ public class CalculatorService {
             if (product instanceof Card) {
                 Card card = (Card) product;
                 notes.add(card.getDescription());
+
+            } else if (product instanceof SavingAccount) {
+                SavingAccount savingAccount = (SavingAccount) product;
+                RefillOption refillOption = savingAccount.getRefillOption();
+
+                if (refillOption != null && refillOption.getDescription() != null) {
+                    notes.add(refillOption.getDescription());
+                }
             }
         }
         return notes;

@@ -26,4 +26,6 @@ public class RefillOption {
 
     @Enumerated(EnumType.STRING)
     private RefillOptionSumTypeEnum refillSumType;
+
+    private String description;
 }
