@@ -114,9 +114,11 @@ public class SavingAccountCalculator implements Calculator {
             BigDecimal layerProfitSum = layer.getValue();
 
             for (int i = 1; layerNextPeriodDate.isBefore(endDate); i++) {
-                layerAccountState.add(layerProfitSum);
 
                 layerNextPeriodDate = layerNextPeriodDate.plusMonths(1);
+                if(layerNextPeriodDate.compareTo(endDate) <= 0) {
+                    layerAccountState.add(layerProfitSum);
+                }
 
                 boolean isLastPeriod = !layerNextPeriodDate.isBefore(endDate);
                 long periodDays = isLastPeriod ? DAYS.between(layerStartDate, endDate) : DAYS.between(layerStartDate, layerNextPeriodDate);
