@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -58,13 +59,13 @@ public class CalculatorService {
 
         Set<String> dublicateChecker = new HashSet<>();
 
-        return calculateRequests.stream()
+        List<ProductGroup> offers = calculateRequests.stream()
                 .map(r -> {
                     Calculator calculator = calculatorFactory.get(r.getProduct().getType());
                     return calculator.calculate(r);
                 })
                 .map(r -> {
-                    if(r.getOptionProfitSum() != null && BigDecimal.ZERO.compareTo(r.getOptionProfitSum()) == 0) {
+                    if (r.getOptionProfitSum() != null && BigDecimal.ZERO.compareTo(r.getOptionProfitSum()) == 0) {
                         return null;
                     }
 
@@ -73,7 +74,7 @@ public class CalculatorService {
                     Product linkedProduct = r.getProduct().getLinkedProduct();
                     if (linkedProduct != null) {
                         products.add(linkedProduct);
-                        if(linkedProduct.getLinkedProduct() != null) {
+                        if (linkedProduct.getLinkedProduct() != null) {
                             products.add(linkedProduct.getLinkedProduct());
                         }
                     }
@@ -96,27 +97,34 @@ public class CalculatorService {
                             .offerByClientProduct(r.isOfferByClientProduct())
                             .build();
                 })
+                .sorted((pg1, pg2) -> isHasRefillOption(pg2).compareTo(isHasRefillOption(pg1)))
+                .collect(toList());
+
+        return  offers.stream()
                 .filter(Objects::nonNull)
                 .filter(pg -> {
                     int p1 = pg.getProfitSum().intValue();
                     int p2 = Optional.ofNullable(pg.getOptionProfitSum()).orElse(BigDecimal.ZERO).intValue();
                     float p3 = pg.getMaxRate().floatValue();
-                    boolean p4 = false;
-                    for (Product product : pg.getProducts()) {
-                        if (product instanceof SavingAccount) {
-                            SavingAccount savingAccount = (SavingAccount) product;
-                            if(savingAccount.getRefillOption() != null) {
-                                p4 = true;
-                                break;
-                            }
-                        }
-                    }
-                    String hash = MessageFormat.format("{0}:{1}:{2}:{3}", p1, p2, p3, p4);
+
+                    String hash = MessageFormat.format("{0}:{1}:{2}", p1, p2, p3);
                     return dublicateChecker.add(hash);
                 })
                 .sorted(new ProductGroupComparator())
                 .limit(offersCountLimit)
                 .collect(toList());
+    }
+
+    private Boolean isHasRefillOption(ProductGroup pg) {
+        for (Product product : pg.getProducts()) {
+            if (product instanceof SavingAccount) {
+                SavingAccount savingAccount = (SavingAccount) product;
+                if(savingAccount.getRefillOption() != null) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private Set<String> getProductsNotes(List<Product> products) {
