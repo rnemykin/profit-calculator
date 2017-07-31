@@ -11,11 +11,6 @@ public enum RefillOptionSumTypeEnum {
     FIXED_SUM,
 
     /**
-     * ??? TODO в презе не было
-     */
-    FIXED_PERCENTAGE,
-
-    /**
      * •%% от операций (поступившей/ потраченной суммы)
      */
     IN_OUT_SUM_PERCENTAGE,

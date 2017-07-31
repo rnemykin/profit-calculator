@@ -151,14 +151,9 @@ public class CalculateRequestBuilder {
 
     private Set<PosCategoryEnum> getRelevantCategories(CalculateParams params) {
         Map<PosCategoryEnum, Pair<Boolean, BigDecimal>> categories2Costs = params.getCategories2Costs();
-        BigDecimal maxCostSum = categories2Costs.entrySet().parallelStream()
-                .max(Comparator.comparing(x -> x.getValue().getSecond()))
-                .orElseThrow(() -> new RuntimeException("categories2Costs not set or wrong"))
-                .getValue().getSecond();
 
         return categories2Costs.entrySet().parallelStream()
                 .filter(e -> Boolean.TRUE.equals(e.getValue().getFirst()))
-//                .filter(e -> maxCostSum.compareTo(e.getValue().getSecond()) == 0)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toSet());
     }

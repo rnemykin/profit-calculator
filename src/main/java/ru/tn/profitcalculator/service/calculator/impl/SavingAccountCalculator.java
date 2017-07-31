@@ -132,11 +132,6 @@ public class SavingAccountCalculator implements Calculator {
                     BigDecimal optionProfitSum = calculator.calculateProfitSum(sum, rate, days);
                     monthProfit = monthProfit.add(optionProfitSum);
                 }
-
-                //TODO решить вопрос по капитализации на НС
-//                if(savingAccount.isCapitalization()) {
-//                     layerProfitSum = layerProfitSum.add(monthProfit);
-//                }
                 layerStartDate = layerNextPeriodDate;
 
                 totalSum = totalSum.add(monthProfit);

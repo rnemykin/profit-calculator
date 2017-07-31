@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 
 public class SavingAccountSteps {
 
-//    @Autowired
     private SavingAccountCalculator savingAccountCalculator;
 
     private int spentMonthes;
@@ -31,6 +30,6 @@ public class SavingAccountSteps {
 
     @То("^итоговая % ставка \\(R\\) составила (.+)$")
     public void итоговаяСтавкаСоставила(BigDecimal rate) {
-//        assertEquals(rate.doubleValue(), savingAccountCalculator.getRate4Month(spentMonthes).doubleValue(), 0);  //todo
+
     }
 }

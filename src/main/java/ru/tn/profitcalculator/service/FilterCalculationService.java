@@ -56,9 +56,9 @@ public class FilterCalculationService {
 
 
         return CalculateParams.builder()
-                .initSum(BigDecimal.valueOf(oneMonthAccumulation * MONTH_OF_YEAR / 2))   //todo Подумать сколько в качестве первоначального взноса давать вводить
+                .initSum(BigDecimal.valueOf(oneMonthAccumulation * MONTH_OF_YEAR / 2))
                 .monthRefillSum(BigDecimal.valueOf(oneMonthAccumulation))
-                .daysCount(params.getDaysCount() != null ? params.getDaysCount() : 361) //todo берем из запроса среднюю продолжительность сберегательных продуктов клиента
+                .daysCount(params.getDaysCount() != null ? params.getDaysCount() : 361)
                 .creditCard(params.getCreditCard())
                 .transactions(params.getTransactions())
                 .payroll(params.getPayroll())
