@@ -30,7 +30,6 @@ public class CardUtils {
             default:
                 bonusOptions.add(BonusOptionEnum.SAVING);
                 bonusOptions.add(BonusOptionEnum.CASH_BACK);
-                bonusOptions.add(BonusOptionEnum.TRAVEL);
                 bonusOptions.add(BonusOptionEnum.COLLECTION);
         }
 

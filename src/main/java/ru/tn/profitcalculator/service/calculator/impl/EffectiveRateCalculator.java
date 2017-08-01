@@ -34,23 +34,26 @@ public class EffectiveRateCalculator {
     }
 
     private BigDecimal getMinSumForPeriod(int period) {
-        List<BigDecimal> initLayer = accountState.get(0);
-        if (initLayer.size() < period) {
-            return BigDecimal.ZERO;
-        }
+        if (accountState != null && !accountState.isEmpty()) {
 
-        int size = initLayer.size();
-        List<BigDecimal> monthsSum = new ArrayList<>();
-        for (int i = size - period; i < size; i++) {
-            BigDecimal monthSum = BigDecimal.ZERO;
-            for (List<BigDecimal> state : accountState) {
-                monthSum = monthSum.add(state.get(i));
+            List<BigDecimal> initLayer = accountState.get(0);
+            if (initLayer.size() < period) {
+                return BigDecimal.ZERO;
             }
-            monthsSum.add(monthSum);
-        }
 
-        return monthsSum.stream()
-                .min(BigDecimal::compareTo)
-                .orElse(BigDecimal.ZERO);
+            int size = initLayer.size();
+            List<BigDecimal> monthsSum = new ArrayList<>();
+            for (int i = size - period; i < size; i++) {
+                BigDecimal monthSum = BigDecimal.ZERO;
+                for (List<BigDecimal> state : accountState) {
+                    monthSum = monthSum.add(state.get(i));
+                }
+                monthsSum.add(monthSum);
+            }
+            return monthsSum.stream()
+                    .min(BigDecimal::compareTo)
+                    .orElse(BigDecimal.ZERO);
+        }
+        return BigDecimal.ZERO;
     }
 }

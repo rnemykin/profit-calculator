@@ -67,7 +67,7 @@ public class SavingAccountCalculator implements Calculator {
         BigDecimal totalProfit = ZERO;
         BigDecimal refillSum = ZERO;
         Map<LocalDate, BigDecimal> layers = new TreeMap<>();
-        BigDecimal totalSum;
+        BigDecimal totalSum = ZERO;
         boolean offerByClientProduct = false;
 
         ClientProduct clientProduct = request.getClientProduct();
@@ -83,8 +83,6 @@ public class SavingAccountCalculator implements Calculator {
             totalSum = max;
             offerByClientProduct = true;
         } else {
-            totalSum = params.getInitSum();
-            layers.put(startDate, totalSum);
 
             if (isGreatThenZero(params.getMonthRefillSum())) {
                 long monthsCount = MONTHS.between(startDate, endDate);
@@ -92,6 +90,9 @@ public class SavingAccountCalculator implements Calculator {
                     layers.put(startDate.plusMonths(i), params.getMonthRefillSum());
                 }
                 refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
+            } else {
+                totalSum = params.getInitSum();
+                layers.put(startDate, totalSum);
             }
         }
         if (isLinkedProductCard(savingAccount, CardCategoryEnum.CREDIT)) {
@@ -144,7 +145,7 @@ public class SavingAccountCalculator implements Calculator {
 //                layerProfitSum = layerProfitSum.add(monthProfit); // capitalization
                 layerStartDate = layerNextPeriodDate;
 
-                totalSum = totalSum.add(monthProfit);
+                //    totalSum = totalSum.add(monthProfit);
                 totalProfit = totalProfit.add(monthProfit);
             }
 
