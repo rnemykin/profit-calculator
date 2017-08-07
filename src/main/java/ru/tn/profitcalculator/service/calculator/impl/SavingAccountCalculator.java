@@ -83,6 +83,7 @@ public class SavingAccountCalculator implements Calculator {
             totalSum = max;
             offerByClientProduct = true;
         } else {
+            totalSum = params.getInitSum();
 
             if (isGreatThenZero(params.getMonthRefillSum())) {
                 long monthsCount = MONTHS.between(startDate, endDate);
@@ -91,7 +92,6 @@ public class SavingAccountCalculator implements Calculator {
                 }
                 refillSum = params.getMonthRefillSum().multiply(valueOf(monthsCount));
             } else {
-                totalSum = params.getInitSum();
                 layers.put(startDate, totalSum);
             }
         }
@@ -145,7 +145,7 @@ public class SavingAccountCalculator implements Calculator {
 //                layerProfitSum = layerProfitSum.add(monthProfit); // capitalization
                 layerStartDate = layerNextPeriodDate;
 
-                //    totalSum = totalSum.add(monthProfit);
+                totalSum = totalSum.add(monthProfit);
                 totalProfit = totalProfit.add(monthProfit);
             }
 
